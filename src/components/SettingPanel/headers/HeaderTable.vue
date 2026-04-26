@@ -1,8 +1,8 @@
 <template>
   <EditableTable
-    addButtonText="新增參數"
-    keyTitle="參數"
-    valueTitle="數值"
+    addButtonText="新增標頭"
+    keyTitle="請求標頭"
+    valueTitle="內容"
     @add="requestStore.addHeader()"
   >
     <HeaderTableLine
