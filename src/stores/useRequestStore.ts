@@ -1,111 +1,65 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-
-export interface QueryParam {
-  id: string;
-  enabled: boolean;
-  key: string;
-  value: string;
-}
+import {
+  useTableManager,
+  type KeyValuePair,
+} from "@/composables/useTableManager";
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
   const url = ref("https://lighthttp.samhacker.xyz/new");
-  const params = ref<QueryParam[]>([]);
 
+  // 基礎資料
+  const params = ref<KeyValuePair[]>([]);
+  const headers = ref<KeyValuePair[]>([]);
+
+  // 1. 定義同步邏輯
+  const syncUrlFromParams = () => {
+    try {
+      const urlObj = new URL(url.value);
+      urlObj.search = "";
+      params.value.forEach((p) => {
+        if (p.enabled && p.key) urlObj.searchParams.append(p.key, p.value);
+      });
+      url.value = urlObj.toString();
+    } catch {}
+  };
+
+  // 2. 使用 Composables 管理資料 (傳入 ref 與 回調)
+  const paramManager = useTableManager(params, syncUrlFromParams);
+  const headerManager = useTableManager(headers); // Header 變動通常不需改 URL
+
+  // 3. 監聽 URL 變動 (解析 Params)
   watch(
     url,
     (newUrl) => {
       try {
         const urlObj = new URL(newUrl);
-        const urlSearchParams = urlObj.searchParams;
-
-        // 1. 先標記目前所有「已勾選」的為「待刪除」，準備重新從 URL 讀取
-        // 但保留「未勾選」的項目，因為它們不在 URL 裡
         const disabledItems = params.value.filter((p) => !p.enabled);
-        const updatedParams: QueryParam[] = [...disabledItems];
+        const newItems: KeyValuePair[] = [];
 
-        // 2. 從 URL 讀取目前有效的參數
-        urlSearchParams.forEach((value, key) => {
-          updatedParams.push({
-            id: crypto.randomUUID(),
-            enabled: true,
-            key,
-            value,
-          });
+        urlObj.searchParams.forEach((value, key) => {
+          newItems.push({ id: crypto.randomUUID(), enabled: true, key, value });
         });
 
-        params.value = updatedParams;
-      } catch (e) {
-        // 格式錯誤不更新
-      }
+        params.value = [...disabledItems, ...newItems];
+      } catch {}
     },
     { immediate: true },
   );
 
-  // 未來可以在這裡加入發送請求的邏輯
-  function setUrl(newUrl: string) {
-    url.value = newUrl;
-  }
+  return {
+    method,
+    url,
+    params,
+    headers,
+    // 將 Manager 的方法展開或重新命名導出
+    addParam: () => paramManager.add("param"),
+    removeParam: paramManager.remove,
+    toggleParam: paramManager.toggle,
 
-  // params 管理
-  function addParam(key?: string, value?: string) {
-    if (!value) value = "value";
-    if (!key) {
-      // 檢查是否已經有 param 開頭的 key，並找到最大的數字後加1
-      const existingKeys = params.value
-        .map((param) => param.key)
-        .filter((k) => k.startsWith("param"));
-      const maxIndex = existingKeys.reduce((max, k) => {
-        const index = parseInt(k.replace("param", ""));
-        return isNaN(index) ? max : Math.max(max, index);
-      }, 0);
-      key = `param${maxIndex + 1}`;
-    }
-
-    // 在params裡新增一筆，並更新URL
-    params.value.push({
-      id: crypto.randomUUID(),
-      enabled: true,
-      key,
-      value,
-    });
-
-    updateUrlFromParams();
-  }
-
-  function removeParam(key: string) {
-    // 從params裡移除，並更新URL
-    params.value = params.value.filter((p) => p.key !== key);
-
-    updateUrlFromParams();
-  }
-
-  function toggleParam(id: string) {
-    const item = params.value.find((p) => p.id === id);
-    if (!item) return;
-
-    item.enabled = !item.enabled;
-    updateUrlFromParams();
-  }
-
-  // 根據目前的 params 重新組裝 URL
-  function updateUrlFromParams() {
-    try {
-      const urlObj = new URL(url.value);
-      urlObj.search = ""; // 清空原本的 query
-
-      params.value.forEach((p) => {
-        if (p.enabled && p.key) {
-          urlObj.searchParams.append(p.key, p.value);
-        }
-      });
-
-      url.value = urlObj.toString();
-    } catch (e) {
-      console.error("URL 更新失敗");
-    }
-  }
-
-  return { method, url, params, setUrl, addParam, removeParam, toggleParam };
+    addHeader: () => headerManager.add("header", ""),
+    removeHeader: headerManager.remove,
+    toggleHeader: headerManager.toggle,
+  };
 });
