@@ -6,9 +6,7 @@
       <TabsOptions value="body" name="Body" chinese-name="主體" />
       <TabsOptions value="proxy" name="Proxy" chinese-name="代理" />
     </TabsList>
-    <TabsContent value="params">
-      Make changes to your account here.
-    </TabsContent>
+    <TabsContent value="params"><ParamTable /></TabsContent>
     <TabsContent value="authorization">
       Change your password here.
     </TabsContent>
@@ -16,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import TabsOptions from "./TabsOption.vue";
+import ParamTable from "./params/ParamTable.vue";
 </script>
