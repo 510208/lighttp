@@ -19,5 +19,3 @@
 import logo from "@/assets/lighttp_logo.svg";
 import WindowControlButton from "./WindowControlButton.vue";
 </script>
-
-<style scoped></style>

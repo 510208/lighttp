@@ -45,5 +45,3 @@ const appWindow = getCurrentWindow();
 
 console.log("WindowControlButton mounted, appWindow:", appWindow);
 </script>
-
-<style scoped></style>
