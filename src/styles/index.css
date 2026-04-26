@@ -138,3 +138,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* UI元件 */
+button[data-slot="tabs-trigger"] {
+  @apply data-active:bg-ctp-green/20 data-active:text-ctp-green data-[state=open]:bg-ctp-green/20 data-[state=open]:text-ctp-green;
+}
+
+button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
+  @apply text-ctp-green;
+}
