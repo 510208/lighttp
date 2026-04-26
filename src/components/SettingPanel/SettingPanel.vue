@@ -7,7 +7,6 @@
       <TabsOptions value="proxy" name="Proxy" chinese-name="代理" />
     </TabsList>
     <TabsContent value="params"><ParamTable /></TabsContent>
-    <TabsContent value="headers"><HeaderTable /></TabsContent>
   </Tabs>
 </template>
 
@@ -15,5 +14,4 @@
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import TabsOptions from "./TabsOption.vue";
 import ParamTable from "./params/ParamTable.vue";
-import HeaderTable from "./headers/HeaderTable.vue";
 </script>
