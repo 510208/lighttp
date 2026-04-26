@@ -4,6 +4,9 @@
 @import "@catppuccin/tailwindcss/mocha.css";
 @import "tw-animate-css";
 
+@import "@fontsource-variable/noto-sans-tc/wght.css";
+@import "@fontsource-variable/space-grotesk/wght.css";
+
 @custom-variant dark (&);
 
 #app {
@@ -62,6 +65,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: "Noto Sans TC Variable", sans-serif;
+  --font-space: "Space Grotesk Variable", monospace;
 }
 
 :root {

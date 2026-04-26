@@ -11,6 +11,8 @@
     "cn": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
+    "@fontsource-variable/noto-sans-tc": "^5.2.10",
+    "@fontsource-variable/space-grotesk": "^5.2.10",
     "@lucide/vue": "^1.11.0",
     "@tailwindcss/vite": "^4.2.4",
     "@tauri-apps/api": "^2",
