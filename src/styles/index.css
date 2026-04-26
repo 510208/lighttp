@@ -1,6 +1,6 @@
+@import "tailwindcss";
+@import "@catppuccin/tailwindcss/mocha.css";
+
 #app {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  @apply h-screen w-screen bg-ctp-crust;
 }
