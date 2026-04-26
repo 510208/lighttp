@@ -25,6 +25,7 @@
           <ParamTableLine
             v-for="item in requestStore.params"
             :key="item.id"
+            :id="item.id"
             :enabled="true"
             :param="item.key"
             :value="item.value"

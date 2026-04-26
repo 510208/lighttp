@@ -3,7 +3,11 @@
     class="border-ctp-surface1 hover:bg-ctp-surface0/50 transition-colors"
   >
     <TableCell class="text-center">
-      <Checkbox :default-value="props.enabled" class="border-ctp-overlay0" />
+      <Checkbox
+        :default-value="props.enabled"
+        @update:modelValue="handleToggle"
+        class="border-ctp-overlay0"
+      />
     </TableCell>
 
     <TableCell class="font-space text-sm text-ctp-text">
@@ -38,9 +42,15 @@ import { useRequestStore } from "@/stores/useRequestStore";
 const requestStore = useRequestStore();
 
 interface Props {
-  enabled?: boolean;
+  id: string; // 增加 ID
+  enabled: boolean;
   param: string;
   value: string;
 }
 const props = defineProps<Props>();
+
+const handleToggle = () => {
+  // 直接傳 ID 給 Store 處理
+  requestStore.toggleParam(props.id);
+};
 </script>
