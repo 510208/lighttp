@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import TargetInput from "@/components/TargetInput.vue";
+import TargetInput from "@/components/TargetInput/TargetInput.vue";
 </script>
 
 <style scoped></style>
