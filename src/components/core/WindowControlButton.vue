@@ -5,6 +5,7 @@
       id="titlebar-minimize"
       title="minimize"
       class="flex items-center justify-center h-full px-6 hover:bg-white/10 transition-colors duration-200"
+      @click="appWindow.minimize()"
     >
       <!-- https://api.iconify.design/mdi:window-minimize.svg -->
       <img :src="minimizeIcon" alt="Minimize" class="h-3 w-3" />
@@ -13,6 +14,7 @@
       id="titlebar-maximize"
       title="maximize"
       class="flex items-center justify-center h-full px-6 hover:bg-white/10 transition-colors duration-200"
+      @click="appWindow.toggleMaximize()"
     >
       <!-- https://api.iconify.design/mdi:window-maximize.svg -->
       <img :src="maximizeIcon" alt="Maximize" class="h-3 w-3" />
@@ -21,6 +23,7 @@
       id="titlebar-close"
       title="close"
       class="flex items-center justify-center h-full px-6 hover:bg-red-500/40 transition-colors duration-200"
+      @click="appWindow.close()"
     >
       <!-- https://api.iconify.design/mdi:close.svg -->
       <img :src="closeIcon" alt="Close" class="h-3 w-3" />
@@ -41,16 +44,6 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 const appWindow = getCurrentWindow();
 
 console.log("WindowControlButton mounted, appWindow:", appWindow);
-
-document
-  .getElementById("titlebar-minimize")
-  ?.addEventListener("click", () => appWindow.minimize());
-document
-  .getElementById("titlebar-maximize")
-  ?.addEventListener("click", () => appWindow.toggleMaximize());
-document
-  .getElementById("titlebar-close")
-  ?.addEventListener("click", () => appWindow.close());
 </script>
 
 <style scoped></style>
