@@ -4,8 +4,8 @@
     data-tauri-drag-region
   >
     <div class="flex gap-2.5">
-      <img :src="logo" alt="Logo" class="h-5" />
-      <p class="text-sm text-ctp-subtext1">by SamHacker</p>
+      <img :src="logo" alt="Logo" class="h-5 pointer-events-none" />
+      <p class="text-sm text-ctp-subtext1 pointer-events-none">by SamHacker</p>
     </div>
 
     <!-- 視窗控制按鈕 -->
