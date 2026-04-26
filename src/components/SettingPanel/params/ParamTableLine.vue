@@ -16,7 +16,11 @@
 
     <!-- Action Buttons -->
     <TableCell>
-      <Button variant="destructive" size="icon">
+      <Button
+        variant="destructive"
+        size="icon"
+        @click="requestStore.removeParam($props.param)"
+      >
         <Trash class="text-ctp-red" :size="16" />
       </Button>
     </TableCell>
@@ -29,6 +33,9 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Button from "@/components/ui/button/Button.vue";
 import { Trash } from "@lucide/vue";
+
+import { useRequestStore } from "@/stores/useRequestStore";
+const requestStore = useRequestStore();
 
 interface Props {
   enabled?: boolean;

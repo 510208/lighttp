@@ -4,7 +4,7 @@
       <Button
         variant="outline"
         class="w-auto gap-2"
-        @click="requestStore.addParam('param', 'value')"
+        @click="requestStore.addParam()"
       >
         <Plus />新增參數
       </Button>
