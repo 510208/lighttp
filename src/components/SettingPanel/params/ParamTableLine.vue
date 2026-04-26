@@ -3,6 +3,7 @@
   <TableRow
     class="border-ctp-surface1 hover:bg-ctp-surface0/50 transition-colors"
     :data-disabled="!isEnabled"
+    :data-param-id="props.id"
   >
     <TableCell class="text-center">
       <Checkbox
@@ -26,7 +27,7 @@
       <Button
         variant="destructive"
         size="icon"
-        @click="requestStore.removeParam($props.param)"
+        @click="requestStore.removeParam($props.id)"
       >
         <Trash class="text-ctp-red" :size="16" />
       </Button>
