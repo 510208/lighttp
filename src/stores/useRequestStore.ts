@@ -1,27 +1,47 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, watch } from "vue";
+
+export interface QueryParam {
+  id: string;
+  enabled: boolean;
+  key: string;
+  value: string;
+}
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
   const url = ref("https://lighthttp.samhacker.xyz/new");
+  const params = ref<QueryParam[]>([]);
 
-  // 定義params，根據method和url動態生成請求參數
-  const params = computed(() => {
-    try {
-      const searchParams = new URL(url.value).searchParams;
-      const result = [];
-      for (const [key, value] of searchParams.entries()) {
-        result.push({
-          id: `${key}-${value}-${Math.random()}`, // 暫時產生 key 作為渲染使用
-          key,
-          value,
+  watch(
+    url,
+    (newUrl) => {
+      try {
+        const urlObj = new URL(newUrl);
+        const urlSearchParams = urlObj.searchParams;
+
+        // 1. 先標記目前所有「已勾選」的為「待刪除」，準備重新從 URL 讀取
+        // 但保留「未勾選」的項目，因為它們不在 URL 裡
+        const disabledItems = params.value.filter((p) => !p.enabled);
+        const updatedParams: QueryParam[] = [...disabledItems];
+
+        // 2. 從 URL 讀取目前有效的參數
+        urlSearchParams.forEach((value, key) => {
+          updatedParams.push({
+            id: crypto.randomUUID(),
+            enabled: true,
+            key,
+            value,
+          });
         });
+
+        params.value = updatedParams;
+      } catch (e) {
+        // 格式錯誤不更新
       }
-      return result;
-    } catch {
-      return [];
-    }
-  });
+    },
+    { immediate: true },
+  );
 
   // 未來可以在這裡加入發送請求的邏輯
   function setUrl(newUrl: string) {
@@ -42,17 +62,50 @@ export const useRequestStore = defineStore("request", () => {
       }, 0);
       key = `param${maxIndex + 1}`;
     }
-    // 在URL尾端更新
-    const urlObj = new URL(url.value);
-    urlObj.searchParams.append(key, value);
-    url.value = urlObj.toString();
+
+    // 在params裡新增一筆，並更新URL
+    params.value.push({
+      id: crypto.randomUUID(),
+      enabled: true,
+      key,
+      value,
+    });
+
+    updateUrlFromParams();
   }
 
   function removeParam(key: string) {
-    const urlObj = new URL(url.value);
-    urlObj.searchParams.delete(key);
-    url.value = urlObj.toString();
+    // 從params裡移除，並更新URL
+    params.value = params.value.filter((p) => p.key !== key);
+
+    updateUrlFromParams();
   }
 
-  return { method, url, params, setUrl, addParam, removeParam };
+  function toggleParam(id: string) {
+    const item = params.value.find((p) => p.id === id);
+    if (!item) return;
+
+    item.enabled = !item.enabled;
+    updateUrlFromParams();
+  }
+
+  // 根據目前的 params 重新組裝 URL
+  function updateUrlFromParams() {
+    try {
+      const urlObj = new URL(url.value);
+      urlObj.search = ""; // 清空原本的 query
+
+      params.value.forEach((p) => {
+        if (p.enabled && p.key) {
+          urlObj.searchParams.append(p.key, p.value);
+        }
+      });
+
+      url.value = urlObj.toString();
+    } catch (e) {
+      console.error("URL 更新失敗");
+    }
+  }
+
+  return { method, url, params, setUrl, addParam, removeParam, toggleParam };
 });
