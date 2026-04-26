@@ -13,6 +13,13 @@
     <TableCell class="font-space text-sm text-ctp-text">
       <Input :default-value="$props.value" class="border-none" />
     </TableCell>
+
+    <!-- Action Buttons -->
+    <TableCell>
+      <Button variant="destructive" size="icon">
+        <Trash class="text-ctp-red" :size="16" />
+      </Button>
+    </TableCell>
   </TableRow>
 </template>
 
@@ -20,6 +27,8 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import Button from "@/components/ui/button/Button.vue";
+import { Trash } from "@lucide/vue";
 
 interface Props {
   enabled?: boolean;
