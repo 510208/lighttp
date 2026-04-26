@@ -28,13 +28,31 @@ export const useRequestStore = defineStore("request", () => {
     url.value = newUrl;
   }
 
-  // 新增params參數
-  function addParam(key: string, value: string) {
+  // params 管理
+  function addParam(key?: string, value?: string) {
+    if (!value) value = "value";
+    if (!key) {
+      // 檢查是否已經有 param 開頭的 key，並找到最大的數字後加1
+      const existingKeys = params.value
+        .map((param) => param.key)
+        .filter((k) => k.startsWith("param"));
+      const maxIndex = existingKeys.reduce((max, k) => {
+        const index = parseInt(k.replace("param", ""));
+        return isNaN(index) ? max : Math.max(max, index);
+      }, 0);
+      key = `param${maxIndex + 1}`;
+    }
     // 在URL尾端更新
     const urlObj = new URL(url.value);
     urlObj.searchParams.append(key, value);
     url.value = urlObj.toString();
   }
 
-  return { method, url, params, setUrl, addParam };
+  function removeParam(key: string) {
+    const urlObj = new URL(url.value);
+    urlObj.searchParams.delete(key);
+    url.value = urlObj.toString();
+  }
+
+  return { method, url, params, setUrl, addParam, removeParam };
 });
