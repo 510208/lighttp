@@ -11,6 +11,7 @@
     "cn": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
+    "@lucide/vue": "^1.11.0",
     "@tailwindcss/vite": "^4.2.4",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
