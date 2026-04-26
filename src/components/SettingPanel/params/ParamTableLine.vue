@@ -3,21 +3,22 @@
     class="border-ctp-surface1 hover:bg-ctp-surface0/50 transition-colors"
   >
     <TableCell class="text-center">
-      <Checkbox :checked="props.enabled" class="border-ctp-overlay0" />
+      <Checkbox :default-value="props.enabled" class="border-ctp-overlay0" />
     </TableCell>
 
     <TableCell class="font-space text-sm text-ctp-text">
-      {{ props.param }}
+      <Input :default-value="$props.param" class="border-none" />
     </TableCell>
 
     <TableCell class="font-space text-sm text-ctp-text">
-      {{ props.value }}
+      <Input :default-value="$props.value" class="border-none" />
     </TableCell>
   </TableRow>
 </template>
 
 <script setup lang="ts">
 import { TableRow, TableCell } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {

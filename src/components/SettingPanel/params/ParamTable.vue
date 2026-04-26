@@ -14,7 +14,7 @@
         <ParamTableLine
           v-for="i in 3"
           :key="i"
-          :enabled="false"
+          :enabled="true"
           :param="'param' + i"
           :value="'value' + i"
         />
@@ -24,7 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableBody,
+} from "@/components/ui/table";
 import { Check } from "@lucide/vue";
 import ParamTableLine from "./ParamTableLine.vue";
 </script>
