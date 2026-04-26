@@ -4,7 +4,7 @@
 @import "@catppuccin/tailwindcss/mocha.css";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&);
 
 #app {
   @apply h-screen w-screen bg-ctp-crust;
@@ -67,51 +67,57 @@
 :root {
   --radius: 0.625rem;
 
-  --background: var(--ctp-crust);
-  --foreground: var(--ctp-text);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
 
-  --card: var(--ctp-overlay1);
-  --card-foreground: var(--color-ctp-subtext0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
 
-  --popover: var(--ctp-overlay1);
-  --popover-foreground: var(--color-ctp-subtext0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
 
-  --primary: var(--ctp-text);
-  --primary-foreground: var(--color-ctp-base);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
 
-  --secondary: var(--ctp-surface2);
-  --secondary-foreground: var(--color-ctp-subtext0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
 
-  --muted: var(--ctp-surface2);
-  --muted-foreground: var(--color-ctp-subtext0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
 
-  --accent: var(--ctp-text);
-  --accent-foreground: var(--color-ctp-base);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
 
-  --destructive: var(--ctp-red);
-  --border: var(--ctp-surface0);
-  --input: var(--ctp-surface0);
-  --ring: var(--ctp-blue);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
 
-  --chart-1: var(--ctp-red);
-  --chart-2: var(--ctp-green);
-  --chart-3: var(--ctp-blue);
-  --chart-4: var(--ctp-peach);
-  --chart-5: var(--ctp-mauve);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
 
-  --sidebar: var(--ctp-surface0);
-  --sidebar-foreground: var(--color-ctp-subtext0);
-  --sidebar-primary: var(--color-ctp-surface1);
-  --sidebar-primary-foreground: var(--color-ctp-base);
-  --sidebar-accent: var(--color-ctp-surface2);
-  --sidebar-accent-foreground: var(--color-ctp-subtext0);
-  --sidebar-border: var(--color-ctp-surface0);
-  --sidebar-ring: var(--color-ctp-blue);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180);
+  --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250);
+  --admonitions-color-important: oklch(0.7 0.14 310) oklch(0.75 0.14 310);
+  --admonitions-color-warning: oklch(0.7 0.14 60) oklch(0.75 0.14 60);
+  --admonitions-color-caution: oklch(0.6 0.2 25) oklch(0.65 0.2 25);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
