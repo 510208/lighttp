@@ -37,6 +37,7 @@ export function useTableManager(
   };
 
   const toggle = (id: string) => {
+    // console.log("Toggling item with id:", id);
     const item = dataRef.value.find((p) => p.id === id);
     if (item) {
       item.enabled = !item.enabled;
@@ -48,6 +49,7 @@ export function useTableManager(
     id: string,
     updates: Partial<Pick<KeyValuePair, "key" | "value">>,
   ) => {
+    // console.log("Updating item with id:", id, "Updates:", updates);
     const item = dataRef.value.find((p) => p.id === id);
     if (item) {
       Object.assign(item, updates);

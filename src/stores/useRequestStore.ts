@@ -30,23 +30,42 @@ export const useRequestStore = defineStore("request", () => {
   const headerManager = useTableManager(headers); // Header 變動通常不需改 URL
 
   // 3. 監聽 URL 變動 (解析 Params)
-  watch(
-    url,
-    (newUrl) => {
-      try {
-        const urlObj = new URL(newUrl);
-        const disabledItems = params.value.filter((p) => !p.enabled);
-        const newItems: KeyValuePair[] = [];
+  watch(url, (newUrl, oldUrl) => {
+    // 關鍵：如果 URL 的變化是由於表格內部 updateUrlFromParams 觸發的，就跳過
+    // 這裡可以檢查新的 URL 解析出的 Query 是否跟目前的 params 一致
+    try {
+      const urlObj = new URL(newUrl);
+      const searchParams = urlObj.searchParams;
 
-        urlObj.searchParams.forEach((value, key) => {
-          newItems.push({ id: crypto.randomUUID(), enabled: true, key, value });
+      // 將 URL 的參數轉為字串比較，簡單判斷是否真的有外部變動
+      const currentParamsStr = params.value
+        .filter((p) => p.enabled)
+        .map((p) => `${p.key}=${p.value}`)
+        .join("&");
+      const newParamsStr = searchParams.toString();
+
+      // 如果內部的 params 跟 URL 已經同步了，就不要重新賦值，避免觸發重新渲染
+      if (currentParamsStr === newParamsStr && params.value.length > 0) {
+        return;
+      }
+
+      const disabledItems = params.value.filter((p) => !p.enabled);
+      const newItems: KeyValuePair[] = [];
+
+      searchParams.forEach((value, key) => {
+        newItems.push({
+          id: crypto.randomUUID(),
+          enabled: true,
+          key,
+          value,
         });
+      });
 
-        params.value = [...disabledItems, ...newItems];
-      } catch {}
-    },
-    { immediate: true },
-  );
+      params.value = [...disabledItems, ...newItems];
+    } catch (e) {
+      // 格式錯誤不處理
+    }
+  });
 
   return {
     method,
@@ -57,9 +76,11 @@ export const useRequestStore = defineStore("request", () => {
     addParam: () => paramManager.add("param"),
     removeParam: paramManager.remove,
     toggleParam: paramManager.toggle,
+    updateParam: paramManager.update,
 
     addHeader: () => headerManager.add("header", ""),
     removeHeader: headerManager.remove,
     toggleHeader: headerManager.toggle,
+    updateHeader: headerManager.update,
   };
 });
