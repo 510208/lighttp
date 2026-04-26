@@ -70,6 +70,14 @@
   --font-space: "Space Grotesk Variable", monospace;
 }
 
+@layer base {
+  *,
+  ::after,
+  ::before {
+    border-color: var(--catppuccin-color-surface2);
+  }
+}
+
 :root {
   --radius: 0.625rem;
 
