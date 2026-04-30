@@ -1,9 +1,10 @@
 <template>
   <div class="flex flex-col gap-4 w-full">
-    <div class="flex">
+    <div class="flex gap-2">
       <Button variant="outline" class="w-auto gap-2" @click="$emit('add')">
         <Plus :size="16" />{{ addButtonText }}
       </Button>
+      <slot name="extra"></slot>
     </div>
 
     <div
