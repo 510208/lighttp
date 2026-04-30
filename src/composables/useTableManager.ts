@@ -23,9 +23,14 @@ export function useTableManager(
     value,
   });
 
-  const add = (defaultKeyPrefix = "item", defaultValue = "value") => {
+  const addExample = (defaultKeyPrefix = "item", defaultValue = "value") => {
     const newKey = `${defaultKeyPrefix}${dataRef.value.length + 1}`;
-    dataRef.value.push(createItem(newKey, defaultValue));
+    add(newKey, defaultValue);
+    onUpdate?.();
+  };
+
+  const add = (key: string, value: string) => {
+    dataRef.value.push(createItem(key, value));
     onUpdate?.();
   };
 
@@ -57,5 +62,5 @@ export function useTableManager(
     }
   };
 
-  return { add, remove, toggle, update };
+  return { add, addExample, remove, toggle, update };
 }
