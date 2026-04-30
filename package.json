@@ -8,7 +8,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "cn": "pnpm dlx shadcn@latest"
+    "cn": "pnpm dlx shadcn-vue@latest"
   },
   "dependencies": {
     "@fontsource-variable/noto-sans-tc": "^5.2.10",
