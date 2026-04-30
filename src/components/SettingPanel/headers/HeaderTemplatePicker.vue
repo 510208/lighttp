@@ -7,7 +7,7 @@
       </Button>
     </DialogTrigger>
     <DialogContent
-      class="border-ctp-surface1 bg-ctp-mantle min-w-120"
+      class="border-ctp-surface1 bg-ctp-mantle min-w-160"
       align="start"
     >
       <DialogHeader>
@@ -17,7 +17,7 @@
       </DialogHeader>
       <div class="flex gap-2 max-h-60 overflow-y-auto">
         <!-- 左欄顯示所有的標頭模板 -->
-        <div class="max-w-40">
+        <div class="w-60 max-h-full overflow-y-auto overflow-x-hidden">
           <Button
             variant="ghost"
             v-for="template in headerTemplates"
