@@ -73,12 +73,16 @@ export const useRequestStore = defineStore("request", () => {
     params,
     headers,
     // 將 Manager 的方法展開或重新命名導出
-    addParam: () => paramManager.add("param"),
+    addParam: () => paramManager.addExample("param"),
+    addParamFromPair: (key: string, value: string) =>
+      paramManager.add(key, value),
     removeParam: paramManager.remove,
     toggleParam: paramManager.toggle,
     updateParam: paramManager.update,
 
-    addHeader: () => headerManager.add("header", ""),
+    addHeader: () => headerManager.addExample("header", ""),
+    addHeaderFromPair: (key: string, value: string) =>
+      headerManager.add(key, value),
     removeHeader: headerManager.remove,
     toggleHeader: headerManager.toggle,
     updateHeader: headerManager.update,
