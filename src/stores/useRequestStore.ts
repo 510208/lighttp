@@ -26,8 +26,7 @@ export const useRequestStore = defineStore("request", () => {
   }
 
   // Header
-
-  // 定義同步邏輯
+  //   定義同步邏輯
   const syncUrlFromParams = () => {
     try {
       const urlObj = new URL(url.value);
