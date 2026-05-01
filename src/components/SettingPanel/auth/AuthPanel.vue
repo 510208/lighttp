@@ -1,11 +1,11 @@
 <template>
   <ResizablePanelGroup
     direction="horizontal"
-    class="border rounded-lg border-ctp-surface1"
+    class="border rounded-lg border-ctp-surface1 min-h-ui"
   >
     <!-- 左欄：顯示認證選項 -->
     <ResizablePanel :default-size="30">
-      <div class="flex h-[200px] items-center justify-center p-6">
+      <div class="flex">
         <span class="font-semibold">One</span>
       </div>
     </ResizablePanel>
@@ -14,7 +14,7 @@
 
     <!-- 右欄：設定詳細內容 -->
     <ResizablePanel :default-size="70">
-      <div class="flex h-[200px] items-center justify-center p-6">
+      <div class="flex">
         <span class="font-semibold">One</span>
       </div>
     </ResizablePanel>
