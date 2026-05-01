@@ -80,6 +80,17 @@ export const useRequestStore = defineStore("request", () => {
     }
   });
 
+  // 將所儲存的內容組合成json的方法
+  function getRequestData() {
+    return {
+      url: url.value,
+      method: method.value,
+      params: params.value.filter((p) => p.enabled),
+      headers: headers.value.filter((h) => h.enabled),
+      auth: auth.value,
+    };
+  }
+
   return {
     method,
     url,
@@ -104,5 +115,8 @@ export const useRequestStore = defineStore("request", () => {
 
     // 認證相關
     setAuth,
+
+    // 傳送給後端的資訊
+    getRequestData,
   };
 });
