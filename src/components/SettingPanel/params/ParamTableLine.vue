@@ -1,6 +1,6 @@
 <template>
   <TableRow
-    class="border-ctp-surface1 hover:bg-ctp-surface0/50 transition-colors"
+    class="hover:bg-ctp-surface0/50 transition-colors"
     :data-disabled="!isEnabled"
     :data-param-id="props.id"
   >

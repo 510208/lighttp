@@ -2,14 +2,11 @@
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger>
-      <Button variant="outline" class="gap-2 border-dashed border-ctp-surface1">
+      <Button variant="outline" class="gap-2 border-dashed">
         <Library /> 從模板新增
       </Button>
     </DialogTrigger>
-    <DialogContent
-      class="border-ctp-surface1 bg-ctp-mantle min-w-160"
-      align="start"
-    >
+    <DialogContent class="min-w-160" align="start">
       <DialogHeader>
         <DialogTitle class="flex gap-2 items-center">
           <Library /> 選擇標頭模板

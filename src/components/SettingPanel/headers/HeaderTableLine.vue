@@ -1,6 +1,6 @@
 <template>
   <TableRow
-    class="border-ctp-surface1 hover:bg-ctp-surface0/50 transition-colors"
+    class="hover:bg-ctp-surface0/50 transition-colors"
     :data-disabled="!isEnabled"
     :data-param-id="props.id"
   >
@@ -9,7 +9,6 @@
         :checked="props.enabled"
         :default-value="props.enabled"
         @update:modelValue="handleToggle"
-        class="border-ctp-overlay0"
       />
     </TableCell>
 
