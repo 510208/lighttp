@@ -1,5 +1,5 @@
 <template>
-  <Select>
+  <Select @update:model-value="(v) => emit('update:modelValue', v)">
     <SelectTrigger size="sm">
       <SelectValue placeholder="選擇認證方式" />
     </SelectTrigger>
@@ -8,7 +8,6 @@
         v-for="method in authMethods"
         :key="method.value"
         :value="method.value"
-        @select="handleSelect"
       >
         {{ method.label }}
       </SelectItem>
@@ -32,11 +31,6 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["update:modelValue"]);
-
-// 2. 這裡接收到的會是正確的 string 值
-function handleSelect(value: string) {
-  emit("update:modelValue", value);
-}
 </script>
 
 <style scoped></style>
