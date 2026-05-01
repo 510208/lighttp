@@ -5,7 +5,7 @@ import {
   type KeyValuePair,
 } from "@/composables/useTableManager";
 
-import type { AuthStore } from "./authType.d";
+import type { AuthStore, AuthStoreForBackend } from "./authType.d";
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
@@ -80,6 +80,14 @@ export const useRequestStore = defineStore("request", () => {
     }
   });
 
+  // 將auth.type改為auth.auth_type，否則在Rust端無法正確解析
+  function renameAuthType(original: AuthStore): AuthStoreForBackend {
+    return {
+      auth_type: original.type,
+      content: original.content,
+    };
+  }
+
   // 將所儲存的內容組合成json的方法
   function getRequestData() {
     return {
@@ -87,7 +95,7 @@ export const useRequestStore = defineStore("request", () => {
       method: method.value,
       params: params.value.filter((p) => p.enabled),
       headers: headers.value.filter((h) => h.enabled),
-      auth: auth.value,
+      auth: renameAuthType(auth.value),
     };
   }
 
