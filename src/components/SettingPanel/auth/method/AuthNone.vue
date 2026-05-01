@@ -13,4 +13,13 @@
 <script setup lang="ts">
 import IconContainer from "@/components/ui/icon-ct/IconContainer.vue";
 import { Ghost } from "@lucide/vue";
+import { useRequestStore } from "@/stores/useRequestStore";
+import { AuthStore } from "@/stores/authType";
+
+// 當選到 "無" 認證方式時，將認證方式設為NoneAuthContent
+const requestStore = useRequestStore();
+requestStore.setAuth({
+  type: "none",
+  content: {},
+} as AuthStore);
 </script>
