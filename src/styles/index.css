@@ -81,37 +81,41 @@
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(0.145 0 0);
-  --foreground: var(--catppuccin-color-text);
+  --background: var(--catppuccin-color-mantle);
+  --foreground: white;
 
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
+  --card: var(--catppuccin-color-overlay);
+  --card-foreground: var(--catppuccin-color-text);
 
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --popover: var(--catppuccin-color-overlay1);
+  --popover-foreground: var(--catppuccin-color-text);
 
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: color-mix(
+    in oklch,
+    var(--catppuccin-color-green) 40%,
+    transparent
+  );
+  --primary-foreground: var(--catppuccin-color-green-foreground);
 
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary: var(--catppuccin-color-surface1);
+  --secondary-foreground: var(--catppuccin-color-text);
 
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted: var(--catppuccin-color-surface2);
+  --muted-foreground: var(--catppuccin-color-text);
 
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: var(--catppuccin-color-blue);
+  --accent-foreground: var(--catppuccin-color-blue-foreground);
 
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --destructive: var(--catppuccin-color-red);
+  --border: var(--catppuccin-color-surface2);
+  --input: var(--catppuccin-color-surface2);
+  --ring: var(--catppuccin-color-green);
 
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: var(--catppuccin-color-blue);
+  --chart-2: var(--catppuccin-color-green);
+  --chart-3: var(--catppuccin-color-peach);
+  --chart-4: var(--catppuccin-color-mauve);
+  --chart-5: var(--catppuccin-color-red);
 
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
