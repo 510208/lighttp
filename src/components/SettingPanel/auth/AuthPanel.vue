@@ -22,9 +22,11 @@
 
     <!-- 右欄：設定詳細內容 -->
     <ResizablePanel :default-size="70" class="p-4">
-      <div class="flex">
-        <span class="font-semibold">One</span>
-      </div>
+      <!-- 認證設定詳細內容 -->
+      <component
+        :is="selectedAuthMethodObject"
+        v-if="selectedAuthMethodObject"
+      />
     </ResizablePanel>
   </ResizablePanelGroup>
 </template>
@@ -40,6 +42,10 @@ import { authMethods } from "./methods";
 import { ref, computed } from "vue";
 
 const selectedAuthMethod = ref("");
+const selectedAuthMethodObject = computed(() => {
+  const method = authMethods.find((m) => m.value === selectedAuthMethod.value);
+  return method ? method.object : null;
+});
 
 const escapeHtml = (str: string) =>
   str
