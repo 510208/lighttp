@@ -13,5 +13,4 @@
 <script setup lang="ts">
 import IconContainer from "@/components/ui/icon-ct/IconContainer.vue";
 import { Ghost } from "@lucide/vue";
-import { h } from "vue";
 </script>
