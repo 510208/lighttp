@@ -159,3 +159,7 @@ button[data-slot="tabs-trigger"] {
 button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
   @apply text-ctp-green;
 }
+
+.min-h-ui {
+  @apply min-h-30;
+}
