@@ -29,7 +29,12 @@ export function useTableManager(
     onUpdate?.();
   };
 
-  const add = (key: string, value: string) => {
+  const add = (key: string, value: string, skipCheckDuplicate = true) => {
+    // 如果有重複就直接拋出錯誤
+    if (!skipCheckDuplicate && dataRef.value.some((item) => item.key === key)) {
+      throw new Error(`Item with key "${key}" already exists.`);
+    }
+
     dataRef.value.push(createItem(key, value));
     onUpdate?.();
   };
