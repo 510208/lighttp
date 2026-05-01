@@ -9,6 +9,13 @@
         <span class="text-sm font-semibold">認證方式</span>
         <AuthChoose v-model="selectedAuthMethod" />
       </div>
+
+      <!-- 認證方式描述 -->
+      <div
+        class="text-ctp-text text-sm"
+        v-if="selectedAuthMethod"
+        v-html="selectedDescriptionHtml"
+      ></div>
     </ResizablePanel>
 
     <ResizableHandle />
@@ -29,9 +36,25 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import AuthChoose from "./AuthChoose.vue";
-import { ref } from "vue";
+import { authMethods } from "./methods";
+import { ref, computed } from "vue";
 
 const selectedAuthMethod = ref("");
+
+const escapeHtml = (str: string) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const selectedDescriptionHtml = computed(() => {
+  const desc =
+    authMethods.find((m) => m.value === selectedAuthMethod.value)
+      ?.description || "";
+  return escapeHtml(desc).replace(/\r?\n/g, "<br/>");
+});
 </script>
 
 <style scoped></style>
