@@ -1,4 +1,5 @@
 import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
+import AuthBasic from "@/components/SettingPanel/auth/method/AuthBasic.vue";
 
 export const authMethods = [
   {
@@ -11,7 +12,7 @@ export const authMethods = [
     value: "Basic",
     description:
       "基本驗證方式。\n\n使用此方式後系統會自動在 Header 中加入 Authorization: Basic ... 標頭。",
-    object: null,
+    object: AuthBasic,
     label: "Basic",
   },
 ];
