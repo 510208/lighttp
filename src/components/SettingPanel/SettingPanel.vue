@@ -7,11 +7,13 @@
       <TabsOptions value="body" name="Body" chinese-name="主體" />
       <TabsOptions value="proxy" name="Proxy" chinese-name="代理" />
     </TabsList>
-    <TabsContent value="params"><ParamTable /></TabsContent>
-    <TabsContent value="headers"><HeaderTable /></TabsContent>
-    <TabsContent value="auth"><AuthPanel /></TabsContent>
-    <TabsContent value="body">Body</TabsContent>
-    <TabsContent value="proxy">Proxy</TabsContent>
+    <div id="setting-panel-content" class="min-h-30">
+      <TabsContent value="params" as-child><ParamTable /></TabsContent>
+      <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
+      <TabsContent value="auth" as-child><AuthPanel /></TabsContent>
+      <TabsContent value="body" as-child>Body</TabsContent>
+      <TabsContent value="proxy" as-child>Proxy</TabsContent>
+    </div>
   </Tabs>
 </template>
 
