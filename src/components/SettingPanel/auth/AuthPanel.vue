@@ -1,13 +1,13 @@
 <template>
   <ResizablePanelGroup
     direction="horizontal"
-    class="border rounded-lg border-ctp-surface1 min-h-ui"
+    class="border-ctp-surface1 min-h-ui rounded-lg border"
   >
     <!-- 左欄：顯示認證選項 -->
     <ResizablePanel :default-size="30" class="p-4">
       <div class="mb-4 flex flex-col gap-1">
         <span class="text-sm font-semibold">認證方式</span>
-        <AuthChoose />
+        <AuthChoose v-model="selectedAuthMethod" />
       </div>
     </ResizablePanel>
 
@@ -29,6 +29,9 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import AuthChoose from "./AuthChoose.vue";
+import { ref } from "vue";
+
+const selectedAuthMethod = ref("");
 </script>
 
 <style scoped></style>
