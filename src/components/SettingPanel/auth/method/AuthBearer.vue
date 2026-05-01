@@ -23,6 +23,8 @@ import { Input } from "@/components/ui/input";
 import { useRequestStore } from "@/stores/useRequestStore";
 import { ref } from "vue";
 
+import { type BearerAuthContent } from "@/stores/authType";
+
 const token = ref("");
 
 function updateAuth() {
@@ -30,7 +32,7 @@ function updateAuth() {
     type: "bearer",
     content: {
       token: token.value,
-    },
+    } as BearerAuthContent,
   });
 }
 

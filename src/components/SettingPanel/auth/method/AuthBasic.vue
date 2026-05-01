@@ -30,6 +30,8 @@ import { Input } from "@/components/ui/input";
 import { useRequestStore } from "@/stores/useRequestStore";
 import { ref } from "vue";
 
+import { type BasicAuthContent } from "@/stores/authType";
+
 const username = ref("");
 const password = ref("");
 
@@ -39,7 +41,7 @@ function updateAuth() {
     content: {
       username: username.value,
       password: password.value,
-    },
+    } as BasicAuthContent,
   });
 }
 
