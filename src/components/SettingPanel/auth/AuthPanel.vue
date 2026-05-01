@@ -38,7 +38,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import AuthChoose from "./AuthChoose.vue";
-import { authMethods } from "./methods";
+import { authMethods } from "../../../constants/methods";
 import { ref, computed } from "vue";
 
 const selectedAuthMethod = ref("");
