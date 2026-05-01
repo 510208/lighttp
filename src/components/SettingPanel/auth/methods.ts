@@ -1,8 +1,10 @@
+import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
+
 export const authMethods = [
   {
     value: "無認證",
     description: "不使用任何認證方式。\n\n適用於不需要身份驗證的公開 API。",
-    object: null,
+    object: AuthNone,
     label: "None",
   },
   {
