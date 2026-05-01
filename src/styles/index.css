@@ -10,7 +10,7 @@
 @custom-variant dark (&);
 
 #app {
-  @apply h-screen w-screen bg-ctp-crust;
+  @apply bg-ctp-crust h-screen w-screen;
 }
 
 @theme inline {
@@ -84,10 +84,10 @@
   --background: var(--catppuccin-color-mantle);
   --foreground: white;
 
-  --card: var(--catppuccin-color-overlay);
+  --card: var(--catppuccin-color-overlay0);
   --card-foreground: var(--catppuccin-color-text);
 
-  --popover: var(--catppuccin-color-overlay1);
+  --popover: var(--catppuccin-color-surface0);
   --popover-foreground: var(--catppuccin-color-text);
 
   --primary: color-mix(
@@ -103,7 +103,7 @@
   --muted: var(--catppuccin-color-surface2);
   --muted-foreground: var(--catppuccin-color-text);
 
-  --accent: var(--catppuccin-color-blue);
+  --accent: var(--catppuccin-color-surface1);
   --accent-foreground: var(--catppuccin-color-blue-foreground);
 
   --destructive: var(--catppuccin-color-red);
