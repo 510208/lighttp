@@ -5,6 +5,8 @@ import {
   type KeyValuePair,
 } from "@/composables/useTableManager";
 
+import type { AuthStore } from "./authType.d";
+
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
   const url = ref("https://lighthttp.samhacker.xyz/new");
@@ -13,7 +15,19 @@ export const useRequestStore = defineStore("request", () => {
   const params = ref<KeyValuePair[]>([]);
   const headers = ref<KeyValuePair[]>([]);
 
-  // 1. 定義同步邏輯
+  // 認證資料
+  const auth = ref<AuthStore>({
+    type: "none",
+    content: {},
+  });
+
+  function setAuth(newAuth: AuthStore) {
+    auth.value = newAuth;
+  }
+
+  // Header
+
+  // 定義同步邏輯
   const syncUrlFromParams = () => {
     try {
       const urlObj = new URL(url.value);
@@ -25,11 +39,11 @@ export const useRequestStore = defineStore("request", () => {
     } catch {}
   };
 
-  // 2. 使用 Composables 管理資料 (傳入 ref 與 回調)
+  // 使用 Composables 管理資料 (傳入 ref 與 回調)
   const paramManager = useTableManager(params, syncUrlFromParams);
   const headerManager = useTableManager(headers); // Header 變動通常不需改 URL
 
-  // 3. 監聽 URL 變動 (解析 Params)
+  // 監聽 URL 變動 (解析 Params)
   watch(url, (newUrl, oldUrl) => {
     // 關鍵：如果 URL 的變化是由於表格內部 updateUrlFromParams 觸發的，就跳過
     // 這裡可以檢查新的 URL 解析出的 Query 是否跟目前的 params 一致
@@ -71,7 +85,9 @@ export const useRequestStore = defineStore("request", () => {
     method,
     url,
     params,
+    auth,
     headers,
+
     // 將 Manager 的方法展開或重新命名導出
     addParam: () => paramManager.addExample("param"),
     addParamFromPair: (key: string, value: string) =>
@@ -86,5 +102,8 @@ export const useRequestStore = defineStore("request", () => {
     removeHeader: headerManager.remove,
     toggleHeader: headerManager.toggle,
     updateHeader: headerManager.update,
+
+    // 認證相關
+    setAuth,
   };
 });

@@ -13,3 +13,5 @@ interface BasicAuthContent {
   username: string;
   password: string;
 }
+
+export type { AuthStore, NoneAuthContent, BasicAuthContent };
