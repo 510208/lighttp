@@ -18,15 +18,19 @@
       <div class="flex gap-2 max-h-60 overflow-y-auto">
         <!-- 左欄顯示所有的標頭模板 -->
         <div class="w-60 max-h-full overflow-y-auto overflow-x-hidden">
-          <Button
-            variant="ghost"
+          <div
+            class="flex"
             v-for="template in headerTemplates"
             :key="template.key"
-            class="p-2 rounded cursor-pointer hover:bg-ctp-surface1"
-            @click="selectTemplate(template)"
           >
-            {{ template.key }}
-          </Button>
+            <Button
+              variant="ghost"
+              class="p-2 rounded cursor-pointer hover:bg-ctp-surface1"
+              @click="selectTemplate(template)"
+            >
+              {{ template.key }}
+            </Button>
+          </div>
         </div>
 
         <!-- 右欄顯示選中模板的詳細內容 -->
@@ -100,7 +104,12 @@ const addTemplate = (template: HeaderTemplate) => {
     value: template.value,
     enabled: true,
   };
-  requestStore.addHeaderFromPair(newHeader.key, newHeader.value);
+  try {
+    requestStore.addHeaderFromPair(newHeader.key, newHeader.value);
+  } catch (error) {
+    console.error("新增標頭失敗:", error);
+    return;
+  }
   // 清空選取狀態
   selectedHeaderTemplate.value = null;
   open.value = false; // 選擇後關閉選單
