@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Debug)]
@@ -40,3 +41,9 @@ pub struct RequestPayload {
 
 // ------
 
+#[derive(Serialize, Debug)]
+pub struct ResponsePayload {
+    pub status: u16,                // HTTP 狀態碼 (例如 200, 404)
+    pub body: String,               // 回應的主體內容
+    pub headers: HashMap<String, String>, // 回應標頭
+}
