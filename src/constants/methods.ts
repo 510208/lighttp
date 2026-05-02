@@ -1,6 +1,7 @@
 import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
 import AuthBasic from "@/components/SettingPanel/auth/method/AuthBasic.vue";
 import AuthBearer from "@/components/SettingPanel/auth/method/AuthBearer.vue";
+import { describe } from "node:test";
 
 export const authMethods = [
   {
@@ -24,5 +25,20 @@ export const authMethods = [
     label: "Bearer Token",
   },
 ];
-
 export type AuthMethod = (typeof authMethods)[number]["value"];
+
+export const bodyMethods = [
+  {
+    value: "空內容",
+    description: "不包含任何內容的請求體。",
+    object: null,
+    label: "None",
+  },
+  {
+    value: "原始文本",
+    description: "使用純文本（含JSON、XML等）作為請求主體。",
+    object: null,
+    label: "Original",
+  },
+];
+export type BodyMethod = (typeof bodyMethods)[number]["value"];
