@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-ctp-text flex h-full w-full flex-col items-center justify-center gap-2 text-sm"
+    class="text-ctp-text flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-sm"
   >
     <IconContainer>
       <Ghost />
