@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-ui flex w-full flex-col gap-4"><CodeEditor /></div>
+  <CodeEditor />
 </template>
 
 <script setup lang="ts">

@@ -2,6 +2,7 @@ import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
 import AuthBasic from "@/components/SettingPanel/auth/method/AuthBasic.vue";
 import AuthBearer from "@/components/SettingPanel/auth/method/AuthBearer.vue";
 
+import BodyNone from "@/components/SettingPanel/body/method/BodyNone.vue";
 import BodyOriginal from "@/components/SettingPanel/body/method/BodyOriginal.vue";
 
 export const authMethods = [
@@ -32,7 +33,7 @@ export const bodyMethods = [
   {
     value: "空內容",
     description: "不包含任何內容的請求體。",
-    object: null,
+    object: BodyNone,
     label: "None",
   },
   {
