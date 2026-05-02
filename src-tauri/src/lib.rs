@@ -19,10 +19,11 @@ pub fn run() {
 // use std::collections::HashMap;
 
 mod models;
-use models::{RequestPayload, ResponsePayload};
+use models::{RequestPayload, ResponsePayload, AuthStore};
 use reqwest::header::HeaderMap;
-use std::collections::HashMap;
+use std::{collections::HashMap};
 use reqwest::{Client, Method};
+use base64::{Engine as _, engine::general_purpose};
 
 fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
     header_map
@@ -34,6 +35,29 @@ fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
             )
         })
         .collect()
+}
+
+fn encode_base64(input: &str) -> String { general_purpose::STANDARD.encode(input) }
+
+// 處理驗證
+async fn handle_auth(auth: &AuthStore) -> Option<reqwest::header::HeaderValue> {
+    match auth {
+        AuthStore::Basic(content) => {
+            if let (Some(u), Some(p)) = (&content.username, &content.password) {
+                let credentials = format!("{}:{}", u, p);
+                let encoded = encode_base64(&credentials);
+                reqwest::header::HeaderValue::from_str(&format!("Basic {}", encoded)).ok()
+            } else {
+                None
+            }
+        }
+        AuthStore::Bearer(content) => {
+            content.token.as_ref().and_then(|t| {
+                reqwest::header::HeaderValue::from_str(&format!("Bearer {}", t)).ok()
+            })
+        }
+        AuthStore::None(_) => None,
+    }
 }
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
@@ -55,6 +79,10 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     }
 
     // TODO: 添加認證處理 (根據 payload.auth 的內容)
+    if let Some(auth_header) = handle_auth(&payload.auth).await {  // Some(auth_header) 表示有有效的認證資訊
+        request_builder = request_builder.header(reqwest::header::AUTHORIZATION, auth_header);
+    }
+    println!("[handle_request] request_builder: {:?}", request_builder);
 
     // TODO: 處理正文內容
 
@@ -64,7 +92,11 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     // 檢查請求是否成功
     match response {
         Ok(response) => parse_success_response(response).await,
-        Err(e) => build_error_response(500, format!("[handle_request] 請求失敗: {}", e)),
+        Err(e) => {
+            let full_error = format!("{}", e);
+            eprintln!("[handle_request] 請求發送失敗: {}", full_error);
+            build_error_response(500, full_error)
+        },
     }
 }
 
