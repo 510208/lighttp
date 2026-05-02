@@ -17,12 +17,12 @@ pub fn run() {
 
 // use serde::Deserialize;
 // use std::collections::HashMap;
-use reqwest::Client;
 
 mod models;
 use models::{RequestPayload, ResponsePayload};
 use reqwest::header::HeaderMap;
 use std::collections::HashMap;
+use reqwest::{Client, Method};
 
 fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
     header_map
@@ -41,46 +41,30 @@ fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
 async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     // 建立一個Client實例
     let client = Client::new();
-    
-    match payload.method.as_str() {
-        // GET request
-        "GET" => {
-            let mut request_builder = client.get(&payload.url);
 
-            // 添加標頭
-            for header in payload.headers {
-                request_builder = request_builder.header(&header.key, &header.value);
-            }
+    let method = match Method::from_bytes(payload.method.to_uppercase().as_bytes()) {
+        Ok(m) => m,
+        Err(_) => return build_error_response(400, format!("[handle_request] 無效的 HTTP 方法: {}", payload.method)),
+    };
 
-            // 驗證方式處理
+    let mut request_builder = client.request(method, &payload.url);
 
-            // 發送請求並處理回應
-            match request_builder.send().await {
-                Ok(response) => {
-                    println!("Response Status: {}", response.status());
-                    // 回傳結果
-                    return parse_success_response(response).await;
-                }
-                Err(e) => {
-                    eprintln!("Request failed: {}", e);
-                    // 回傳錯誤結果
-                    return ResponsePayload {
-                        status: 500,
-                        headers: HashMap::new(),
-                        body: format!("Request failed: {}", e),
-                    };
-                }
-            }
-        }
-        // 這裡可以添加對其他 HTTP 方法的處理，例如 POST、PUT、DELETE 等
-        _ => {
-            eprintln!("Unsupported HTTP method: {}", payload.method);
-            return ResponsePayload {
-                status: 400,
-                headers: HashMap::new(),
-                body: format!("Unsupported HTTP method: {}", payload.method),
-            };
-        }
+    // 添加標頭
+    for header in payload.headers {
+        request_builder = request_builder.header(&header.key, &header.value);
+    }
+
+    // TODO: 添加認證處理 (根據 payload.auth 的內容)
+
+    // TODO: 處理正文內容
+
+    // 送請求
+    let response = request_builder.send().await;
+
+    // 檢查請求是否成功
+    match response {
+        Ok(response) => parse_success_response(response).await,
+        Err(e) => build_error_response(500, format!("[handle_request] 請求失敗: {}", e)),
     }
 }
 
@@ -90,5 +74,16 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
         status: response.status().as_u16(),
         headers: to_hashmap(response.headers()),
         body: response.text().await.unwrap_or_default(),  // response.text() 會取走擁有權，所以headers要放在上面
+    }
+}
+
+// 處理錯誤的結果
+fn build_error_response(status: u16, message: String) -> ResponsePayload {
+    println!("[build_error_response] Error: {}", message);
+
+    ResponsePayload {
+        status,
+        headers: HashMap::new(),
+        body: message,
     }
 }
