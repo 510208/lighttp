@@ -16,7 +16,7 @@ const editorOptions = {
 </script>
 
 <template>
-  <div class="h-40">
+  <div class="h-40 overflow-auto rounded-lg border">
     <CodeEditor
       v-model:value="code"
       language="json"
