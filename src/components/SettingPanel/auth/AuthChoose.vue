@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { authMethods } from "../../../constants/methods";
+import { authMethods } from "@/constants/methods";
 import {
   Select,
   SelectContent,
