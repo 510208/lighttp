@@ -13,11 +13,35 @@ pub struct Param {
     pub value: String,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct AuthStore {
-    pub auth_type: String,
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum AuthMethod {
+    None,
+    Basic,
+    Bearer,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "auth_type", content = "content", rename_all = "lowercase")]
+pub enum AuthStore {
+    /// 對應 NoneAuthContent (通常為空物件或 null)
+    None(serde_json::Value), 
+    
+    /// 對應 BasicAuthContent
+    Basic(BasicAuthContent),
+    
+    /// 對應 BearerAuthContent
+    Bearer(BearerAuthContent),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BasicAuthContent {
     pub username: Option<String>,
     pub password: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BearerAuthContent {
     pub token: Option<String>,
 }
 
