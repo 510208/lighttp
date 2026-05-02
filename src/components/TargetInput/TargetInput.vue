@@ -17,9 +17,10 @@ const handleSend = () => {
     return;
   }
 
-  console.log(`Sending ${requestStore.method} request to: ${requestStore.url}`);
-  console.log("requestStore:", requestStore);
-  console.log("Request Content:", requestStore.getRequestData());
+  console.log(
+    `Sending ${requestStore.method} request to: ${requestStore.url} with `,
+    requestStore.getRequestData(),
+  );
 
   // 發送請求到 Rust 後端
   invoke("handle_request", { payload: requestStore.getRequestData() })
