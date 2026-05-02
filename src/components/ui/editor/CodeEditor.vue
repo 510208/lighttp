@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { CodeEditor } from "monaco-editor-vue3";
 
@@ -16,8 +16,7 @@ const editorOptions = {
 </script>
 
 <template>
-  <div class="editor-container">
-    <!-- 将编辑器容器绑定到 ref -->
+  <div class="h-40">
     <CodeEditor
       v-model:value="code"
       language="json"
@@ -27,15 +26,4 @@ const editorOptions = {
   </div>
 </template>
 
-<style scoped>
-.editor-container {
-  width: 100%;
-  height: 100%;
-  padding: 15px;
-  background: #ffffff;
-}
-#editor {
-  width: 100%;
-  height: 100%;
-}
-</style>
+<style scoped></style>
