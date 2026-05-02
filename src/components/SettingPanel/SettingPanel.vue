@@ -1,6 +1,6 @@
 <template>
   <Tabs default-value="params">
-    <TabsList class="bg-transparent p-0 gap-5">
+    <TabsList class="gap-5 bg-transparent p-0">
       <TabsOptions value="params" name="Params" chinese-name="參數" />
       <TabsOptions value="headers" name="Headers" chinese-name="標頭" />
       <TabsOptions value="auth" name="Auth" chinese-name="認證" />
@@ -11,7 +11,7 @@
       <TabsContent value="params" as-child><ParamTable /></TabsContent>
       <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
       <TabsContent value="auth" as-child><AuthPanel /></TabsContent>
-      <TabsContent value="body" as-child>Body</TabsContent>
+      <TabsContent value="body" as-child><BodyPanel /></TabsContent>
       <TabsContent value="proxy" as-child>Proxy</TabsContent>
     </div>
   </Tabs>
@@ -23,4 +23,5 @@ import TabsOptions from "./TabsOption.vue";
 import ParamTable from "./params/ParamTable.vue";
 import HeaderTable from "./headers/HeaderTable.vue";
 import AuthPanel from "./auth/AuthPanel.vue";
+import BodyPanel from "./body/BodyPanel.vue";
 </script>
