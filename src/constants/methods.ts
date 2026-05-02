@@ -1,7 +1,8 @@
 import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
 import AuthBasic from "@/components/SettingPanel/auth/method/AuthBasic.vue";
 import AuthBearer from "@/components/SettingPanel/auth/method/AuthBearer.vue";
-import { describe } from "node:test";
+
+import BodyOriginal from "@/components/SettingPanel/body/method/BodyOriginal.vue";
 
 export const authMethods = [
   {
@@ -37,7 +38,7 @@ export const bodyMethods = [
   {
     value: "原始文本",
     description: "使用純文本（含JSON、XML等）作為請求主體。",
-    object: null,
+    object: BodyOriginal,
     label: "Original",
   },
 ];
