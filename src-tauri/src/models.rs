@@ -13,6 +13,7 @@ pub struct Param {
     pub value: String,
 }
 
+// ------ 驗證
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum AuthMethod {
@@ -45,7 +46,16 @@ pub struct BearerAuthContent {
     pub token: Option<String>,
 }
 
-// 定義前端資料結構
+// ------ 正文
+#[derive(Debug, Serialize, Deserialize)]
+pub struct BodyContent {
+    #[serde(rename = "type")]
+    pub body_type: String,
+    
+    pub content: String,
+}
+
+// ------ 前端
 
 // #[derive(Deserialize)]代表這個結構可以從 JSON 反序列化而來，這對於從前端接收資料非常有用。
 // {      url: url.value,
@@ -61,6 +71,7 @@ pub struct RequestPayload {
     pub params: Vec<Param>,
     pub headers: Vec<Header>,
     pub auth: AuthStore,
+    pub body: Option<BodyContent>,
 }
 
 // ------
