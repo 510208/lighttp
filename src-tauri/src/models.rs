@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Header {
@@ -26,11 +26,11 @@ pub enum AuthMethod {
 #[serde(tag = "auth_type", content = "content", rename_all = "lowercase")]
 pub enum AuthStore {
     /// 對應 NoneAuthContent (通常為空物件或 null)
-    None(serde_json::Value), 
-    
+    None(serde_json::Value),
+
     /// 對應 BasicAuthContent
     Basic(BasicAuthContent),
-    
+
     /// 對應 BearerAuthContent
     Bearer(BearerAuthContent),
 }
@@ -51,7 +51,7 @@ pub struct BearerAuthContent {
 pub struct BodyContent {
     #[serde(rename = "type")]
     pub body_type: String,
-    
+
     pub content: String,
 }
 
@@ -78,7 +78,7 @@ pub struct RequestPayload {
 
 #[derive(Serialize, Debug)]
 pub struct ResponsePayload {
-    pub status: u16,                // HTTP 狀態碼 (例如 200, 404)
-    pub body: String,               // 回應的主體內容
+    pub status: u16,                      // HTTP 狀態碼 (例如 200, 404)
+    pub body: String,                     // 回應的主體內容
     pub headers: HashMap<String, String>, // 回應標頭
 }
