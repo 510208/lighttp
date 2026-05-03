@@ -40,7 +40,7 @@ export const bodyMethods = [
     value: "原始文本",
     description: "使用純文本（含JSON、XML等）作為請求主體。",
     object: BodyOriginal,
-    label: "Original",
+    label: "Raw",
   },
 ];
 export type BodyMethod = (typeof bodyMethods)[number]["value"];
