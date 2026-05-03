@@ -2,10 +2,10 @@
   <TabsTrigger
     :value="value"
     :disabled="disabled"
-    class="flex items-center gap-2.5 justify-end border-none py-0.5 px-2"
+    class="flex items-center justify-end gap-2.5 border-none px-2 py-0.5"
   >
     <p class="text-sm font-medium">{{ name || value }}</p>
-    <p class="text-[10px] text-ctp-text/20 font-light sh_tabs_chinese-name">
+    <p class="text-ctp-text/20 sh_tabs_chinese-name text-[10px] font-light">
       {{ chineseName }}
     </p>
   </TabsTrigger>
@@ -23,5 +23,5 @@ interface TabsTriggerProps {
 }
 
 // 定義組件的 props
-const props = defineProps<TabsTriggerProps>();
+defineProps<TabsTriggerProps>();
 </script>

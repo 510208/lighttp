@@ -47,6 +47,7 @@ export const useRequestStore = defineStore("request", () => {
 
   //  - 監聽 URL 變動 (解析 Params)
   watch(url, (newUrl, oldUrl) => {
+    console.log("[watch] URL changed from", oldUrl, "to", newUrl);
     // 關鍵：如果 URL 的變化是由於表格內部 updateUrlFromParams 觸發的，就跳過
     // 這裡可以檢查新的 URL 解析出的 Query 是否跟目前的 params 一致
     try {
