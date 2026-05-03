@@ -112,6 +112,21 @@
           </div>
         </div>
       </div>
+
+      <Separator class="my-4" />
+
+      <!-- 檢查設定 -->
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <Switch
+            id="proxy-check-before-send"
+            v-model="requestStore.proxyConfig.checkBeforeSend"
+          />
+          <label for="proxy-check-before-send" class="text-sm font-medium">
+            在發送請求前先測試 Proxy 是否可用
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
