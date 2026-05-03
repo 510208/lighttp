@@ -47,9 +47,6 @@ importers:
       monaco-editor:
         specifier: ^0.55.1
         version: 0.55.1
-      monaco-editor-vue3:
-        specifier: ^1.0.5
-        version: 1.0.5(monaco-editor@0.55.1)(vue@3.5.33(typescript@5.6.3))
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.6.3)(vue@3.5.33(typescript@5.6.3))
@@ -934,12 +931,6 @@ packages:
   mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
 
-  monaco-editor-vue3@1.0.5:
-    resolution: {integrity: sha512-1n4ayGcuYpZcQ6A4PUYZYqXuf6n+A/2pUNdLnb8I39WZV0zkhfvSRNau3hB0qzq6vp6wSNZ7MgcjQRCJCiGHWQ==}
-    peerDependencies:
-      monaco-editor: '>= 0.25.0 < 1'
-      vue: ^3
-
   monaco-editor@0.55.1:
     resolution: {integrity: sha512-jz4x+TJNFHwHtwuV9vA9rMujcZRb0CEilTEwG2rRSpe/A7Jdkuj8xPKttCgOh+v/lkHy7HsZ64oj+q3xoAFl9A==}
 
@@ -1818,11 +1809,6 @@ snapshots:
       brace-expansion: 2.1.0
 
   mitt@3.0.1: {}
-
-  monaco-editor-vue3@1.0.5(monaco-editor@0.55.1)(vue@3.5.33(typescript@5.6.3)):
-    dependencies:
-      monaco-editor: 0.55.1
-      vue: 3.5.33(typescript@5.6.3)
 
   monaco-editor@0.55.1:
     dependencies:
