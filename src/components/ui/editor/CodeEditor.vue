@@ -6,10 +6,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ref, onMounted, onUnmounted, shallowRef } from "vue";
+import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
-import type { editor } from "monaco-editor";
+// Monaco types may not be available in some environments. Use a lightweight local alias
+// to avoid TypeScript errors when the module or its type declarations aren't found.
+type MonacoEditorAlias = any;
 import { AcceptableValue } from "reka-ui";
+
+const props = defineProps<{
+  modelValue?: string; // 接收外部傳入的程式碼
+}>();
+
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
 
 const language = ref("json");
 const editorContainer = ref<HTMLElement | null>(null);
@@ -19,7 +29,7 @@ const code = ref(`{
 }`);
 
 // 使用 shallowRef 儲存實例以優化效能
-const editorInstance = shallowRef<editor.IStandaloneCodeEditor | null>(null);
+const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
 const monacoRef = shallowRef<any>(null);
 
 onMounted(async () => {
@@ -36,11 +46,36 @@ onMounted(async () => {
         theme: "vs-dark",
         automaticLayout: true,
       });
+
+      editorInstance.value.getModel().onDidChangeContent(() => {
+        const newValue = editorInstance.value?.getValue() || "";
+        console.log("Editor content changed:", newValue);
+
+        // 只有在值真的改變時才發送更新，避免冗餘觸發
+        if (newValue !== props.modelValue) {
+          emit("update:modelValue", newValue);
+        }
+      });
     } catch (error) {
       console.error("[Monaco Loader Error]:", error);
     }
   }
 });
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (!editorInstance.value) return;
+
+    const currentEditorValue = editorInstance.value.getValue();
+
+    // 只有當外部傳入的值與編輯器內部的內容「不一致」時，才執行 setValue
+    // 這通常發生在切換頁面回來、點擊重置按鈕或從 API 載入資料時
+    if (newVal !== currentEditorValue) {
+      editorInstance.value.setValue(newVal);
+    }
+  },
+);
 
 /**
  * 當語言切換時，動態更新 Model 語言
