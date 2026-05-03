@@ -120,6 +120,41 @@ export const useRequestStore = defineStore("request", () => {
 
   // 將所儲存的內容組合成json的方法
   function getRequestData() {
+    let checkedProxyConfig: ProxyConfig | null = proxyConfig.value.enabled
+      ? proxyConfig.value
+      : null;
+
+    if (proxyConfig.value.enabled) {
+      // 檢查proxy設定中URL與協定是否為空
+      if (
+        proxyConfig.value.host === "" ||
+        !proxyConfig.value.host ||
+        proxyConfig.value.port === 0 ||
+        !proxyConfig.value.protocol
+      ) {
+        console.error(
+          "Proxy is enabled but host or protocol is missing, the proxy configuration is ",
+          proxyConfig.value,
+        );
+        checkedProxyConfig = null; // 不傳送proxy設定給後端
+      }
+
+      // 檢查auth設定是否完整
+      if (
+        proxyConfig.value.auth &&
+        (!proxyConfig.value.auth.username || !proxyConfig.value.auth.password)
+      ) {
+        console.error(
+          "Proxy auth is enabled but username or password is missing, the proxy auth configuration is ",
+          proxyConfig.value.auth,
+        );
+        checkedProxyConfig = {
+          ...proxyConfig.value,
+          auth: undefined, // 不傳送auth設定給後端
+        };
+      }
+    }
+
     return {
       url: url.value,
       method: method.value,
@@ -130,7 +165,7 @@ export const useRequestStore = defineStore("request", () => {
         type: bodyType.value,
         content: bodyContent.value,
       },
-      proxy: proxyConfig.value,
+      proxy: checkedProxyConfig,
     };
   }
 
@@ -146,7 +181,6 @@ export const useRequestStore = defineStore("request", () => {
     };
     bodyType.value = data.body.type;
     bodyContent.value = data.body.content;
-    proxyConfig.value = data.proxy;
   }
 
   return {
