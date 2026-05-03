@@ -6,6 +6,7 @@ import {
 } from "@/composables/useTableManager";
 
 import type { AuthStore, AuthStoreForBackend } from "./authType.d";
+import type { ProxyConfig } from "./proxyConfig.d";
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
@@ -38,11 +39,13 @@ export const useRequestStore = defineStore("request", () => {
     } catch {}
   };
 
-  // 使用 Composables 管理資料 (傳入 ref 與 回調)
+  // 參數
   const paramManager = useTableManager(params, syncUrlFromParams);
+
+  // Header
   const headerManager = useTableManager(headers); // Header 變動通常不需改 URL
 
-  // 監聽 URL 變動 (解析 Params)
+  //  - 監聽 URL 變動 (解析 Params)
   watch(url, (newUrl, oldUrl) => {
     // 關鍵：如果 URL 的變化是由於表格內部 updateUrlFromParams 觸發的，就跳過
     // 這裡可以檢查新的 URL 解析出的 Query 是否跟目前的 params 一致
@@ -100,6 +103,20 @@ export const useRequestStore = defineStore("request", () => {
     bodyContent.value = content;
   }
 
+  // Proxy
+  const proxyConfig = ref<ProxyConfig>({
+    enabled: false,
+    protocol: "http",
+    host: "",
+    port: 0,
+  });
+
+  function setProxyConfig(config: ProxyConfig) {
+    proxyConfig.value = config;
+  }
+
+  // ------
+
   // 將所儲存的內容組合成json的方法
   function getRequestData() {
     return {
@@ -112,7 +129,23 @@ export const useRequestStore = defineStore("request", () => {
         type: bodyType.value,
         content: bodyContent.value,
       },
+      proxy: proxyConfig.value,
     };
+  }
+
+  // 從JSON或其他來源載入資料的方法
+  function loadRequestData(data: ReturnType<typeof getRequestData>) {
+    url.value = data.url;
+    method.value = data.method;
+    params.value = data.params.map((p) => ({ ...p, enabled: true }));
+    headers.value = data.headers.map((h) => ({ ...h, enabled: true }));
+    auth.value = {
+      type: data.auth.auth_type,
+      content: data.auth.content,
+    };
+    bodyType.value = data.body.type;
+    bodyContent.value = data.body.content;
+    proxyConfig.value = data.proxy;
   }
 
   return {
@@ -122,7 +155,7 @@ export const useRequestStore = defineStore("request", () => {
     auth,
     headers,
 
-    // 將 Manager 的方法展開或重新命名導出
+    // 網址參數
     addParam: () => paramManager.addExample("param"),
     addParamFromPair: (key: string, value: string) =>
       paramManager.add(key, value),
@@ -130,6 +163,7 @@ export const useRequestStore = defineStore("request", () => {
     toggleParam: paramManager.toggle,
     updateParam: paramManager.update,
 
+    // Header
     addHeader: () => headerManager.addExample("header", ""),
     addHeaderFromPair: (key: string, value: string) =>
       headerManager.add(key, value),
@@ -137,7 +171,7 @@ export const useRequestStore = defineStore("request", () => {
     toggleHeader: headerManager.toggle,
     updateHeader: headerManager.update,
 
-    // 認證相關
+    // 認證
     setAuth,
 
     // Body
@@ -146,7 +180,12 @@ export const useRequestStore = defineStore("request", () => {
     setBodyType,
     setBodyContent,
 
+    // Proxy
+    proxyConfig,
+    setProxyConfig,
+
     // 傳送給後端的資訊
     getRequestData,
+    loadRequestData,
   };
 });
