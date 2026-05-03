@@ -18,6 +18,7 @@
     "@tailwindcss/vite": "^4.2.4",
     "@tanstack/vue-table": "^8.21.3",
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-fs": "~2.5.1",
     "@tauri-apps/plugin-opener": "^2",
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
