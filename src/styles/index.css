@@ -92,10 +92,10 @@
 
   --primary: color-mix(
     in oklch,
-    var(--catppuccin-color-green) 40%,
+    var(--catppuccin-color-green) 50%,
     transparent
   );
-  --primary-foreground: var(--catppuccin-color-green-foreground);
+  --primary-foreground: var(--foreground);
 
   --secondary: var(--catppuccin-color-surface1);
   --secondary-foreground: var(--catppuccin-color-text);
