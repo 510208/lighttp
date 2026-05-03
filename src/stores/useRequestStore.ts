@@ -88,6 +88,13 @@ export const useRequestStore = defineStore("request", () => {
     };
   }
 
+  // Body
+  const body = ref<string | null>(null);
+
+  function setBody(newBody: string | null) {
+    body.value = newBody;
+  }
+
   // 將所儲存的內容組合成json的方法
   function getRequestData() {
     return {
@@ -96,6 +103,7 @@ export const useRequestStore = defineStore("request", () => {
       params: params.value.filter((p) => p.enabled),
       headers: headers.value.filter((h) => h.enabled),
       auth: renameAuthType(auth.value),
+      body: body.value,
     };
   }
 
@@ -123,6 +131,10 @@ export const useRequestStore = defineStore("request", () => {
 
     // 認證相關
     setAuth,
+
+    // Body
+    body,
+    setBody,
 
     // 傳送給後端的資訊
     getRequestData,
