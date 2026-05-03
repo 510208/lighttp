@@ -106,6 +106,7 @@ export const useRequestStore = defineStore("request", () => {
   // Proxy
   const proxyConfig = ref<ProxyConfig>({
     enabled: false,
+    checkBeforeSend: false,
     protocol: "http",
     host: "",
     port: 0,
