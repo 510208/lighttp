@@ -55,6 +55,35 @@ pub struct BodyContent {
     pub content: String,
 }
 
+// ------ 代理
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
+#[serde(rename_all = "lowercase")]
+pub enum ProxyProtocol {
+    Http,
+    Https,
+    Socks4,
+    Socks5,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
+pub struct ProxyAuth {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ProxyConfig {
+    pub enabled: bool,
+
+    #[serde(rename = "checkBeforeSend")]
+    pub check_before_send: bool,
+
+    pub protocol: crate::models::ProxyProtocol,
+    pub host: String,
+    pub port: u16,
+    pub auth: Option<ProxyAuth>, // 這裡使用 Option 來表示
+}
+
 // ------ 前端
 
 // #[derive(Deserialize)]代表這個結構可以從 JSON 反序列化而來，這對於從前端接收資料非常有用。
@@ -72,6 +101,7 @@ pub struct RequestPayload {
     pub headers: Vec<Header>,
     pub auth: AuthStore,
     pub body: Option<BodyContent>,
+    pub proxy: Option<ProxyConfig>,
 }
 
 // ------
