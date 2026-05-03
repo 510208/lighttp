@@ -2,7 +2,7 @@
   <!-- 關鍵：綁定 :model-value 為 props 傳進來的值 -->
   <Select
     :model-value="modelValue"
-    @update:model-value="(v) => emit('update:modelValue', v)"
+    @update:model-value="(v) => emit('update:modelValue', v as string)"
   >
     <SelectTrigger size="sm">
       <SelectValue :placeholder="placeholder || '選擇認證方式'" />
