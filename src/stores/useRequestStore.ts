@@ -89,10 +89,15 @@ export const useRequestStore = defineStore("request", () => {
   }
 
   // Body
-  const body = ref<string | null>(null);
+  const bodyType = ref("None");
+  const bodyContent = ref("");
 
-  function setBody(newBody: string | null) {
-    body.value = newBody;
+  function setBodyType(type: string) {
+    bodyType.value = type;
+  }
+
+  function setBodyContent(content: string) {
+    bodyContent.value = content;
   }
 
   // 將所儲存的內容組合成json的方法
@@ -103,7 +108,10 @@ export const useRequestStore = defineStore("request", () => {
       params: params.value.filter((p) => p.enabled),
       headers: headers.value.filter((h) => h.enabled),
       auth: renameAuthType(auth.value),
-      body: body.value,
+      body: {
+        type: bodyType.value,
+        content: bodyContent.value,
+      },
     };
   }
 
@@ -133,8 +141,10 @@ export const useRequestStore = defineStore("request", () => {
     setAuth,
 
     // Body
-    body,
-    setBody,
+    bodyType,
+    bodyContent,
+    setBodyType,
+    setBodyContent,
 
     // 傳送給後端的資訊
     getRequestData,
