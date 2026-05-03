@@ -10,8 +10,12 @@
     <div id="setting-panel-content" class="min-h-30">
       <TabsContent value="params" as-child><ParamTable /></TabsContent>
       <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
-      <TabsContent value="auth" as-child><AuthPanel /></TabsContent>
-      <TabsContent value="body" as-child><BodyPanel /></TabsContent>
+      <TabsContent value="auth" as-child>
+        <KeepAlive><AuthPanel /></KeepAlive>
+      </TabsContent>
+      <TabsContent value="body" as-child>
+        <KeepAlive><BodyPanel /></KeepAlive>
+      </TabsContent>
       <TabsContent value="proxy" as-child>Proxy</TabsContent>
     </div>
   </Tabs>
