@@ -111,7 +111,7 @@ onUnmounted(() => {
   <div class="flex flex-col">
     <div class="flex items-center gap-2 p-2 px-4">
       <span class="text-sm font-semibold">選擇語言</span>
-      <Select v-model="language" @update:model-value="changeLanguage">
+      <Select v-model="language" @update:model-value="changeLanguage" size="sm">
         <SelectTrigger class="h-8 w-[180px]">
           <SelectValue placeholder="選擇語言" />
         </SelectTrigger>
