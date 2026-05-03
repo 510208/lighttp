@@ -28,6 +28,24 @@ use reqwest::header::HeaderMap;
 use reqwest::{Client, Method};
 use std::collections::HashMap;
 
+use crate::models::ProxyConfig;
+
+// 展開錯誤內容
+fn get_deep_error(e: &reqwest::Error) -> String {
+    use std::error::Error;
+    let mut messages = vec![format!("{}", e)];
+    
+    // 遞迴取得底層錯誤原因 (例如 hyper 或 native-tls 的錯誤)
+    let mut source = e.source();
+    while let Some(cause) = source {
+        messages.push(format!("原因: {}", cause));
+        source = cause.source();
+    }
+    
+    messages.join(" -> ")
+}
+
+// 將 HeaderMap 轉換為 HashMap<String, String>，以便前端使用
 fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
     header_map
         .iter()
@@ -64,11 +82,69 @@ async fn handle_auth(auth: &AuthStore) -> Option<reqwest::header::HeaderValue> {
     }
 }
 
+// 處理代理
+async fn handle_proxy(proxy: &ProxyConfig) -> Result<Option<reqwest::Proxy>, String> {
+    // 如果未啟用，直接回傳 Ok(None)，表示這不是錯誤，只是不需要代理
+    if !proxy.enabled {
+        return Ok(None);
+    }
+
+    // 使用 serde 的特性或直接轉小寫處理協議
+    let proto = format!("{:?}", proxy.protocol).to_lowercase();
+    let proxy_url = format!("{}://{}:{}", proto, proxy.host, proxy.port);
+    
+    let mut reqwest_proxy = reqwest::Proxy::all(&proxy_url)
+        .map_err(|e| format!("無效的代理 URL: {}", e))?;
+
+    // 處理驗證邏輯
+    if let Some(auth) = &proxy.auth {
+        // 只有在真的有提供帳號密碼時才掛載驗證
+        if !auth.username.is_empty() || !auth.password.is_empty() {
+            reqwest_proxy = reqwest_proxy.basic_auth(&auth.username, &auth.password);
+        }
+    }
+
+    Ok(Some(reqwest_proxy))
+}
+
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
 async fn handle_request(payload: RequestPayload) -> ResponsePayload {
+    info!("[handle_request] 收到請求: {:?}", payload);
+
     // DONE: 建立一個Client實例
-    let client = Client::new();
+    let mut client_builder = Client::builder();
+
+    // DONE: 處理代理設定 (如果有的話)
+    if let Some(proxy_config) = payload.proxy.as_ref() {
+        info!("[handle_request] 檢查代理設定: {:?}", proxy_config);
+        
+        match handle_proxy(proxy_config).await {
+            Ok(Some(proxy)) => {
+                // 成功建立代理物件，掛載到 client
+                client_builder = client_builder.proxy(proxy);
+            }
+            Ok(None) => {
+                // 代理未啟用，不做任何事，繼續執行普通請求
+                info!("[handle_request] 代理已關閉，使用直連模式");
+            }
+            Err(e) => {
+                // 代理格式真的有錯誤
+                error!("[handle_request] 代理設定出錯: {}", e);
+                return build_error_response(400, e);
+            }
+        }
+    }
+
+    // DONE: 建立Client實例，並處理可能的錯誤
+    let client = match client_builder.build() {
+        Ok(client) => client,
+        Err(e) => {
+            let full_error = format!("{}", e);
+            error!("[handle_request] 建立 Client 失敗: {}", full_error);
+            return build_error_response(500, full_error);
+        }
+    };
 
     let method = match Method::from_bytes(payload.method.to_uppercase().as_bytes()) {
         Ok(m) => m,
@@ -115,16 +191,16 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     }
 
     // DONE: 送請求
-    debug!("[handle_request] request_builder: {:?}", request_builder);
+    info!("[handle_request] request_builder: {:?}", request_builder);
     let response = request_builder.send().await;
 
     // DONE: 檢查請求是否成功
     match response {
         Ok(response) => parse_success_response(response).await,
         Err(e) => {
-            let full_error = format!("{}", e);
-            error!("[handle_request] 請求發送失敗: {}", full_error);
-            build_error_response(500, full_error)
+            let detailed_error = get_deep_error(&e); // 這裡會拿到更深層的資訊
+            error!("[handle_request] 請求發送失敗: {}", detailed_error);
+            build_error_response(500, detailed_error)
         }
     }
 }
