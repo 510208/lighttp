@@ -38,7 +38,7 @@ fn get_deep_error(e: &reqwest::Error) -> String {
     // 遞迴取得底層錯誤原因 (例如 hyper 或 native-tls 的錯誤)
     let mut source = e.source();
     while let Some(cause) = source {
-        messages.push(format!("原因: {}", cause));
+        messages.push(format!("{}", cause));
         source = cause.source();
     }
     
@@ -134,6 +134,8 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
                 return build_error_response(400, e);
             }
         }
+    } else {
+        info!("[handle_request] 無代理設定，使用直連模式");
     }
 
     // DONE: 建立Client實例，並處理可能的錯誤
