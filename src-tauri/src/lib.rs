@@ -1,3 +1,5 @@
+use tracing::{debug, info, error};
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -86,20 +88,23 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     // DONE: 處理正文內容
     if let Some(body) = payload.body {
         match body.body_type.as_str() {
+            "None" => {
+                debug!("[handle_request] 無正文內容");
+            }
             "Raw" => {
-                println!("[handle_request] 處理 Raw Body: {}", body.content);
+                debug!("[handle_request] 處理 Raw Body: {}", body.content);
                 request_builder = request_builder.body(body.content);
             }
             // 其他類型的處理可以在這裡添加
             _ => {
-                eprintln!("[handle_request] 不支援的 Body 類型: {}", body.body_type);
+                error!("[handle_request] 不支援的 Body 類型: {}", body.body_type);
                 return build_error_response(400, format!("不支援的 Body 類型: {}", body.body_type));
             }
         }
     }
     
     // DONE: 送請求
-    println!("[handle_request] request_builder: {:?}", request_builder);
+    debug!("[handle_request] request_builder: {:?}", request_builder);
     let response = request_builder.send().await;
 
     // DONE: 檢查請求是否成功
@@ -107,7 +112,7 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
         Ok(response) => parse_success_response(response).await,
         Err(e) => {
             let full_error = format!("{}", e);
-            eprintln!("[handle_request] 請求發送失敗: {}", full_error);
+            error!("[handle_request] 請求發送失敗: {}", full_error);
             build_error_response(500, full_error)
         },
     }
@@ -124,7 +129,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
 
 // 處理錯誤的結果
 fn build_error_response(status: u16, message: String) -> ResponsePayload {
-    println!("[build_error_response] Error: {}", message);
+    error!("[build_error_response] Error: {}", message);
 
     ResponsePayload {
         status,
