@@ -4,17 +4,11 @@
     <div class="flex flex-col">
       <div class="mb-4 flex flex-col gap-1 lg:flex-row lg:items-center">
         <span class="text-sm font-semibold lg:min-w-[100px]">使用者名稱</span>
-        <Input
-          @input="updateAuth"
-          v-model="username"
-          placeholder="username"
-          class="w-full"
-        />
+        <Input v-model="username" placeholder="username" class="w-full" />
       </div>
       <div class="mb-4 flex flex-col gap-1 lg:flex-row lg:items-center">
         <span class="text-sm font-semibold lg:min-w-[100px]">密碼</span>
         <Input
-          @input="updateAuth"
           v-model="password"
           placeholder="password"
           type="password"
@@ -28,24 +22,23 @@
 <script setup lang="ts">
 import { Input } from "@/components/ui/input";
 import { useRequestStore } from "@/stores/useRequestStore";
-import { ref } from "vue";
-
+import { computed } from "vue";
 import { type BasicAuthContent } from "@/stores/authType";
 
-const username = ref("");
-const password = ref("");
-
-function updateAuth() {
-  requestStore.setAuth({
-    type: "basic",
-    content: {
-      username: username.value,
-      password: password.value,
-    } as BasicAuthContent,
-  });
-}
-
 const requestStore = useRequestStore();
-</script>
 
-<style scoped></style>
+// 使用 Computed 進行雙向綁定，直接存取 Store 內的 content
+const username = computed({
+  get: () => (requestStore.auth.content as BasicAuthContent).username || "",
+  set: (val) => {
+    (requestStore.auth.content as BasicAuthContent).username = val;
+  },
+});
+
+const password = computed({
+  get: () => (requestStore.auth.content as BasicAuthContent).password || "",
+  set: (val) => {
+    (requestStore.auth.content as BasicAuthContent).password = val;
+  },
+});
+</script>
