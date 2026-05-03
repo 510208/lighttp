@@ -23,10 +23,14 @@ const emit = defineEmits<{
 
 const language = ref("json");
 const editorContainer = ref<HTMLElement | null>(null);
-const code = ref(`{
+const code = ref(
+  props.modelValue ||
+    `{
   "name": "SamHacker",
-  "website": "https://samhacker.xyz"
-}`);
+  "age": null,
+  "isAdmin": true,
+}`,
+);
 
 // 使用 shallowRef 儲存實例以優化效能
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
