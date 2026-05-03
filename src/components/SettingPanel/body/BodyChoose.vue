@@ -1,7 +1,10 @@
 <template>
-  <Select @update:model-value="(v) => emit('update:modelValue', v)">
+  <Select
+    :model-value="modelValue"
+    @update:model-value="(v) => emit('update:modelValue', v as string)"
+  >
     <SelectTrigger size="sm">
-      <SelectValue placeholder="選擇認證方式" />
+      <SelectValue placeholder="選擇內容類型" />
     </SelectTrigger>
     <SelectContent>
       <SelectItem
@@ -25,12 +28,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// 接收父組件傳入的 v-model
 defineProps<{
   modelValue?: string;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
 </script>
-
-<style scoped></style>
