@@ -16,7 +16,7 @@
       <TabsContent value="body" as-child>
         <KeepAlive><BodyPanel /></KeepAlive>
       </TabsContent>
-      <TabsContent value="proxy" as-child>Proxy</TabsContent>
+      <TabsContent value="proxy" as-child><ProxyPanel /></TabsContent>
     </div>
   </Tabs>
 </template>
@@ -28,4 +28,5 @@ import ParamTable from "./params/ParamTable.vue";
 import HeaderTable from "./headers/HeaderTable.vue";
 import AuthPanel from "./auth/AuthPanel.vue";
 import BodyPanel from "./body/BodyPanel.vue";
+import ProxyPanel from "./proxy/ProxyPanel.vue";
 </script>
