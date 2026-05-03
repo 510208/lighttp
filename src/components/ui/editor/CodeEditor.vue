@@ -50,6 +50,7 @@ onMounted(async () => {
         theme: "vs-dark",
         automaticLayout: true,
       });
+      emit("update:modelValue", code.value);
 
       editorInstance.value.getModel().onDidChangeContent(() => {
         const newValue = editorInstance.value?.getValue() || "";
