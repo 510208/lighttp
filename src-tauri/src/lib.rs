@@ -63,7 +63,7 @@ async fn handle_auth(auth: &AuthStore) -> Option<reqwest::header::HeaderValue> {
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
 async fn handle_request(payload: RequestPayload) -> ResponsePayload {
-    // 建立一個Client實例
+    // DONE: 建立一個Client實例
     let client = Client::new();
 
     let method = match Method::from_bytes(payload.method.to_uppercase().as_bytes()) {
@@ -73,23 +73,36 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
 
     let mut request_builder = client.request(method, &payload.url);
 
-    // 添加標頭
+    // DONE: 添加標頭
     for header in payload.headers {
         request_builder = request_builder.header(&header.key, &header.value);
     }
 
-    // TODO: 添加認證處理 (根據 payload.auth 的內容)
+    // DONE: 添加認證處理 (根據 payload.auth 的內容)
     if let Some(auth_header) = handle_auth(&payload.auth).await {  // Some(auth_header) 表示有有效的認證資訊
         request_builder = request_builder.header(reqwest::header::AUTHORIZATION, auth_header);
     }
+    
+    // DONE: 處理正文內容
+    if let Some(body) = payload.body {
+        match body.body_type.as_str() {
+            "Raw" => {
+                println!("[handle_request] 處理 Raw Body: {}", body.content);
+                request_builder = request_builder.body(body.content);
+            }
+            // 其他類型的處理可以在這裡添加
+            _ => {
+                eprintln!("[handle_request] 不支援的 Body 類型: {}", body.body_type);
+                return build_error_response(400, format!("不支援的 Body 類型: {}", body.body_type));
+            }
+        }
+    }
+    
+    // DONE: 送請求
     println!("[handle_request] request_builder: {:?}", request_builder);
-
-    // TODO: 處理正文內容
-
-    // 送請求
     let response = request_builder.send().await;
 
-    // 檢查請求是否成功
+    // DONE: 檢查請求是否成功
     match response {
         Ok(response) => parse_success_response(response).await,
         Err(e) => {
