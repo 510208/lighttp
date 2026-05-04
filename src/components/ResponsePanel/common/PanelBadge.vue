@@ -1,6 +1,11 @@
 <template>
   <div :class="cn(statusColorsWithGeneral[status], className)">
-    <component :is="icon" v-if="icon" :size="10" class="shrink-0" />
+    <component
+      :is="icon"
+      v-if="icon"
+      :size="10"
+      :class="cn(statusColorsWithGeneral[status].split(' ')[3], 'shrink-0')"
+    />
     <slot />
   </div>
 </template>
@@ -15,22 +20,28 @@ interface Props {
 }
 
 const statusColors = {
-  ready: "bg-ctp-overlay2/20 text-ctp-overlay2",
-  error: "bg-ctp-red/20 text-ctp-red",
-  success: "bg-ctp-green/20 text-ctp-green",
-  loading: "bg-ctp-peach/20 text-ctp-peach",
+  none: "bg-ctp-overlay2/20",
+  error: "bg-ctp-red/20 ",
+  success: "bg-ctp-green/20",
+  loading: "bg-ctp-peach/20",
+};
+const statusClasses = {
+  none: "!text-ctp-overlay2 border-ctp-overlay2/30",
+  error: "!text-ctp-red border-ctp-red/30",
+  success: "!text-ctp-green border-ctp-green/30",
+  loading: "!text-ctp-peach border-ctp-peach/30",
 };
 const generalClass =
-  "text-[10px] flex h-full items-center flex gap-1 text-mono px-1 py-0.5";
+  "text-xs flex items-center flex gap-1 text-mono px-2 py-1 rounded-[10px] border";
 const statusColorsWithGeneral = Object.fromEntries(
   Object.entries(statusColors).map(([key, value]) => [
     key,
-    `${value} ${generalClass}`,
+    `${value} ${generalClass} ${statusClasses[key as keyof typeof statusClasses]}`,
   ]),
 ) as Record<string, string>;
 
 const {
-  variant: status = "ready",
+  variant: status = "none",
   class: className,
   icon = null,
 } = defineProps<Props>();
