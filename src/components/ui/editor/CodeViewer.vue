@@ -81,11 +81,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col overflow-hidden">
+  <div class="flex h-full flex-col overflow-hidden">
     <!-- 編輯器容器 -->
-    <div class="h-full min-h-64 w-full">
-      <div ref="editorContainer" class="min-h-full w-full"></div>
-    </div>
+    <div ref="editorContainer" class="w-full flex-1"></div>
   </div>
 </template>
 
