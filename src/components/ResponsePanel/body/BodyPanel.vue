@@ -1,6 +1,9 @@
 <template>
   <div class="flex h-full flex-col border-t">
-    <CodeViewer :model-value="JSON.stringify(responseStore.body, null, 2)" />
+    <CodeViewer
+      :model-value="JSON.stringify(responseStore.body, null, 2)"
+      language="json"
+    />
 
     <!-- 絕對值定位的按鈕，用於提供更多操作 -->
     <div class="absolute right-6 bottom-10">
