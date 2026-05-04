@@ -1,3 +1,4 @@
+use log::info;
 use reqwest::header::HeaderMap;
 use std::collections::HashMap;
 
@@ -27,4 +28,12 @@ pub fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
             )
         })
         .collect()
+}
+
+pub fn get_content_type(headers: &HeaderMap) -> String {
+    headers
+        .get(reqwest::header::CONTENT_TYPE)
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("text/plain")
+        .to_string()
 }

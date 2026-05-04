@@ -28,7 +28,7 @@ use std::collections::HashMap;
 
 pub mod utils;
 use utils::auth::handle_auth;
-use utils::other::{get_deep_error, to_hashmap};
+use utils::other::{get_content_type, get_deep_error, to_hashmap};
 use utils::proxy::{check_proxy, handle_proxy};
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
@@ -163,6 +163,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
     ResponsePayload {
         status: response.status().as_u16(),
         headers: to_hashmap(response.headers()),
+        body_type: get_content_type(response.headers()),
         body: response.text().await.unwrap_or_default(), // response.text() 會取走擁有權，所以headers要放在上面
     }
 }
@@ -174,6 +175,7 @@ fn build_error_response(status: u16, message: String) -> ResponsePayload {
     ResponsePayload {
         status,
         headers: HashMap::new(),
+        body_type: "text".into(), // 錯誤情況下，body_type 可以設為 "text"
         body: message,
     }
 }
