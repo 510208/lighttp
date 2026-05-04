@@ -3,8 +3,8 @@
   <div
     class="bg-ctp-surface border-ctp-surface-variant flex h-full min-h-0 flex-col gap-0"
   >
-    <div class="mt-4 flex items-center">
-      <h2 class="text-ctp-overlay2 px-10 text-sm font-bold">結果</h2>
+    <div class="mt-4 flex items-center gap-2 px-10">
+      <h2 class="text-ctp-overlay2 mr-4 text-sm font-bold">結果</h2>
       <PanelBadge :variant="responseStatus" :icon="Dot">
         {{
           responseStore.status === undefined
@@ -13,6 +13,22 @@
               ? "無回應"
               : responseStore.status
         }}
+      </PanelBadge>
+
+      <PanelBadge
+        v-if="responseStore.size !== undefined"
+        variant="ready"
+        :icon="Dot"
+      >
+        {{ (responseStore.size / 1024).toFixed(2) }} KB
+      </PanelBadge>
+
+      <PanelBadge
+        v-if="responseStore.timeTaken !== undefined"
+        variant="ready"
+        :icon="Timer"
+      >
+        {{ responseStore.timeTaken?.toFixed(3) }} ms
       </PanelBadge>
     </div>
     <Tabs default-value="body" class="flex min-h-0 flex-1 flex-col">
@@ -42,7 +58,7 @@ import HeaderTable from "./header/HeaderTable.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
 import { computed } from "vue";
 
-import { Dot } from "@lucide/vue";
+import { Dot, Timer } from "@lucide/vue";
 
 const responseStore = useResponseStore();
 const responseStatus = computed(() => {

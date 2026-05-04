@@ -3,7 +3,7 @@
     <component
       :is="icon"
       v-if="icon"
-      :size="10"
+      :size="14"
       :class="cn(statusColorsWithGeneral[status].split(' ')[3], 'shrink-0')"
     />
     <slot />
@@ -24,12 +24,14 @@ const statusColors = {
   error: "bg-ctp-red/20 ",
   success: "bg-ctp-green/20",
   loading: "bg-ctp-peach/20",
+  ready: "bg-ctp-overlay1/20",
 };
 const statusClasses = {
   none: "!text-ctp-overlay2 border-ctp-overlay2/30",
   error: "!text-ctp-red border-ctp-red/30",
   success: "!text-ctp-green border-ctp-green/30",
   loading: "!text-ctp-peach border-ctp-peach/30",
+  ready: "!text-ctp-text border-ctp-overlay1/30",
 };
 const generalClass =
   "text-xs flex items-center flex gap-1 text-mono px-2 py-1 rounded-[10px] border";
