@@ -29,9 +29,15 @@
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent class="mr-2">
-                <DropdownMenuItem>Python</DropdownMenuItem>
-                <DropdownMenuItem>TypeScript</DropdownMenuItem>
-                <DropdownMenuItem>Rust</DropdownMenuItem>
+                <DropdownMenuItem @click="generatePythonType">
+                  Python
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="generateTypeScriptType">
+                  TypeScript
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="generateRustType">
+                  Rust
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
@@ -57,7 +63,12 @@ import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
 import { EllipsisVertical, Copy, Braces, BookA } from "@lucide/vue";
-import { convertJsonToSchema } from "@/lib/getStructure";
+import {
+  convertJsonToSchema,
+  convertJsonToTypeScript,
+  convertJsonToPython,
+  convertJsonToRust,
+} from "@/lib/getStructure";
 
 import { ref } from "vue";
 import StructureDialog from "./StructureDialog.vue";
@@ -111,6 +122,72 @@ async function generateJsonSchema() {
   } catch (error) {
     console.error(
       "Failed to parse response body or generate JSON Schema: ",
+      error,
+    );
+  }
+}
+
+// 生成型別定義
+//   TypeScript
+async function generateTypeScriptType() {
+  if (responseStore.body === "") {
+    console.warn(
+      "Response body is empty. Cannot generate TypeScript definitions.",
+    );
+    toast.error("回應結果為空，無法生成 TypeScript 定義。");
+    return;
+  }
+  try {
+    const typeScriptDef = await convertJsonToTypeScript(responseStore.body);
+    console.log("Generated TypeScript Definitions:", typeScriptDef);
+
+    generatedSchema.value = typeScriptDef;
+    isModalOpen.value = true;
+  } catch (error) {
+    console.error(
+      "Failed to parse response body or generate TypeScript definitions: ",
+      error,
+    );
+  }
+}
+
+//   Python
+async function generatePythonType() {
+  if (responseStore.body === "") {
+    console.warn("Response body is empty. Cannot generate Python definitions.");
+    toast.error("回應結果為空，無法生成 Python 定義。");
+    return;
+  }
+  try {
+    const pythonDef = await convertJsonToPython(responseStore.body);
+    console.log("Generated Python Definitions:", pythonDef);
+
+    generatedSchema.value = pythonDef;
+    isModalOpen.value = true;
+  } catch (error) {
+    console.error(
+      "Failed to parse response body or generate Python definitions: ",
+      error,
+    );
+  }
+}
+
+//   Rust
+async function generateRustType() {
+  if (responseStore.body === "") {
+    console.warn("Response body is empty. Cannot generate Rust definitions.");
+    toast.error("回應結果為空，無法生成 Rust 定義。");
+    return;
+  }
+  try {
+    const rustDef = await convertJsonToRust(responseStore.body);
+    console.log("Generated Rust Definitions:", rustDef);
+
+    generatedSchema.value = rustDef;
+    isModalOpen.value = true;
+  } catch (error) {
+    console.error(
+      "Failed to parse response body or generate Rust definitions: ",
       error,
     );
   }
