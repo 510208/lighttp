@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
-import TabsOptions from "./TabsOption.vue";
+import TabsOptions from "@/components/common/TabsOption.vue";
 import ParamTable from "./params/ParamTable.vue";
 import HeaderTable from "./headers/HeaderTable.vue";
 import AuthPanel from "./auth/AuthPanel.vue";
