@@ -21,6 +21,7 @@
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <StructureDialog v-model:open="isModalOpen" :schema="generatedSchema" />
     </div>
   </div>
 </template>
@@ -38,7 +39,14 @@ import { useResponseStore } from "@/stores/useResponseStore";
 import { EllipsisVertical, Copy, Braces } from "@lucide/vue";
 import { convertJsonToSchema } from "@/lib/getStructure";
 
+import { ref } from "vue";
+import StructureDialog from "./StructureDialog.vue";
+import { toast } from "vue-sonner";
+
 const responseStore = useResponseStore();
+
+const isModalOpen = ref(false);
+const generatedSchema = ref<string | null>(null);
 
 function getContent() {
   if (responseStore.body === "") {
@@ -59,23 +67,27 @@ function copyToClipboard() {
   navigator.clipboard
     .writeText(textToCopy)
     .then(() => {
-      console.log("Response body copied to clipboard!");
+      toast.success("成功複製回應結果到剪貼簿！");
     })
     .catch((err) => {
       console.error("Failed to copy response body: ", err);
+      toast.error(`複製回應結果到剪貼簿失敗: ${err}`);
     });
 }
 
 // 生成 JSON Schema
-function generateJsonSchema() {
+async function generateJsonSchema() {
   if (responseStore.body === "") {
     console.warn("Response body is empty. Cannot generate JSON Schema.");
+    toast.error("回應結果為空，無法生成 JSON Schema。");
     return;
   }
   try {
-    const jsonSchema = convertJsonToSchema(responseStore.body);
+    const jsonSchema = await convertJsonToSchema(responseStore.body);
     console.log("Generated JSON Schema:", jsonSchema);
-    // 可以在這裡將生成的 JSON Schema 顯示給用戶，或者提供下載功能
+
+    generatedSchema.value = jsonSchema;
+    isModalOpen.value = true;
   } catch (error) {
     console.error(
       "Failed to parse response body or generate JSON Schema: ",
