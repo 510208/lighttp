@@ -12,5 +12,9 @@ import { Toaster } from "@/components/ui/sonner";
     <RequestBuilder />
   </main>
 
-  <Toaster position="bottom-right" />
+  <Toaster
+    position="bottom-right"
+    :closeButton="true"
+    closeButtonPosition="top-right"
+  />
 </template>
