@@ -40,7 +40,7 @@ const copyToClipboard = () => {
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle>產生的 JSON Schema</DialogTitle>
+        <DialogTitle>產生的 {{ props.language || "JSON" }} 結構</DialogTitle>
         <DialogDescription>
           以下是根據您的設定所產生的結構化資料。
         </DialogDescription>
@@ -55,13 +55,29 @@ const copyToClipboard = () => {
       </div>
 
       <DialogFooter>
-        <Button variant="outline" @click="emit('update:open', false)">
-          關閉
-        </Button>
-        <Button @click="copyToClipboard">
-          <Copy :size="16" />
-          複製 JSON
-        </Button>
+        <div>
+          <p>
+            Schema 生成作業由
+            <a
+              href="https://quicktypes.io/"
+              target="_blank"
+              class="text-primary underline"
+            >
+              quicktype-core
+            </a>
+            提供技術支持。
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <Button variant="outline" @click="emit('update:open', false)">
+            關閉
+          </Button>
+          <Button @click="copyToClipboard">
+            <Copy :size="16" />
+            複製結構
+          </Button>
+        </div>
       </DialogFooter>
     </DialogContent>
   </Dialog>
