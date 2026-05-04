@@ -163,3 +163,28 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
 .min-h-ui {
   @apply min-h-30;
 }
+
+/* 自訂捲軸樣式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(
+    --color-scrollbar-thumb,
+    var(--catppuccin-color-surface2)
+  );
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(
+    --color-scrollbar-thumb-hover,
+    var(--catppuccin-color-surface1)
+  );
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-scrollbar-track, transparent);
+}
