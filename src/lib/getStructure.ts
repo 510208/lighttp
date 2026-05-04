@@ -4,6 +4,8 @@ import {
   jsonInputForTargetLanguage,
   QuickTypeError,
 } from "quicktype-core";
+import { type RequestStoreData } from "@/stores/useRequestStore";
+import { BasicAuthContent } from "@/stores/authType";
 
 function jsonIsValid(json: string): boolean {
   try {
@@ -148,9 +150,46 @@ async function convertJsonToRust(
   }
 }
 
+function getCurlCommand(store: RequestStoreData) {
+  let command = `curl -X ${store.method.toUpperCase()} "${store.url}" \\`;
+
+  // Headers
+  store.headers.forEach((header) => {
+    if (header.enabled) {
+      command += `\n  -H "${header.key}: ${header.value}" \\`;
+    }
+  });
+
+  // Auth
+  if (store.auth.type === "Basic" && store.auth.content) {
+    const authContent = store.auth.content as BasicAuthContent;
+    command += `\n  -u "${authContent.username}:${authContent.password}" \\`;
+  } else if (store.auth.type === "Bearer" && store.auth.content) {
+    const token = (store.auth.content as { token: string }).token;
+    command += `\n  -H "Authorization: Bearer ${token}" \\`;
+  }
+
+  // Body
+  if (store.bodyContent && store.bodyType !== "None") {
+    // Escape double quotes in body content
+    const escapedBody = store.bodyContent.replace(/"/g, '\\"');
+    command += `\n  -d "${escapedBody}" \\`;
+  }
+
+  // Proxy
+  if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
+    const proxyUrlAuthPart = `${store.proxyConfig.auth ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@` : ""}`;
+    const proxyUrl = `${store.proxyConfig.protocol}://${proxyUrlAuthPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
+    command += `\n  -x "${proxyUrl}" \\`;
+  }
+
+  return command;
+}
+
 export {
   convertJsonToSchema,
   convertJsonToTypeScript,
   convertJsonToPython,
   convertJsonToRust,
+  getCurlCommand,
 };
