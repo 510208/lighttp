@@ -14,22 +14,22 @@ const editorContainer = ref<HTMLElement | null>(null);
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
 const monacoRef = shallowRef<any>(null);
 
-const formattedCode = computed(() => {
-  if (!props.modelValue) return "";
+function formatCode(code: string): string {
   try {
-    // 第一次 parse：處理傳入的字串，將其轉為物件
-    // 這會自動處理掉 \" 並去除最外層的引號
-    const parsedData =
-      typeof props.modelValue === "string"
-        ? JSON.parse(props.modelValue)
-        : props.modelValue;
-
-    // 第二次 stringify：轉回格式化後的字串，加上 2 格空格縮排
-    return JSON.stringify(parsedData, null, 2);
+    const parsed = JSON.parse(JSON.parse(code));
+    console.log("[Parsed JSON]:", parsed);
+    console.log("[Stringified JSON]:", JSON.stringify(parsed, null, 2));
+    return JSON.stringify(parsed, null, 2);
+    // return parsed as string;
   } catch (e) {
     console.error("[JSON Parse Error]:", e);
-    return props.modelValue; // 若解析失敗則回傳原始值
+    return code; // 若解析失敗則回傳原始值
   }
+}
+
+const formattedCode = computed(() => {
+  if (!props.modelValue) return "";
+  return formatCode(props.modelValue);
 });
 
 onMounted(async () => {
@@ -37,6 +37,7 @@ onMounted(async () => {
     try {
       const monaco = await loader.init();
       monacoRef.value = monaco;
+      console.log("[formattedCode]:", formattedCode.value);
 
       // 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
@@ -63,11 +64,10 @@ onMounted(async () => {
 watch(
   () => props.modelValue,
   (newVal) => {
-    if (editorInstance.value) {
-      const currentEditorValue = editorInstance.value.getValue();
-      if (newVal !== currentEditorValue) {
-        editorInstance.value.setValue(formattedCode.value);
-      }
+    if (editorInstance.value && newVal !== editorInstance.value.getValue()) {
+      console.log("[New Model Value]:", newVal);
+      const formatted = formatCode(newVal || "");
+      editorInstance.value.setValue(formatted);
     }
   },
 );
