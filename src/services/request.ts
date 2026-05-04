@@ -65,7 +65,6 @@ async function sendRequest(): Promise<ResponseState | null> {
   }
 }
 
-// 4. 呼叫端也要改為 async
 async function handleSend() {
   const response = await sendRequest();
   console.log("[handleSend] Response:", response);
