@@ -1,10 +1,17 @@
 <script lang="ts" setup>
-import type { ToasterProps } from "vue-sonner"
-import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "lucide-vue-next"
-import { Toaster as Sonner } from "vue-sonner"
-import { cn } from "@/lib/utils"
+import type { ToasterProps } from "vue-sonner";
+import {
+  CircleCheckIcon,
+  InfoIcon,
+  Loader2Icon,
+  OctagonXIcon,
+  TriangleAlertIcon,
+  XIcon,
+} from "lucide-vue-next";
+import { Toaster as Sonner } from "vue-sonner";
+import { cn } from "@/lib/utils";
 
-const props = defineProps<ToasterProps>()
+const props = defineProps<ToasterProps>();
 </script>
 
 <template>
@@ -36,7 +43,20 @@ const props = defineProps<ToasterProps>()
       </div>
     </template>
     <template #close-icon>
-      <XIcon class="size-4" />
+      <XIcon class="text-ctp-subtext0 size-4" />
     </template>
   </Sonner>
 </template>
+
+<style>
+.toaster button[data-close-button] {
+  border-color: var(--normal-border) !important;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--normal-border) !important;
+    transition: all 0.2s ease-in-out;
+  }
+}
+</style>
