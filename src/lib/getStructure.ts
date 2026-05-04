@@ -150,38 +150,48 @@ async function convertJsonToRust(
   }
 }
 
-function getCurlCommand(store: RequestStoreData) {
-  let command = `curl -X ${store.method.toUpperCase()} "${store.url}" \\`;
+function getCurlCommand(
+  store: RequestStoreData,
+  breakLineSymbol: string = "\\",
+): string {
+  let command = `curl -X ${store.method.toUpperCase()} "${store.url}" ${breakLineSymbol}`;
 
   // Headers
   store.headers.forEach((header) => {
     if (header.enabled) {
-      command += `\n  -H "${header.key}: ${header.value}" \\`;
+      command += `\n  -H "${header.key}: ${header.value}" ${breakLineSymbol}`;
     }
   });
 
   // Auth
-  if (store.auth.type === "Basic" && store.auth.content) {
+  console.log("Auth type:", store.auth.type);
+  if (store.auth.type === "basic" && store.auth.content) {
+    console.log("Auth content:", store.auth.content);
     const authContent = store.auth.content as BasicAuthContent;
-    command += `\n  -u "${authContent.username}:${authContent.password}" \\`;
-  } else if (store.auth.type === "Bearer" && store.auth.content) {
+    command += `\n  -u "${authContent.username}:${authContent.password}" ${breakLineSymbol}`;
+  } else if (store.auth.type === "bearer token" && store.auth.content) {
     const token = (store.auth.content as { token: string }).token;
-    command += `\n  -H "Authorization: Bearer ${token}" \\`;
+    command += `\n  -H "Authorization: Bearer ${token}" ${breakLineSymbol}`;
   }
 
   // Body
   if (store.bodyContent && store.bodyType !== "None") {
     // Escape double quotes in body content
-    const escapedBody = store.bodyContent.replace(/"/g, '\\"');
-    command += `\n  -d "${escapedBody}" \\`;
+    // const escapedBody = store.bodyContent.replace(/"/g, '\\"');
+    const escapedBody = store.bodyContent;
+    // 將 body content 包裹在雙引號中，並添加 -d 參數
+    command += `\n  -d '${escapedBody}' ${breakLineSymbol}`;
   }
 
   // Proxy
   if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
     const proxyUrlAuthPart = `${store.proxyConfig.auth ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@` : ""}`;
     const proxyUrl = `${store.proxyConfig.protocol}://${proxyUrlAuthPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
-    command += `\n  -x "${proxyUrl}" \\`;
+    command += `\n  -x "${proxyUrl}" ${breakLineSymbol}`;
   }
+
+  // Remove the trailing backslash and newline
+  command = command.trim().replace(new RegExp(`${breakLineSymbol}$`), "");
 
   return command;
 }
