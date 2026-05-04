@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import TitleBar from "@/components/core/TitleBar.vue";
 import RequestBuilder from "@/layouts/RequestBuilder.vue";
+import ResponsePanel from "@/components/ResponsePanel/ResponsePanel.vue";
+import StatusBar from "@/components/StatusBar/StatusBar.vue";
 
 import { Toaster } from "@/components/ui/sonner";
 import "vue-sonner/style.css";
-import ResponsePanel from "@/components/ResponsePanel/ResponsePanel.vue";
 
 import {
   ResizableHandle,
@@ -35,6 +36,8 @@ import {
           <ResponsePanel />
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <StatusBar />
     </main>
 
     <Toaster
