@@ -64,9 +64,9 @@
     v-else
     class="flex h-full flex-col items-center justify-center gap-4 border-t"
   >
-    <IconContainer variant="error"
-      ><CircleX class="text-ctp-red-100"
-    /></IconContainer>
+    <IconContainer variant="error">
+      <CircleX class="text-ctp-red-100" />
+    </IconContainer>
     <div class="flex flex-col items-center justify-center gap-0">
       <h2 class="text-ctp-red-100 text-lg font-semibold">回應錯誤</h2>
       <p class="text-ctp-red-300 text-sm">完了，出現錯誤了。</p>
@@ -113,10 +113,10 @@ watch(
       // undefined 代表仍在等待回應
       responseIsNormal.value = undefined;
       console.log("Response status is undefined, waiting for response...");
-    } else if (typeof newStatus === "number") {
-      responseIsNormal.value = newStatus >= 200 && newStatus < 300;
-    } else {
+    } else if (newStatus === 500) {
       responseIsNormal.value = false;
+    } else {
+      responseIsNormal.value = true;
     }
   },
   { immediate: true },
