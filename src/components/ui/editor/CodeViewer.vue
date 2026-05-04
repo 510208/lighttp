@@ -20,6 +20,8 @@ async function formatCode(code: string, language?: string): Promise<string> {
   if (!code || code === "") return "";
 
   try {
+    console.log("Language:", language);
+
     switch (language) {
       case "json":
       case "jsonc":
@@ -55,12 +57,62 @@ function formatJson(code: string): string {
 
 async function formatHtml(code: string): Promise<string> {
   try {
-    return await prettier.format(code, {
-      parser: "html",
-      plugins: [parserHtml],
-      htmlWhitespaceSensitivity: "css",
-      printWidth: 80,
-    });
+    // 简单的 HTML 缩进格式化
+    let formatted = code;
+    let indent = 0;
+    const indentStr = "  ";
+
+    formatted = formatted
+      // 添加换行和缩进
+      .replace(/>\s*</g, ">\n<")
+      .split("\n")
+      .map((line) => {
+        line = line.trim();
+        if (!line) return "";
+
+        // 自闭合标签或文本节点不改变缩进
+        if (line.startsWith("</")) {
+          indent = Math.max(0, indent - 1);
+        }
+
+        const formatted = indentStr.repeat(indent) + line;
+
+        // 开始标签增加缩进
+        if (
+          line.startsWith("<") &&
+          !line.startsWith("</") &&
+          !line.endsWith("/>")
+        ) {
+          // 排除自闭合标签
+          const tagName = line.match(/<([a-zA-Z0-9]+)/)?.[1];
+          // 某些标签不增加缩进
+          if (
+            tagName &&
+            ![
+              "br",
+              "hr",
+              "img",
+              "input",
+              "link",
+              "meta",
+              "area",
+              "base",
+              "col",
+              "embed",
+              "source",
+              "track",
+              "wbr",
+            ].includes(tagName.toLowerCase())
+          ) {
+            indent++;
+          }
+        }
+
+        return formatted;
+      })
+      .join("\n");
+
+    return formatted;
   } catch (e) {
     console.error("[HTML Format Error]:", e);
     return code;
