@@ -45,8 +45,6 @@ onMounted(async () => {
       monacoRef.value = monaco;
       console.log("[formattedCode]:", formattedCode.value);
 
-      console.log("language:", props.language || "json");
-
       // 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
         value: formattedCode.value,
