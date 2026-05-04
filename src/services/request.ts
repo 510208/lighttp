@@ -23,10 +23,6 @@ async function sendRequest(): Promise<ResponseState | null> {
       `[handleSend] Sending ${requestStore.method} request to: ${requestStore.url}`,
     );
 
-    toast.loading(`正在發送 ${requestStore.method} 請求...`, {
-      duration: 1,
-    });
-
     // 使用 await 等待 Rust 後端回傳，response 為物件
     const response = await invoke<any>("handle_request", {
       payload: requestStore.getRequestData(),
@@ -44,41 +40,36 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
     };
 
-    toast.success(
-      `已收到回應: ${responseDataParsed.status} (${duration.toFixed(2)} ms)`,
-    );
+    // toast.success(
+    //   `已收到回應: ${responseDataParsed.status} (${duration.toFixed(2)} ms)`,
+    // );
 
     return responseDataParsed;
   } catch (error) {
-    const endTime = performance.now();
-    console.error("[handleSend] Error invoking Rust command:", error);
-
-    toast.error(`Request failed: ${String(error)}`);
-
-    // 即使失敗，可能也想回傳一個錯誤狀態給前端顯示
-    return {
-      status: 500,
-      body: String(error),
-      headers: {},
-      timeTaken: endTime - startTime, // 單位：毫秒
-    };
+    console.error("[handleSend] Rust Command Error:", error);
+    throw error;
   }
 }
 
 async function handleSend() {
-  const response = await sendRequest();
-  console.log("[handleSend] Response:", response);
-
   const responseStore = useResponseStore();
-  if (response) {
-    responseStore.setResponse(response);
-  }
+  const requestStore = useRequestStore();
 
-  console.log("[handleSend] Updated response store:", {
-    status: responseStore.status,
-    headers: responseStore.headers,
-    body: responseStore.body,
-    timeTaken: responseStore.timeTaken,
+  // 使用 toast.promise 自動管理狀態
+  toast.promise(sendRequest(), {
+    loading: `正在發送 ${requestStore.method} 請求至 ${requestStore.url}...`,
+    success: (data: ResponseState | null) => {
+      // 當 sendRequest resolve 時執行
+      if (data) {
+        responseStore.setResponse(data);
+        return `收到結果: ${data.status} (${data.timeTaken != null ? data.timeTaken.toFixed(2) : "NaN"} ms)`;
+      }
+      return "請求完成";
+    },
+    error: (err: unknown) => {
+      // 當 sendRequest reject 時執行
+      return `發送失敗: ${(err as Error).message || String(err)}`;
+    },
   });
 }
 
