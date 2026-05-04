@@ -7,6 +7,7 @@ export interface ResponseState {
   size: number;
   headers: Record<string, string>;
   timeTaken: number | null;
+  body_type: string;
 }
 
 export const useResponseStore = defineStore("response", () => {
@@ -21,6 +22,8 @@ export const useResponseStore = defineStore("response", () => {
   watch(body, (newBody) => {
     size.value = new Blob([newBody]).size;
   });
+
+  const contentType = ref<string>("text/plain");
 
   function setResponse(payload: any) {
     try {
@@ -37,12 +40,15 @@ export const useResponseStore = defineStore("response", () => {
       headers.value = responseObj.headers;
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
+      contentType.value = headers.value["Content-Type"] || "text/plain";
+      console.log("[setResponse] Response payload type:", contentType.value);
     } catch (e) {
       console.error("[setResponse] Failed to parse response payload:", e);
       status.value = null;
       headers.value = {};
       body.value = "";
       timeTaken.value = null;
+      contentType.value = "text/plain";
     }
   }
 
