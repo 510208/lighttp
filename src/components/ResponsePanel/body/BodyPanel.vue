@@ -2,7 +2,7 @@
   <div class="flex h-full flex-col border-t">
     <CodeViewer
       :model-value="JSON.stringify(responseStore.body, null, 2)"
-      language="json"
+      :language="responseLanguage"
     />
 
     <!-- 絕對值定位的按鈕，用於提供更多操作 -->
@@ -79,7 +79,7 @@ import {
   convertJsonToRust,
 } from "@/lib/getStructure";
 
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import StructureDialog from "./StructureDialog.vue";
 import { toast } from "vue-sonner";
 
@@ -87,6 +87,45 @@ const responseStore = useResponseStore();
 
 const isModalOpen = ref(false);
 const generatedSchema = ref<string | null>(null);
+
+// 監控 responseStore.header中的 Content-Type，根據不同的類型設置 responseLanguage
+const responseLanguage = ref<string>("json");
+watch(
+  () => responseStore.headers,
+  (newHeaders) => {
+    if (!newHeaders || typeof newHeaders !== "object") {
+      responseLanguage.value = "json";
+      return;
+    }
+
+    // 由於 HTTP headers 不區分大小寫，需要遍歷查找
+    const contentTypeValue = Object.entries(newHeaders).find(
+      ([key]) => key.toLowerCase() === "content-type",
+    )?.[1];
+
+    if (contentTypeValue) {
+      console.log("[Content-Type Header]:", contentTypeValue);
+      const contentType = contentTypeValue.toLowerCase();
+      if (contentType.includes("application/json")) {
+        responseLanguage.value = "json";
+      } else if (
+        contentType.includes("application/xml") ||
+        contentType.includes("text/xml")
+      ) {
+        responseLanguage.value = "xml";
+      } else if (contentType.includes("text/html")) {
+        responseLanguage.value = "html";
+      } else {
+        responseLanguage.value = "text";
+      }
+    } else {
+      console.warn("Content-Type header not found. Defaulting to JSON.");
+      responseLanguage.value = "json";
+    }
+  },
+  { immediate: true },
+);
+
 const schemaLanguage = ref<string>("json");
 
 function getContent() {
