@@ -41,6 +41,8 @@ async function sendRequest(): Promise<ResponseState | null> {
       body: response.body,
       headers: response.headers,
       timeTaken: duration,
+      body_type: response.body_type || "text/plain",
+      size: new Blob([response.body]).size,
     };
 
     // toast.success(
