@@ -306,7 +306,6 @@ async function generateRustType() {
 }
 
 // ------
-
 function getMediaType(): "image" | "video" | "audio" | "other" {
   const contentType =
     Object.entries(responseStore.headers)
