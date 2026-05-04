@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col">
+  <div class="flex h-full flex-col border-t">
     <CodeViewer :model-value="JSON.stringify(responseStore.body, null, 2)" />
   </div>
 </template>
