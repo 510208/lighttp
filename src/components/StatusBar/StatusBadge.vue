@@ -19,9 +19,9 @@ const statusColors = {
   error: "bg-ctp-red px-2 text-ctp-base",
   success: "bg-ctp-green px-2 text-ctp-base",
   loading: "bg-ctp-peach px-2 text-ctp-base",
-  none: "hover:bg-ctp-surface0 transition-colors duration-200 px-2 text-white pointer-events-none text-xs flex h-full items-center flex gap-1 items-center",
+  none: "hover:bg-ctp-surface0 transition-colors duration-200 px-2 text-white pointer-events-none text-ctp-subtext0",
 };
-const generalClass = "text-xs flex h-full items-center flex gap-1 items-center";
+const generalClass = "text-xs flex h-full items-center flex gap-1";
 const statusColorsWithGeneral = Object.fromEntries(
   Object.entries(statusColors).map(([key, value]) => [
     key,
