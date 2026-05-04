@@ -19,7 +19,6 @@ interface Props {
   schema: string | null;
   language?: string;
 }
-
 const props = defineProps<Props>();
 
 console.log("StructureDialog Props:", {
@@ -54,15 +53,19 @@ const copyToClipboard = () => {
 
       <!-- 顯示 Schema 內容 -->
       <div class="my-4 grid h-60 gap-4 overflow-hidden rounded-md border">
-        <CodeViewer v-if="schema" :model-value="schema" language="json" />
+        <CodeViewer
+          v-if="schema"
+          :model-value="schema"
+          :language="props.language || 'json'"
+        />
         <p v-else class="text-muted-foreground text-center text-sm">
           沒有可顯示的 Schema。
         </p>
       </div>
 
-      <DialogFooter>
+      <DialogFooter class="flex items-center !justify-between">
         <div>
-          <p>
+          <p class="text-muted-foreground text-left text-xs">
             Schema 生成作業由
             <a
               href="https://quicktypes.io/"
