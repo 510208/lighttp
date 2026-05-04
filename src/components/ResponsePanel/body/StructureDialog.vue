@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "vue-sonner";
+import { Copy } from "@lucide/vue";
 
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 
@@ -45,7 +46,7 @@ const copyToClipboard = () => {
       </DialogHeader>
 
       <!-- 顯示 Schema 內容 -->
-      <div class="grid h-60 gap-4 py-4">
+      <div class="my-4 grid h-60 gap-4 overflow-hidden rounded-md border">
         <CodeViewer v-if="schema" :model-value="schema" language="json" />
         <p v-else class="text-muted-foreground text-center text-sm">
           沒有可顯示的 Schema。
@@ -56,7 +57,10 @@ const copyToClipboard = () => {
         <Button variant="outline" @click="emit('update:open', false)">
           關閉
         </Button>
-        <Button @click="copyToClipboard"> 複製 JSON </Button>
+        <Button @click="copyToClipboard">
+          <Copy :size="16" />
+          複製 JSON
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
