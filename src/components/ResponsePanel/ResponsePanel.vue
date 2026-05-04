@@ -8,7 +8,10 @@
         <TabsOptions value="body" name="Body" chinese-name="主體" />
         <TabsOptions value="headers" name="Headers" chinese-name="標頭" />
       </TabsList>
-      <div id="setting-panel-content" class="h-full min-h-0 overflow-hidden">
+      <div
+        id="setting-panel-content"
+        class="mb-6 h-full min-h-0 overflow-hidden"
+      >
         <TabsContent value="body" as-child><BodyPanel /></TabsContent>
         <TabsContent value="headers" as-child>HeaderTable /></TabsContent>
       </div>
