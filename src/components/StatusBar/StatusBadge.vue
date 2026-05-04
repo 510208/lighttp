@@ -15,13 +15,13 @@ interface Props {
 }
 
 const statusColors = {
-  ready: "bg-ctp-overlay2 px-2 text-ctp-base",
-  error: "bg-ctp-red px-2 text-ctp-base",
-  success: "bg-ctp-green px-2 text-ctp-base",
-  loading: "bg-ctp-peach px-2 text-ctp-base",
-  none: "hover:bg-ctp-surface0 transition-colors duration-200 px-2 text-white pointer-events-none text-ctp-subtext0",
+  ready: "bg-ctp-overlay2 text-ctp-base",
+  error: "bg-ctp-red text-ctp-base",
+  success: "bg-ctp-green text-ctp-base",
+  loading: "bg-ctp-peach text-ctp-base",
+  none: "hover:bg-ctp-surface0 transition-colors duration-200 text-white pointer-events-none text-ctp-subtext0",
 };
-const generalClass = "text-xs flex h-full items-center flex gap-1";
+const generalClass = "px-3 text-xs flex h-full items-center flex gap-1";
 const statusColorsWithGeneral = Object.fromEntries(
   Object.entries(statusColors).map(([key, value]) => [
     key,
