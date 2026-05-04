@@ -1,84 +1,128 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, shallowRef, watch, computed } from "vue";
+import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
+import prettier from "prettier";
+import parserHtml from "prettier/parser-html";
 
 type MonacoEditorAlias = any;
 
 const props = defineProps<{
-  modelValue?: string; // 接收外部傳入的 JSON 字串
-  language?: string; // 可選的語言類型，預設為 json
+  modelValue?: string;
+  language?: string;
 }>();
 
 const editorContainer = ref<HTMLElement | null>(null);
-
-// 使用 shallowRef 儲存實例以優化效能
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
 const monacoRef = shallowRef<any>(null);
+const formattedCode = ref<string>("");
 
-function formatCode(code: string): string {
+async function formatCode(code: string, language?: string): Promise<string> {
+  if (!code || code === "") return "";
+
   try {
-    if (props.language !== "json") {
-      return code; // 若非 JSON，直接回傳原始內容
+    switch (language) {
+      case "json":
+      case "jsonc":
+        return formatJson(code);
+      case "html":
+      case "htm":
+      case "xml":
+        return await formatHtml(code);
+      default:
+        return code;
     }
-    if (!code || code === "") return "";
-
-    const parsed = JSON.parse(JSON.parse(code));
-    console.log("[Parsed JSON]:", parsed);
-    console.log("[Stringified JSON]:", JSON.stringify(parsed, null, 2));
-    return JSON.stringify(parsed, null, 2);
-    // return parsed as string;
   } catch (e) {
-    console.error("[JSON Parse Error]:", e);
-    return code; // 若解析失敗則回傳原始值
+    console.error("[Format Error]:", e);
+    return code;
   }
 }
 
-const formattedCode = computed(() => {
-  if (!props.modelValue) return "";
-  return formatCode(props.modelValue);
-});
+function formatJson(code: string): string {
+  try {
+    const parsed = JSON.parse(JSON.parse(code));
+    console.log("[Parsed JSON]:", parsed);
+    return JSON.stringify(parsed, null, 2);
+  } catch {
+    try {
+      const parsed = JSON.parse(code);
+      return JSON.stringify(parsed, null, 2);
+    } catch (e) {
+      console.error("[JSON Parse Error]:", e);
+      return code;
+    }
+  }
+}
+
+async function formatHtml(code: string): Promise<string> {
+  try {
+    return await prettier.format(code, {
+      parser: "html",
+      plugins: [parserHtml],
+      htmlWhitespaceSensitivity: "css",
+      printWidth: 80,
+    });
+  } catch (e) {
+    console.error("[HTML Format Error]:", e);
+    return code;
+  }
+}
 
 onMounted(async () => {
-  if (editorContainer.value) {
-    try {
-      const monaco = await loader.init();
-      monacoRef.value = monaco;
-      console.log("[formattedCode]:", formattedCode.value);
+  if (!editorContainer.value) return;
 
-      // 建立編輯器實例
-      editorInstance.value = monaco.editor.create(editorContainer.value, {
-        value: formattedCode.value,
-        language: props.language || "json",
-        theme: "vs-dark",
-        automaticLayout: true,
-        readOnly: true, // 設定為唯讀
-        domReadOnly: true, // 強化唯讀屬性
-        minimap: { enabled: false }, // 關閉縮圖以節省顯示空間
-        scrollBeyondLastLine: false,
-        contextmenu: false, // 關閉右鍵選單
-        fontSize: 14,
-      });
-    } catch (error) {
-      console.error("[Monaco Loader Error]:", error);
-    }
+  try {
+    // 先格式化代码
+    formattedCode.value = await formatCode(
+      props.modelValue ?? "",
+      props.language,
+    );
+
+    const monaco = await loader.init();
+    monacoRef.value = monaco;
+    console.log("[formattedCode]:", formattedCode.value);
+
+    editorInstance.value = monaco.editor.create(editorContainer.value, {
+      value: formattedCode.value,
+      language: props.language || "json",
+      theme: "vs-dark",
+      automaticLayout: true,
+      readOnly: true,
+      domReadOnly: true,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      contextmenu: false,
+      fontSize: 14,
+    });
+  } catch (error) {
+    console.error("[Monaco Loader Error]:", error);
   }
 });
 
-/**
- * 監聽外部傳入值的變化並同步更新編輯器內容
- */
 watch(
-  () => props.modelValue,
-  (newVal) => {
-    if (editorInstance.value && newVal !== editorInstance.value.getValue()) {
-      console.log("[New Model Value]:", newVal);
-      const formatted = formatCode(newVal || "");
-      editorInstance.value.setValue(formatted);
+  () => [props.modelValue, props.language],
+  async () => {
+    if (!editorInstance.value) return;
+
+    const nextValue = await formatCode(props.modelValue ?? "", props.language);
+    formattedCode.value = nextValue;
+
+    if (nextValue !== editorInstance.value.getValue()) {
+      console.log("[New Model Value]:", nextValue);
+      editorInstance.value.setValue(nextValue);
+    }
+
+    if (monacoRef.value) {
+      const model = editorInstance.value.getModel?.();
+      if (model) {
+        monacoRef.value.editor.setModelLanguage(
+          model,
+          props.language || "json",
+        );
+      }
     }
   },
 );
 
-// 組件卸載時銷毀實例，防止記憶體洩漏
 onUnmounted(() => {
   if (editorInstance.value) {
     editorInstance.value.dispose();
@@ -88,13 +132,11 @@ onUnmounted(() => {
 
 <template>
   <div class="flex h-full flex-col overflow-hidden">
-    <!-- 編輯器容器 -->
     <div ref="editorContainer" class="w-full flex-1"></div>
   </div>
 </template>
 
 <style scoped>
-/* 確保容器高度填滿父級 */
 div[ref="editorContainer"] {
   min-height: 100%;
 }
