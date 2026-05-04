@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col px-10 py-7.5 gap-7.5">
+  <div class="flex flex-col gap-7.5 px-10 py-7.5">
     <!-- 請求輸入框 -->
     <TargetInput />
     <!-- 設定面板 -->
