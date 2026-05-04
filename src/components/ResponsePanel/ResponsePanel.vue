@@ -3,8 +3,17 @@
   <div
     class="bg-ctp-surface border-ctp-surface-variant flex h-full min-h-0 flex-col gap-0"
   >
-    <div class="flex items-center">
-      <h2 class="text-ctp-overlay2 mt-4 px-10 text-sm font-bold">結果</h2>
+    <div class="mt-4 flex items-center">
+      <h2 class="text-ctp-overlay2 px-10 text-sm font-bold">結果</h2>
+      <PanelBadge :variant="responseStatus" :icon="Dot">
+        {{
+          responseStore.status === undefined
+            ? "載入中"
+            : responseStore.status === null
+              ? "無回應"
+              : responseStore.status
+        }}
+      </PanelBadge>
     </div>
     <Tabs default-value="body" class="flex min-h-0 flex-1 flex-col">
       <TabsList class="mt-2 gap-5 bg-transparent p-4 px-10">
@@ -25,9 +34,23 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import TabsOptions from "@/components/common/TabsOption.vue";
+import PanelBadge from "./common/PanelBadge.vue";
 
 import BodyPanel from "./body/BodyPanel.vue";
 import HeaderTable from "./header/HeaderTable.vue";
+
+import { useResponseStore } from "@/stores/useResponseStore";
+import { computed } from "vue";
+
+import { Dot } from "@lucide/vue";
+
+const responseStore = useResponseStore();
+const responseStatus = computed(() => {
+  if (responseStore.status === undefined) return "loading";
+  if (responseStore.status === null) return "none";
+  if (responseStore.status >= 400) return "error";
+  return "success";
+});
 </script>
 
 <style scoped></style>
