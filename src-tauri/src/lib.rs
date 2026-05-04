@@ -28,8 +28,8 @@ use std::collections::HashMap;
 
 pub mod utils;
 use utils::auth::handle_auth;
-use utils::proxy::{handle_proxy};
 use utils::other::{get_deep_error, to_hashmap};
+use utils::proxy::handle_proxy;
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
@@ -42,7 +42,7 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
         info!("[handle_request] 檢查代理設定: {:?}", proxy_config);
-        
+
         match handle_proxy(proxy_config).await {
             Ok(Some(proxy)) => {
                 // 成功建立代理物件，掛載到 client
