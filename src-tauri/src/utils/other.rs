@@ -5,14 +5,14 @@ use std::collections::HashMap;
 pub fn get_deep_error(e: &reqwest::Error) -> String {
     use std::error::Error;
     let mut messages = vec![format!("{}", e)];
-    
+
     // 遞迴取得底層錯誤原因 (例如 hyper 或 native-tls 的錯誤)
     let mut source = e.source();
     while let Some(cause) = source {
         messages.push(format!("{}", cause));
         source = cause.source();
     }
-    
+
     messages.join(" -> ")
 }
 

@@ -1,7 +1,7 @@
 use crate::models;
 
 use base64::{engine::general_purpose, Engine as _};
-use models::{AuthStore};
+use models::AuthStore;
 
 pub fn encode_base64(input: &str) -> String {
     general_purpose::STANDARD.encode(input)

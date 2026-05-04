@@ -1,3 +1,3 @@
 pub mod auth;
-pub mod proxy;
 pub mod other;
+pub mod proxy;
