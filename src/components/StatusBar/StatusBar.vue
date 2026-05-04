@@ -161,7 +161,7 @@ function checkProxyStatus() {
       proxyStatus.value.icon = GlobeLock;
     } else {
       proxyStatus.value.statProp = "loadingText";
-      proxyStatus.value.content = "設置不完全";
+      proxyStatus.value.content = "代理設定不完整";
       proxyStatus.value.icon = GlobeOff;
     }
   } else {
