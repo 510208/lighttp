@@ -44,6 +44,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      htmlfy:
+        specifier: ^1.0.1
+        version: 1.0.1
       lucide-vue-next:
         specifier: ^1.0.0
         version: 1.0.0(vue@3.5.33(typescript@5.6.3))
@@ -873,6 +876,9 @@ packages:
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
+
+  htmlfy@1.0.1:
+    resolution: {integrity: sha512-M85PmyEpWUDqhlEknsnvqmqGLq67h8e86WuKLMdXQdUl8iyvOSDbAAyv0tv0IVmIfh7Py1Vsot/IU1skdswt6g==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -1909,6 +1915,8 @@ snapshots:
   he@1.2.0: {}
 
   hookable@5.5.3: {}
+
+  htmlfy@1.0.1: {}
 
   ieee754@1.2.1: {}
 

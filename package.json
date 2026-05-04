@@ -23,6 +23,7 @@
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",
     "monaco-editor": "^0.55.1",
     "pinia": "^3.0.4",
