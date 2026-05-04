@@ -40,6 +40,7 @@ import {
   ServerOff,
   PcCase,
   Loader,
+  Plug,
 } from "@lucide/vue";
 
 import { useResponseStore } from "@/stores/useResponseStore";
@@ -67,6 +68,10 @@ watch(
       leftSideStatus.value.statProp = "ready";
       leftSideStatus.value.content = "已就緒";
       leftSideStatus.value.icon = Ellipsis;
+    } else if (newStatus === undefined) {
+      leftSideStatus.value.statProp = "loading";
+      leftSideStatus.value.content = "等待中";
+      leftSideStatus.value.icon = Plug;
     } else if (newStatus >= 200 && newStatus < 300) {
       leftSideStatus.value.statProp = "success";
       leftSideStatus.value.content = `成功 (${newStatus})`;
