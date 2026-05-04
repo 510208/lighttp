@@ -10,6 +10,10 @@
       >
         {{ leftSideStatus.content }}</StatusBadge
       >
+
+      <StatusBadge v-if="requestTime !== null" status="none" :icon="Timer">
+        {{ requestTime.toFixed(3) }} ms
+      </StatusBadge>
     </div>
 
     <!-- 右側 -->
@@ -26,13 +30,14 @@
         {{ props.responseOpen ? "收合回應面板" : "展開回應面板" }}
       </button>
 
-      <StatusBadge status="none">Lighttp v0.1.0</StatusBadge>
+      <StatusBadge status="none">Lighttp v{{ appVersion }}</StatusBadge>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import StatusBadge from "@/components/StatusBar/StatusBadge.vue";
+import { getVersion } from "@tauri-apps/api/app";
 import {
   ChevronDown,
   Ellipsis,
@@ -41,13 +46,15 @@ import {
   PcCase,
   Loader,
   Plug,
+  Timer,
 } from "@lucide/vue";
 
 import { useResponseStore } from "@/stores/useResponseStore";
-import { watch, ref } from "vue";
+import { watch, ref, onMounted } from "vue";
 
 const responseStore = useResponseStore();
 
+const requestTime = ref<number | null>(null);
 const leftSideStatus = ref({
   statProp: "ready", // 預設為 ready
   icon: Ellipsis,
@@ -58,11 +65,17 @@ const leftSideStatus = ref({
   content: string;
 });
 
+const appVersion = ref("");
+
+onMounted(async () => {
+  appVersion.value = await getVersion();
+});
+
 // 監視 responseStore 的 status 屬性，當它改變時修改左側的狀態顯示
 watch(
   () => responseStore.status,
   (newStatus) => {
-    // status內為HTTP狀態碼，當為null時表示ready狀態
+    //#region status內為HTTP狀態碼，當為null時表示ready狀態
     if (newStatus === null) {
       // 當 status 是 "ready" 時，顯示 Ready
       leftSideStatus.value.statProp = "ready";
@@ -90,6 +103,15 @@ watch(
       leftSideStatus.value.content = "無狀態";
       leftSideStatus.value.icon = Loader;
     }
+    //#endregion
+  },
+);
+
+// 監視 responseStore 的 requestTime 屬性，當它改變時更新 requestTime 變數
+watch(
+  () => responseStore.timeTaken,
+  (newRequestTime) => {
+    requestTime.value = newRequestTime;
   },
 );
 
