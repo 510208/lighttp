@@ -15,6 +15,10 @@
             <Copy />
             複製回應結果
           </DropdownMenuItem>
+          <DropdownMenuItem @click="generateJsonSchema">
+            <Braces />
+            生成 JSON Schema
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -31,7 +35,8 @@ import {
 import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
-import { EllipsisVertical, Copy } from "@lucide/vue";
+import { EllipsisVertical, Copy, Braces } from "@lucide/vue";
+import { convertJsonToSchema } from "@/lib/getStructure";
 
 const responseStore = useResponseStore();
 
@@ -59,6 +64,24 @@ function copyToClipboard() {
     .catch((err) => {
       console.error("Failed to copy response body: ", err);
     });
+}
+
+// 生成 JSON Schema
+function generateJsonSchema() {
+  if (responseStore.body === "") {
+    console.warn("Response body is empty. Cannot generate JSON Schema.");
+    return;
+  }
+  try {
+    const jsonSchema = convertJsonToSchema(responseStore.body);
+    console.log("Generated JSON Schema:", jsonSchema);
+    // 可以在這裡將生成的 JSON Schema 顯示給用戶，或者提供下載功能
+  } catch (error) {
+    console.error(
+      "Failed to parse response body or generate JSON Schema: ",
+      error,
+    );
+  }
 }
 </script>
 
