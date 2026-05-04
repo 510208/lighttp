@@ -16,6 +16,7 @@ const monacoRef = shallowRef<any>(null);
 
 function formatCode(code: string): string {
   try {
+    if (!code || code === "") return "";
     const parsed = JSON.parse(JSON.parse(code));
     console.log("[Parsed JSON]:", parsed);
     console.log("[Stringified JSON]:", JSON.stringify(parsed, null, 2));
