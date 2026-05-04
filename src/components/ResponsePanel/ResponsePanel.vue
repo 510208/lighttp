@@ -18,7 +18,7 @@
       <PanelBadge
         v-if="responseStore.size !== undefined"
         variant="ready"
-        :icon="Dot"
+        :icon="File"
       >
         {{ (responseStore.size / 1024).toFixed(2) }} KB
       </PanelBadge>
@@ -58,7 +58,7 @@ import HeaderTable from "./header/HeaderTable.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
 import { computed } from "vue";
 
-import { Dot, Timer } from "@lucide/vue";
+import { Dot, Timer, File } from "@lucide/vue";
 
 const responseStore = useResponseStore();
 const responseStatus = computed(() => {
