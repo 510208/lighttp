@@ -2,8 +2,8 @@
 import TitleBar from "@/components/core/TitleBar.vue";
 import RequestBuilder from "@/layouts/RequestBuilder.vue";
 
-import "vue-sonner/style.css";
 import { Toaster } from "@/components/ui/sonner";
+import "vue-sonner/style.css";
 </script>
 
 <template>

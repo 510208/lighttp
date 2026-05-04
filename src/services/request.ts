@@ -58,7 +58,8 @@ async function handleSend() {
   // 使用 toast.promise 自動管理狀態
   toast.promise(sendRequest(), {
     loading: `正在發送 ${requestStore.method} 請求至 ${requestStore.url}...`,
-    success: (data: ResponseState | null) => {
+    success: async (data: ResponseState | null) => {
+      await new Promise((resolve) => setTimeout(resolve, 200)); // 模擬處理時間，讓 loading 狀態更明顯
       // 當 sendRequest resolve 時執行
       if (data) {
         responseStore.setResponse(data);
