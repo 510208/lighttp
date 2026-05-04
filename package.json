@@ -26,6 +26,7 @@
     "lucide-vue-next": "^1.0.0",
     "monaco-editor": "^0.55.1",
     "pinia": "^3.0.4",
+    "quicktype-core": "^23.2.6",
     "reka-ui": "^2.9.6",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4",
