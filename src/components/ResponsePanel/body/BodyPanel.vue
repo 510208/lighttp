@@ -15,10 +15,26 @@
             <Copy />
             複製回應結果
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
           <DropdownMenuItem @click="generateJsonSchema">
             <Braces />
             生成 JSON Schema
           </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <BookA />
+              生成型別定義
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent class="mr-2">
+                <DropdownMenuItem>Python</DropdownMenuItem>
+                <DropdownMenuItem>TypeScript</DropdownMenuItem>
+                <DropdownMenuItem>Rust</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
       <StructureDialog v-model:open="isModalOpen" :schema="generatedSchema" />
@@ -32,11 +48,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
-import { EllipsisVertical, Copy, Braces } from "@lucide/vue";
+import { EllipsisVertical, Copy, Braces, BookA } from "@lucide/vue";
 import { convertJsonToSchema } from "@/lib/getStructure";
 
 import { ref } from "vue";
