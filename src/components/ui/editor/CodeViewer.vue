@@ -6,6 +6,7 @@ type MonacoEditorAlias = any;
 
 const props = defineProps<{
   modelValue?: string; // 接收外部傳入的 JSON 字串
+  language?: string; // 可選的語言類型，預設為 json
 }>();
 
 const editorContainer = ref<HTMLElement | null>(null);
@@ -43,7 +44,7 @@ onMounted(async () => {
       // 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
         value: formattedCode.value,
-        language: "json",
+        language: props.language || "json",
         theme: "vs-dark",
         automaticLayout: true,
         readOnly: true, // 設定為唯讀
