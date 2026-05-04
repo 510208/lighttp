@@ -13,7 +13,7 @@
         class="mb-6 h-full min-h-0 overflow-hidden"
       >
         <TabsContent value="body" as-child><BodyPanel /></TabsContent>
-        <TabsContent value="headers" as-child>HeaderTable /></TabsContent>
+        <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
       </div>
     </Tabs>
   </div>
@@ -22,7 +22,9 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import TabsOptions from "@/components/common/TabsOption.vue";
+
 import BodyPanel from "./body/BodyPanel.vue";
+import HeaderTable from "./header/HeaderTable.vue";
 </script>
 
 <style scoped></style>
