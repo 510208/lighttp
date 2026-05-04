@@ -29,7 +29,7 @@ use std::collections::HashMap;
 pub mod utils;
 use utils::auth::handle_auth;
 use utils::other::{get_deep_error, to_hashmap};
-use utils::proxy::handle_proxy;
+use utils::proxy::{check_proxy, handle_proxy};
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
@@ -42,6 +42,32 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
         info!("[handle_request] 檢查代理設定: {:?}", proxy_config);
+
+        // 檢查是否需要先測試代理連線
+        if proxy_config.check_before_send {
+            info!("[handle_request] 代理設定要求測試連線，正在測試...");
+            match check_proxy(proxy_config).await {
+                Ok(()) => info!("[handle_request] 代理連線測試成功"),
+                Err(e) => {
+                    let detailed_error = e;
+                    error!("[handle_request] 代理連線測試出錯: {}", detailed_error);
+
+                    if detailed_error.contains("proxy authorization required") {
+                        return build_error_response(
+                            403,
+                            format!("登入憑證錯誤、未提供或代理認證失敗: {}", detailed_error),
+                        );
+                    } else {
+                        return build_error_response(
+                            500,
+                            format!("代理連線測試出錯: {}", detailed_error),
+                        );
+                    }
+                }
+            }
+        } else {
+            info!("[handle_request] 代理設定不要求測試連線，直接使用設定的代理");
+        }
 
         match handle_proxy(proxy_config).await {
             Ok(Some(proxy)) => {
@@ -125,6 +151,7 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
         Ok(response) => parse_success_response(response).await,
         Err(e) => {
             let detailed_error = get_deep_error(&e); // 這裡會拿到更深層的資訊
+
             error!("[handle_request] 請求發送失敗: {}", detailed_error);
             build_error_response(500, detailed_error)
         }
