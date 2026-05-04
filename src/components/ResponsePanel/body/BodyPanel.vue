@@ -13,6 +13,8 @@
         class="bg-ctp-surface-variant flex h-full flex-col items-center justify-center gap-4 rounded p-6"
         v-if="!forceShowMedia"
       >
+        <IconContainer><Binary /></IconContainer>
+
         <p class="text-ctp-overlay2 text-sm">
           回應內容為媒體類型，為保證系統安全已隱藏。<br />
 
@@ -118,10 +120,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
+import IconContainer from "@/components/ui/icon-ct/IconContainer.vue";
 import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 import { useResponseStore } from "@/stores/useResponseStore";
-import { EllipsisVertical, Copy, Braces, BookA } from "@lucide/vue";
+import { EllipsisVertical, Copy, Braces, BookA, Binary } from "@lucide/vue";
 import {
   convertJsonToSchema,
   convertJsonToTypeScript,
@@ -132,6 +135,9 @@ import {
 import { onUnmounted, ref, watch } from "vue";
 import StructureDialog from "./StructureDialog.vue";
 import { toast } from "vue-sonner";
+
+const forceShowMedia = ref(false);
+const mediaUrl = ref<string>("");
 
 const responseStore = useResponseStore();
 const URL = globalThis.URL;
@@ -300,9 +306,6 @@ async function generateRustType() {
 }
 
 // ------
-
-const forceShowMedia = ref(false);
-const mediaUrl = ref<string>("");
 
 function getMediaType(): "image" | "video" | "audio" | "other" {
   const contentType =
