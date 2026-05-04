@@ -17,6 +17,7 @@ import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 interface Props {
   open: boolean;
   schema: string | null;
+  language?: string;
 }
 
 const props = defineProps<Props>();
