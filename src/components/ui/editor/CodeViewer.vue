@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
-import prettier from "prettier";
-import parserHtml from "prettier/parser-html";
+import { prettify } from "htmlfy";
 
 type MonacoEditorAlias = any;
 
@@ -57,60 +56,11 @@ function formatJson(code: string): string {
 
 async function formatHtml(code: string): Promise<string> {
   try {
-    // 简单的 HTML 缩进格式化
-    let formatted = code;
-    let indent = 0;
-    const indentStr = "  ";
-
-    formatted = formatted
-      // 添加换行和缩进
-      .replace(/>\s*</g, ">\n<")
-      .split("\n")
-      .map((line) => {
-        line = line.trim();
-        if (!line) return "";
-
-        // 自闭合标签或文本节点不改变缩进
-        if (line.startsWith("</")) {
-          indent = Math.max(0, indent - 1);
-        }
-
-        const formatted = indentStr.repeat(indent) + line;
-
-        // 开始标签增加缩进
-        if (
-          line.startsWith("<") &&
-          !line.startsWith("</") &&
-          !line.endsWith("/>")
-        ) {
-          // 排除自闭合标签
-          const tagName = line.match(/<([a-zA-Z0-9]+)/)?.[1];
-          // 某些标签不增加缩进
-          if (
-            tagName &&
-            ![
-              "br",
-              "hr",
-              "img",
-              "input",
-              "link",
-              "meta",
-              "area",
-              "base",
-              "col",
-              "embed",
-              "source",
-              "track",
-              "wbr",
-            ].includes(tagName.toLowerCase())
-          ) {
-            indent++;
-          }
-        }
-
-        return formatted;
-      })
-      .join("\n");
+    const formatted = await prettify(code, {
+      indent: 2,
+      newline: "\n",
+      space: " ",
+    });
 
     return formatted;
   } catch (e) {
@@ -131,7 +81,6 @@ onMounted(async () => {
 
     const monaco = await loader.init();
     monacoRef.value = monaco;
-    console.log("[formattedCode]:", formattedCode.value);
 
     editorInstance.value = monaco.editor.create(editorContainer.value, {
       value: formattedCode.value,
