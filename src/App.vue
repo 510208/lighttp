@@ -30,7 +30,7 @@ const toggleResponsePanel = () => {
     <main class="min-h-0 flex-1">
       <ResizablePanelGroup direction="vertical" class="h-full w-full">
         <ResizablePanel
-          :default-size="isResponsePanelOpen ? 60 : 100"
+          :default-size="isResponsePanelOpen ? 55 : 100"
           :min-size="isResponsePanelOpen ? 40 : 100"
           class="min-h-0"
         >
@@ -46,7 +46,7 @@ const toggleResponsePanel = () => {
             </div>
           </div>
 
-          <ResizablePanel :default-size="40" :min-size="16" class="min-h-0">
+          <ResizablePanel :default-size="45" :min-size="16" class="min-h-0">
             <ResponsePanel />
           </ResizablePanel>
         </template>
