@@ -22,6 +22,12 @@ interface Props {
 
 const props = defineProps<Props>();
 
+console.log("StructureDialog Props:", {
+  open: props.open,
+  schema: props.schema,
+  language: props.language,
+});
+
 // 定義 Emits 用於同步 open 狀態
 const emit = defineEmits<{
   (e: "update:open", value: boolean): void;

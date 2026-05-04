@@ -43,6 +43,7 @@
           </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <StructureDialog
         v-model:open="isModalOpen"
         :schema="generatedSchema"
@@ -62,6 +63,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuSeparator,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
