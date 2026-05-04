@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
+import { ref, onMounted, onUnmounted, shallowRef, watch, computed } from "vue";
 import loader from "@monaco-editor/loader";
 
 type MonacoEditorAlias = any;
@@ -14,6 +14,24 @@ const editorContainer = ref<HTMLElement | null>(null);
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
 const monacoRef = shallowRef<any>(null);
 
+const formattedCode = computed(() => {
+  if (!props.modelValue) return "";
+  try {
+    // 第一次 parse：處理傳入的字串，將其轉為物件
+    // 這會自動處理掉 \" 並去除最外層的引號
+    const parsedData =
+      typeof props.modelValue === "string"
+        ? JSON.parse(props.modelValue)
+        : props.modelValue;
+
+    // 第二次 stringify：轉回格式化後的字串，加上 2 格空格縮排
+    return JSON.stringify(parsedData, null, 2);
+  } catch (e) {
+    console.error("[JSON Parse Error]:", e);
+    return props.modelValue; // 若解析失敗則回傳原始值
+  }
+});
+
 onMounted(async () => {
   if (editorContainer.value) {
     try {
@@ -22,7 +40,7 @@ onMounted(async () => {
 
       // 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
-        value: props.modelValue || "",
+        value: formattedCode.value,
         language: "json",
         theme: "vs-dark",
         automaticLayout: true,
@@ -48,7 +66,7 @@ watch(
     if (editorInstance.value) {
       const currentEditorValue = editorInstance.value.getValue();
       if (newVal !== currentEditorValue) {
-        editorInstance.value.setValue(newVal || "");
+        editorInstance.value.setValue(formattedCode.value);
       }
     }
   },
@@ -63,10 +81,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col overflow-hidden rounded-md border">
+  <div class="flex flex-col overflow-hidden">
     <!-- 編輯器容器 -->
-    <div class="h-64">
-      <div ref="editorContainer" class="h-full w-full"></div>
+    <div class="h-full min-h-64 w-full">
+      <div ref="editorContainer" class="min-h-full w-full"></div>
     </div>
   </div>
 </template>
