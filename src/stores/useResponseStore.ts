@@ -3,8 +3,9 @@ import { ref } from "vue";
 
 export const useResponseStore = defineStore("response", () => {
   const status = ref<number | null>(null);
-  const headers = ref<Record<string, string>>({});
   const body = ref<string>("");
+  const headers = ref<Record<string, string>>({});
+
   const timeTaken = ref<number | null>(null);
 
   function setResponse(payload: string) {
