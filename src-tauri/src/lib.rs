@@ -17,7 +17,6 @@ pub fn run() {
 }
 
 // ------
-
 // use serde::Deserialize;
 // use std::collections::HashMap;
 
@@ -30,6 +29,8 @@ pub mod utils;
 use utils::auth::handle_auth;
 use utils::other::{get_content_type, get_deep_error, to_hashmap};
 use utils::proxy::{check_proxy, handle_proxy};
+
+use base64::{engine::general_purpose, Engine as _};
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
@@ -160,11 +161,25 @@ async fn handle_request(payload: RequestPayload) -> ResponsePayload {
 
 // 處理成功的結果
 async fn parse_success_response(response: reqwest::Response) -> ResponsePayload {
-    ResponsePayload {
-        status: response.status().as_u16(),
-        headers: to_hashmap(response.headers()),
-        body_type: get_content_type(response.headers()),
-        body: response.text().await.unwrap_or_default(), // response.text() 會取走擁有權，所以headers要放在上面
+    let status = response.status().as_u16();
+    let headers = response.headers().clone();
+    let content_type = get_content_type(&headers);
+
+    if is_media_content_type(&content_type) {
+        let body_bytes = response.bytes().await.unwrap_or_default();
+        ResponsePayload {
+            status,
+            headers: to_hashmap(&headers),
+            body_type: content_type,
+            body: general_purpose::STANDARD.encode(body_bytes),
+        }
+    } else {
+        ResponsePayload {
+            status,
+            headers: to_hashmap(&headers),
+            body_type: content_type,
+            body: response.text().await.unwrap_or_default(),
+        }
     }
 }
 
@@ -178,4 +193,13 @@ fn build_error_response(status: u16, message: String) -> ResponsePayload {
         body_type: "text".into(), // 錯誤情況下，body_type 可以設為 "text"
         body: message,
     }
+}
+
+fn is_media_content_type(content_type: &str) -> bool {
+    let content_type = content_type.to_lowercase();
+
+    content_type.starts_with("image/")
+        || content_type.starts_with("video/")
+        || content_type.starts_with("audio/")
+        || content_type == "application/octet-stream"
 }
