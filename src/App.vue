@@ -38,11 +38,11 @@ const toggleResponsePanel = () => {
         </ResizablePanel>
 
         <template v-if="isResponsePanelOpen">
-          <div
-            class="flex h-2 w-full cursor-row-resize items-center justify-center"
-          >
+          <div class="flex h-2 w-full items-center justify-center pt-3">
             <div class="w-[calc(100%-2.5rem)]">
-              <ResizableHandle class="bg-ctp-text/20 w-[90%]" />
+              <ResizableHandle
+                class="bg-ctp-text/20 w-[90%] !cursor-row-resize"
+              />
             </div>
           </div>
 
