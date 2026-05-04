@@ -17,7 +17,11 @@ const monacoRef = shallowRef<any>(null);
 
 function formatCode(code: string): string {
   try {
+    if (props.language !== "json") {
+      return code; // 若非 JSON，直接回傳原始內容
+    }
     if (!code || code === "") return "";
+
     const parsed = JSON.parse(JSON.parse(code));
     console.log("[Parsed JSON]:", parsed);
     console.log("[Stringified JSON]:", JSON.stringify(parsed, null, 2));
@@ -40,6 +44,8 @@ onMounted(async () => {
       const monaco = await loader.init();
       monacoRef.value = monaco;
       console.log("[formattedCode]:", formattedCode.value);
+
+      console.log("language:", props.language || "json");
 
       // 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
