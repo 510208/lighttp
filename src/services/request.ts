@@ -5,6 +5,8 @@ import {
   useResponseStore,
 } from "@/stores/useResponseStore";
 
+import { toast } from "vue-sonner";
+
 async function sendRequest(): Promise<ResponseState | null> {
   const requestStore = useRequestStore();
 
@@ -20,6 +22,10 @@ async function sendRequest(): Promise<ResponseState | null> {
     console.log(
       `[handleSend] Sending ${requestStore.method} request to: ${requestStore.url}`,
     );
+
+    toast.loading(`正在發送 ${requestStore.method} 請求...`, {
+      duration: 1,
+    });
 
     // 使用 await 等待 Rust 後端回傳，response 為物件
     const response = await invoke<any>("handle_request", {
@@ -38,10 +44,16 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
     };
 
+    toast.success(
+      `已收到回應: ${responseDataParsed.status} (${duration.toFixed(2)} ms)`,
+    );
+
     return responseDataParsed;
   } catch (error) {
     const endTime = performance.now();
     console.error("[handleSend] Error invoking Rust command:", error);
+
+    toast.error(`Request failed: ${String(error)}`);
 
     // 即使失敗，可能也想回傳一個錯誤狀態給前端顯示
     return {
