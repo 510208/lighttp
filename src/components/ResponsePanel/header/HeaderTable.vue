@@ -16,8 +16,26 @@
             class="border-ctp-surface1"
           >
             <TableCell class="break-words">
-              {{ parseHeaderKey(key) }}
+              <HoverCard v-if="getHeaderTemplate(key)" class="inline-block">
+                <HoverCardTrigger
+                  class="border-ctp-text-subtle cursor-help border-b border-dotted"
+                >
+                  {{ parseHeaderKey(key) }}
+                </HoverCardTrigger>
+                <HoverCardContent class="w-auto max-w-sm" align="start">
+                  <div class="space-y-2">
+                    <p class="text-sm font-semibold">
+                      {{ parseHeaderKey(key) }}
+                    </p>
+                    <p class="text-ctp-text-subtle text-sm whitespace-pre-wrap">
+                      {{ getHeaderTemplate(key)?.description }}
+                    </p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              <span v-else>{{ parseHeaderKey(key) }}</span>
             </TableCell>
+
             <TableCell class="flex items-center gap-1 font-mono">
               {{ breakLongValue(value) }}
               <HoverCard v-if="value.length > 40" class="inline-block">
@@ -40,6 +58,8 @@
                   </p>
                 </HoverCardContent>
               </HoverCard>
+              <!-- 顯示最後一個字 -->
+              {{ value.length > 41 ? value.slice(-1) : "" }}
             </TableCell>
           </TableRow>
         </TableBody>
@@ -63,8 +83,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { useResponseStore } from "@/stores/useResponseStore";
+import {
+  headerTemplates,
+  type HeaderTemplate,
+} from "@/constants/headerTemplates";
 import { Ellipsis } from "@lucide/vue";
-
 import { toast } from "vue-sonner";
 import Separator from "@/components/ui/separator/Separator.vue";
 
@@ -87,13 +110,17 @@ function breakLongValue(value: string): string {
 function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
-      // 成功複製
       toast.success("已複製到剪貼簿");
     },
     (_err) => {
-      // 複製失敗
       toast.error("複製失敗");
     },
+  );
+}
+
+function getHeaderTemplate(key: string): HeaderTemplate | undefined {
+  return headerTemplates.find(
+    (template) => template.key.toLowerCase() === key.toLowerCase(),
   );
 }
 </script>
