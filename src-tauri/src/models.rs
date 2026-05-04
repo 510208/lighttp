@@ -8,6 +8,7 @@ pub struct Header {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct Param {
     pub key: String,
     pub value: String,
@@ -16,6 +17,7 @@ pub struct Param {
 // ------ 驗證
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
+#[allow(dead_code)]
 pub enum AuthMethod {
     None,
     Basic,
@@ -97,7 +99,10 @@ pub struct ProxyConfig {
 pub struct RequestPayload {
     pub url: String,
     pub method: String,
+
+    #[allow(dead_code)]
     pub params: Vec<Param>,
+
     pub headers: Vec<Header>,
     pub auth: AuthStore,
     pub body: Option<BodyContent>,
