@@ -10,7 +10,7 @@ import type { ProxyConfig } from "./proxyConfig.d";
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
-  const url = ref("https://lighthttp.samhacker.xyz/new");
+  const url = ref("https://api.samhacker.xyz");
 
   // 基礎資料
   const params = ref<KeyValuePair[]>([]);
