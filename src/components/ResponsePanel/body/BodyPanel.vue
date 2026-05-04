@@ -3,7 +3,57 @@
     <CodeViewer
       :model-value="responseStore.body"
       :language="responseLanguage"
+      v-if="!bodyIsMedia()"
     />
+    <div
+      v-else
+      class="flex h-full w-full items-center justify-center overflow-auto bg-zinc-900 p-4"
+    >
+      <div
+        class="bg-ctp-surface-variant flex h-full flex-col items-center justify-center gap-4 rounded p-6"
+        v-if="!forceShowMedia"
+      >
+        <p class="text-ctp-overlay2 text-sm">
+          回應內容為媒體類型，為保證系統安全已隱藏。<br />
+
+          可點擊下方按鈕強制顯示（請確保回應內容安全無害）。
+        </p>
+
+        <Button
+          variant="outline"
+          @click="
+            forceShowMedia = true;
+
+            toast.success('已強制顯示回應內容，請注意安全！');
+          "
+        >
+          強制顯示回應內容
+        </Button>
+      </div>
+
+      <div v-else class="h-full">
+        <!-- 根據不同的 Content-Type 渲染標籤 -->
+        <template v-if="getMediaType() === 'image'">
+          <img
+            :src="mediaUrl"
+            class="max-h-full max-w-full object-contain shadow-lg"
+          />
+        </template>
+
+        <template v-else-if="getMediaType() === 'video'">
+          <video :src="mediaUrl" controls class="max-h-full max-w-full"></video>
+        </template>
+
+        <template v-else-if="getMediaType() === 'audio'">
+          <audio :src="mediaUrl" controls></audio>
+        </template>
+
+        <!-- 其他二進位檔案或未知媒體 -->
+        <template v-else>
+          <iframe :src="mediaUrl" class="h-full w-full rounded"></iframe>
+        </template>
+      </div>
+    </div>
 
     <!-- 絕對值定位的按鈕，用於提供更多操作 -->
     <div class="absolute right-6 bottom-10">
@@ -79,17 +129,19 @@ import {
   convertJsonToRust,
 } from "@/lib/getStructure";
 
-import { ref, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import StructureDialog from "./StructureDialog.vue";
 import { toast } from "vue-sonner";
 
 const responseStore = useResponseStore();
+const URL = globalThis.URL;
 
 const isModalOpen = ref(false);
 const generatedSchema = ref<string | null>(null);
 
 // 監控 responseStore.header中的 Content-Type，根據不同的類型設置 responseLanguage
 const responseLanguage = ref<string>("json");
+
 watch(
   () => responseStore.headers,
   (newHeaders) => {
@@ -104,8 +156,9 @@ watch(
     )?.[1];
 
     if (contentTypeValue) {
-      console.log("[Content-Type Header]:", contentTypeValue);
       const contentType = contentTypeValue.toLowerCase();
+      forceShowMedia.value = false; // 每次 headers 更新時重置強制顯示媒體的狀態
+
       if (contentType.includes("application/json")) {
         responseLanguage.value = "json";
       } else if (
@@ -245,6 +298,95 @@ async function generateRustType() {
     );
   }
 }
+
+// ------
+
+const forceShowMedia = ref(false);
+const mediaUrl = ref<string>("");
+
+function getMediaType(): "image" | "video" | "audio" | "other" {
+  const contentType =
+    Object.entries(responseStore.headers)
+      .find(([key]) => key.toLowerCase() === "content-type")?.[1]
+      ?.toLowerCase() || "";
+
+  if (contentType.includes("image/")) return "image";
+  if (contentType.includes("video/")) return "video";
+  if (contentType.includes("audio/")) return "audio";
+  return "other";
+}
+
+/**
+ * 輔助函式：將 Base64 字串轉換為 Uint8Array
+ */
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
+watch(
+  [() => responseStore.body, forceShowMedia],
+  ([newBody, show]) => {
+    // 釋放舊的 URL 物件，避免記憶體洩漏
+    if (mediaUrl.value) {
+      URL.revokeObjectURL(mediaUrl.value);
+      mediaUrl.value = "";
+    }
+
+    // 只有在使用者點擊「強制顯示」且有資料時才執行
+    if (show && newBody) {
+      const contentType =
+        Object.entries(responseStore.headers).find(
+          ([key]) => key.toLowerCase() === "content-type",
+        )?.[1] || "application/octet-stream";
+
+      try {
+        // 將 Base64 還原為二進位數據
+        const pureBase64 = newBody.includes(",")
+          ? newBody.split(",")[1]
+          : newBody;
+        const byteArray = base64ToUint8Array(pureBase64);
+
+        // 使用 Array.from 或是明確轉為 BlobPart 陣列
+        const blob = new Blob([byteArray] as BlobPart[], { type: contentType });
+        console.log("[Generated Media Blob]:", blob);
+
+        // 生成 URL
+        mediaUrl.value = URL.createObjectURL(blob);
+      } catch (error) {
+        console.error("[Base64 Decode Error]:", error);
+        toast.error("媒體解碼失敗，請檢查回應格式是否為有效的 Base64。");
+      }
+    }
+  },
+  { immediate: true },
+);
+
+function bodyIsMedia(): boolean {
+  // 判斷 Content-Type 是否為常見的媒體類型（如圖片、影音等）
+  const contentTypeValue = Object.entries(responseStore.headers).find(
+    ([key]) => key.toLowerCase() === "content-type",
+  )?.[1];
+  const isMedia =
+    contentTypeValue?.includes("image/") ||
+    contentTypeValue?.includes("video/") ||
+    contentTypeValue?.includes("audio/");
+
+  console.log("[Content-Type]:", contentTypeValue);
+  console.log("[Is Media]:", isMedia);
+  return isMedia || false;
+}
+
+onUnmounted(() => {
+  if (mediaUrl.value) {
+    URL.revokeObjectURL(mediaUrl.value);
+  }
+});
 </script>
 
 <style scoped></style>
