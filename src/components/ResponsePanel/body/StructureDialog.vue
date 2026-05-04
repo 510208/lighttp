@@ -68,7 +68,7 @@ const copyToClipboard = () => {
           <p class="text-muted-foreground text-left text-xs">
             Schema 生成作業由
             <a
-              href="https://quicktypes.io/"
+              href="https://quicktype.io/"
               target="_blank"
               class="text-primary underline"
             >
