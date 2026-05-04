@@ -96,6 +96,25 @@
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Terminal />
+              生成 Curl 指令
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent class="mr-2">
+                <DropdownMenuItem @click="generateCurlCommand('`')">
+                  <Grid2x2 /> 生成適用於 PowerShell 的 Curl 指令
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="generateCurlCommand('\\')">
+                  <Terminal /> 生成適用於 bash 或其他 Shell 的 Curl 指令
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -123,13 +142,25 @@ import {
 import IconContainer from "@/components/ui/icon-ct/IconContainer.vue";
 import Button from "@/components/ui/button/Button.vue";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
+
+import { useRequestStore } from "@/stores/useRequestStore";
 import { useResponseStore } from "@/stores/useResponseStore";
-import { EllipsisVertical, Copy, Braces, BookA, Binary } from "@lucide/vue";
+
+import {
+  EllipsisVertical,
+  Copy,
+  Braces,
+  BookA,
+  Binary,
+  Terminal,
+  Grid2x2,
+} from "@lucide/vue";
 import {
   convertJsonToSchema,
   convertJsonToTypeScript,
   convertJsonToPython,
   convertJsonToRust,
+  getCurlCommand,
 } from "@/lib/getStructure";
 
 import { onUnmounted, ref, watch } from "vue";
@@ -139,6 +170,7 @@ import { toast } from "vue-sonner";
 const forceShowMedia = ref(false);
 const mediaUrl = ref<string>("");
 
+const requestStore = useRequestStore();
 const responseStore = useResponseStore();
 const URL = globalThis.URL;
 
@@ -303,6 +335,14 @@ async function generateRustType() {
       error,
     );
   }
+}
+
+//   curl 指令
+function generateCurlCommand(symbol: string) {
+  const curlCommand = getCurlCommand(requestStore, symbol);
+  generatedSchema.value = curlCommand;
+  schemaLanguage.value = "shell";
+  isModalOpen.value = true;
 }
 
 // ------
