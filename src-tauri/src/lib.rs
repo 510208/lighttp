@@ -22,90 +22,14 @@ pub fn run() {
 // use std::collections::HashMap;
 
 mod models;
-use base64::{engine::general_purpose, Engine as _};
-use models::{AuthStore, RequestPayload, ResponsePayload};
-use reqwest::header::HeaderMap;
+use models::{RequestPayload, ResponsePayload};
 use reqwest::{Client, Method};
 use std::collections::HashMap;
 
-use crate::models::ProxyConfig;
-
-// 展開錯誤內容
-fn get_deep_error(e: &reqwest::Error) -> String {
-    use std::error::Error;
-    let mut messages = vec![format!("{}", e)];
-    
-    // 遞迴取得底層錯誤原因 (例如 hyper 或 native-tls 的錯誤)
-    let mut source = e.source();
-    while let Some(cause) = source {
-        messages.push(format!("{}", cause));
-        source = cause.source();
-    }
-    
-    messages.join(" -> ")
-}
-
-// 將 HeaderMap 轉換為 HashMap<String, String>，以便前端使用
-fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
-    header_map
-        .iter()
-        .map(|(k, v)| {
-            (
-                k.as_str().to_string(),
-                v.to_str().unwrap_or_default().to_string(),
-            )
-        })
-        .collect()
-}
-
-fn encode_base64(input: &str) -> String {
-    general_purpose::STANDARD.encode(input)
-}
-
-// 處理驗證
-async fn handle_auth(auth: &AuthStore) -> Option<reqwest::header::HeaderValue> {
-    match auth {
-        AuthStore::Basic(content) => {
-            if let (Some(u), Some(p)) = (&content.username, &content.password) {
-                let credentials = format!("{}:{}", u, p);
-                let encoded = encode_base64(&credentials);
-                reqwest::header::HeaderValue::from_str(&format!("Basic {}", encoded)).ok()
-            } else {
-                None
-            }
-        }
-        AuthStore::Bearer(content) => content
-            .token
-            .as_ref()
-            .and_then(|t| reqwest::header::HeaderValue::from_str(&format!("Bearer {}", t)).ok()),
-        AuthStore::None(_) => None,
-    }
-}
-
-// 處理代理
-async fn handle_proxy(proxy: &ProxyConfig) -> Result<Option<reqwest::Proxy>, String> {
-    // 如果未啟用，直接回傳 Ok(None)，表示這不是錯誤，只是不需要代理
-    if !proxy.enabled {
-        return Ok(None);
-    }
-
-    // 使用 serde 的特性或直接轉小寫處理協議
-    let proto = format!("{:?}", proxy.protocol).to_lowercase();
-    let proxy_url = format!("{}://{}:{}", proto, proxy.host, proxy.port);
-    
-    let mut reqwest_proxy = reqwest::Proxy::all(&proxy_url)
-        .map_err(|e| format!("無效的代理 URL: {}", e))?;
-
-    // 處理驗證邏輯
-    if let Some(auth) = &proxy.auth {
-        // 只有在真的有提供帳號密碼時才掛載驗證
-        if !auth.username.is_empty() || !auth.password.is_empty() {
-            reqwest_proxy = reqwest_proxy.basic_auth(&auth.username, &auth.password);
-        }
-    }
-
-    Ok(Some(reqwest_proxy))
-}
+pub mod utils;
+use utils::auth::handle_auth;
+use utils::proxy::{handle_proxy};
+use utils::other::{get_deep_error, to_hashmap};
 
 // 建立處理後端邏輯的函式，這裡我們將接收前端傳來的資料並進行處理
 #[tauri::command]
