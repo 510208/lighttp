@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export interface ResponseState {
   status: number | null | undefined; // null 表示還未發出請求，undefined 表示正在等待回應
   body: string;
+  size: number;
   headers: Record<string, string>;
   timeTaken: number | null;
 }
@@ -14,6 +15,12 @@ export const useResponseStore = defineStore("response", () => {
   const headers = ref<Record<string, string>>({});
 
   const timeTaken = ref<number | null>(null);
+
+  // 計算body的檔案大小
+  const size = ref<number>(0);
+  watch(body, (newBody) => {
+    size.value = new Blob([newBody]).size;
+  });
 
   function setResponse(payload: any) {
     try {
@@ -48,6 +55,7 @@ export const useResponseStore = defineStore("response", () => {
     headers,
     body,
     timeTaken,
+    size,
 
     setStatus,
     setResponse,
