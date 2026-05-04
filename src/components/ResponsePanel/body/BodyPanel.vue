@@ -43,7 +43,11 @@
           </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
-      <StructureDialog v-model:open="isModalOpen" :schema="generatedSchema" />
+      <StructureDialog
+        v-model:open="isModalOpen"
+        :schema="generatedSchema"
+        :language="schemaLanguage"
+      />
     </div>
   </div>
 </template>
@@ -78,6 +82,7 @@ const responseStore = useResponseStore();
 
 const isModalOpen = ref(false);
 const generatedSchema = ref<string | null>(null);
+const schemaLanguage = ref<string>("json");
 
 function getContent() {
   if (responseStore.body === "") {
@@ -118,6 +123,7 @@ async function generateJsonSchema() {
     console.log("Generated JSON Schema:", jsonSchema);
 
     generatedSchema.value = jsonSchema;
+    schemaLanguage.value = "json";
     isModalOpen.value = true;
   } catch (error) {
     console.error(
@@ -142,6 +148,7 @@ async function generateTypeScriptType() {
     console.log("Generated TypeScript Definitions:", typeScriptDef);
 
     generatedSchema.value = typeScriptDef;
+    schemaLanguage.value = "typescript";
     isModalOpen.value = true;
   } catch (error) {
     console.error(
@@ -163,6 +170,7 @@ async function generatePythonType() {
     console.log("Generated Python Definitions:", pythonDef);
 
     generatedSchema.value = pythonDef;
+    schemaLanguage.value = "python";
     isModalOpen.value = true;
   } catch (error) {
     console.error(
@@ -184,6 +192,7 @@ async function generateRustType() {
     console.log("Generated Rust Definitions:", rustDef);
 
     generatedSchema.value = rustDef;
+    schemaLanguage.value = "rust";
     isModalOpen.value = true;
   } catch (error) {
     console.error(
