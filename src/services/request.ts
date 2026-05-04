@@ -9,6 +9,9 @@ import { toast } from "vue-sonner";
 
 async function sendRequest(): Promise<ResponseState | null> {
   const requestStore = useRequestStore();
+  const responseStore = useResponseStore();
+
+  responseStore.setStatus(undefined); // 重置狀態
 
   if (requestStore.method === "NONE") {
     console.warn("未選擇 HTTP 方法，跳過請求");

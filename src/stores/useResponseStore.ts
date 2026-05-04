@@ -2,14 +2,14 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export interface ResponseState {
-  status: number | null;
+  status: number | null | undefined; // null 表示還未發出請求，undefined 表示正在等待回應
   body: string;
   headers: Record<string, string>;
   timeTaken: number | null;
 }
 
 export const useResponseStore = defineStore("response", () => {
-  const status = ref<number | null>(null);
+  const status = ref<number | null | undefined>(null);
   const body = ref<string>("");
   const headers = ref<Record<string, string>>({});
 
@@ -38,12 +38,18 @@ export const useResponseStore = defineStore("response", () => {
       timeTaken.value = null;
     }
   }
+
+  function setStatus(newStatus: number | null | undefined) {
+    status.value = newStatus;
+  }
+
   return {
     status,
     headers,
     body,
     timeTaken,
 
+    setStatus,
     setResponse,
   };
 });
