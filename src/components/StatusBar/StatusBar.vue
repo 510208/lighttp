@@ -3,21 +3,27 @@
     class="bg-ctp-base absolute bottom-0 left-0 flex h-6 w-full items-center justify-between"
   >
     <!-- 左側 -->
-    <div class="flex h-full items-center gap-1 text-sm">
+    <div class="flex h-full items-center gap-0 text-sm">
       <StatusBadge
         :status="leftSideStatus.statProp"
         :icon="leftSideStatus.icon"
       >
-        {{ leftSideStatus.content }}</StatusBadge
-      >
+        {{ leftSideStatus.content }}
+      </StatusBadge>
 
+      <!-- 請求時間 -->
       <StatusBadge v-if="requestTime !== null" status="none" :icon="Timer">
         {{ requestTime.toFixed(3) }} ms
+      </StatusBadge>
+
+      <!-- Proxy狀態 -->
+      <StatusBadge :status="proxyStatus.statProp" :icon="proxyStatus.icon">
+        {{ proxyStatus.content }}
       </StatusBadge>
     </div>
 
     <!-- 右側 -->
-    <div class="flex h-full items-center gap-1 text-sm">
+    <div class="flex h-full items-center gap-0 text-sm">
       <button
         type="button"
         class="hover:bg-ctp-surface0 flex h-full items-center gap-1 px-2 text-xs transition-colors"
@@ -47,11 +53,16 @@ import {
   Loader,
   Plug,
   Timer,
+  Globe,
+  GlobeOff,
+  GlobeLock,
 } from "@lucide/vue";
 
 import { useResponseStore } from "@/stores/useResponseStore";
+import { useRequestStore } from "@/stores/useRequestStore";
 import { watch, ref, onMounted } from "vue";
 
+const requestStore = useRequestStore();
 const responseStore = useResponseStore();
 
 const requestTime = ref<number | null>(null);
@@ -60,11 +71,35 @@ const leftSideStatus = ref({
   icon: Ellipsis,
   content: "已就緒", // 預設顯示 Ready
 } as {
-  statProp: "ready" | "error" | "success" | "loading" | "none";
+  statProp:
+    | "ready"
+    | "error"
+    | "errorText"
+    | "success"
+    | "successText"
+    | "loading"
+    | "loadingText"
+    | "none";
   icon?: any; // 圖標為lucide圖標組件
   content: string;
 });
-
+const proxyStatus = ref({
+  statProp: "none",
+  icon: Globe,
+  content: "代理已禁用",
+} as {
+  statProp:
+    | "ready"
+    | "error"
+    | "errorText"
+    | "success"
+    | "successText"
+    | "loading"
+    | "loadingText"
+    | "none";
+  icon?: any; // 圖標為lucide圖標組件
+  content: string;
+});
 const appVersion = ref("");
 
 onMounted(async () => {
@@ -113,6 +148,35 @@ watch(
   (newRequestTime) => {
     requestTime.value = newRequestTime;
   },
+);
+
+function checkProxyStatus() {
+  if (requestStore.proxyConfig.enabled) {
+    if (
+      requestStore.proxyConfig.host != "" &&
+      requestStore.proxyConfig.port != 0
+    ) {
+      proxyStatus.value.statProp = "successText";
+      proxyStatus.value.content = "代理已設置";
+      proxyStatus.value.icon = GlobeLock;
+    } else {
+      proxyStatus.value.statProp = "loadingText";
+      proxyStatus.value.content = "設置不完全";
+      proxyStatus.value.icon = GlobeOff;
+    }
+  } else {
+    proxyStatus.value.statProp = "none";
+    proxyStatus.value.content = "代理已禁用";
+    proxyStatus.value.icon = Globe;
+  }
+}
+
+watch(
+  () => requestStore.proxyConfig,
+  () => {
+    checkProxyStatus();
+  },
+  { deep: true },
 );
 
 const props = defineProps<{
