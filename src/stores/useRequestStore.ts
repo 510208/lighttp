@@ -138,18 +138,18 @@ export const useRequestStore: () => RequestStoreData = defineStore(
         : null;
 
       if (proxyConfig.value.enabled) {
-        // 檢查proxy設定中URL與協定是否為空
+        const proxyPort = Number(proxyConfig.value.port);
+
         if (
-          proxyConfig.value.host === "" ||
-          !proxyConfig.value.host ||
-          proxyConfig.value.port === 0 ||
+          !proxyConfig.value.host.trim() ||
+          !Number.isInteger(proxyPort) ||
+          proxyPort < 1 ||
+          proxyPort > 65535 ||
           !proxyConfig.value.protocol
         ) {
-          console.error(
-            "Proxy is enabled but host or protocol is missing, the proxy configuration is ",
-            proxyConfig.value,
+          throw new Error(
+            "Proxy is enabled but host, protocol, or port is invalid.",
           );
-          checkedProxyConfig = null; // 不傳送proxy設定給後端
         }
 
         // 檢查auth設定是否完整
