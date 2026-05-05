@@ -8,18 +8,7 @@ import {
 import type { AuthStore, AuthStoreForBackend } from "./authType.d";
 import type { ProxyConfig } from "./proxyConfig.d";
 
-export interface RequestStoreData {
-  method: string;
-  url: string;
-  params: KeyValuePair[];
-  headers: KeyValuePair[];
-  auth: AuthStore;
-  bodyType: string;
-  bodyContent: string;
-  proxyConfig: ProxyConfig;
-}
-
-export const useRequestStore: () => RequestStoreData = defineStore(
+export const useRequestStore = defineStore(
   "request",
   () => {
     const method = ref("GET");
@@ -238,3 +227,5 @@ export const useRequestStore: () => RequestStoreData = defineStore(
     };
   },
 );
+
+export type RequestStoreData = ReturnType<typeof useRequestStore>;
