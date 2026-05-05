@@ -57,9 +57,7 @@ function formatJson(code: string): string {
 async function formatHtml(code: string): Promise<string> {
   try {
     const formatted = await prettify(code, {
-      indent: 2,
-      newline: "\n",
-      space: " ",
+      tab_size: 2,
     });
 
     return formatted;
