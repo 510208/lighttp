@@ -1,3 +1,5 @@
+<left><img src="./assets/logo.svg" alt="LigHTTP Logo" height="80" /></left>
+
 # LigHTTP
 
 LigHTTP is **a lightweight HTTP client** built using Rust and Tauri. It provides a simple and efficient way to serve static files and handle HTTP requests. With its minimalistic design, LigHTTP is ideal for developers who need a fast and reliable client for their web applications.
