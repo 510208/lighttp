@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - "v*" # 當推送以 v 開頭的標籤（如 v1.0.0）時觸發
+      - "[0-9]*.[0-9]*.[0-9]" # 當推送符合版本號格式的標籤（如 1.0.0）時觸發
+    # 允許手動觸發
+  workflow_dispatch:
 
 jobs:
   publish-tauri:
