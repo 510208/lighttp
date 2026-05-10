@@ -1,9 +1,9 @@
-import AuthNone from "@/components/SettingPanel/auth/method/AuthNone.vue";
-import AuthBasic from "@/components/SettingPanel/auth/method/AuthBasic.vue";
-import AuthBearer from "@/components/SettingPanel/auth/method/AuthBearer.vue";
+import AuthNone from "@/components/Home/SettingPanel/auth/method/AuthNone.vue";
+import AuthBasic from "@/components/Home/SettingPanel/auth/method/AuthBasic.vue";
+import AuthBearer from "@/components/Home/SettingPanel/auth/method/AuthBearer.vue";
 
-import BodyNone from "@/components/SettingPanel/body/method/BodyNone.vue";
-import BodyOriginal from "@/components/SettingPanel/body/method/BodyOriginal.vue";
+import BodyNone from "@/components/Home/SettingPanel/body/method/BodyNone.vue";
+import BodyOriginal from "@/components/Home/SettingPanel/body/method/BodyOriginal.vue";
 
 export const authMethods = [
   {

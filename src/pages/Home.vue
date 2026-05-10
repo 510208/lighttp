@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import TitleBar from "@/components/core/TitleBar.vue";
 import RequestBuilder from "@/layouts/RequestBuilder.vue";
-import ResponsePanel from "@/components/ResponsePanel/ResponsePanel.vue";
-import StatusBar from "@/components/StatusBar/StatusBar.vue";
+import ResponsePanel from "@/components/Home/ResponsePanel/ResponsePanel.vue";
+import StatusBar from "@/components/Home/StatusBar/StatusBar.vue";
 
 import {
   ResizableHandle,
