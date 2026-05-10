@@ -5,7 +5,7 @@ function openAboutWindow() {
     url: "/about", // 或是您的路由路徑
     title: "關於應用程式",
     width: 400,
-    height: 300,
+    height: 600,
     resizable: false,
     alwaysOnTop: true, // 讓它保持在最上層
   });
