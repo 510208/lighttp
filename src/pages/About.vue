@@ -6,6 +6,7 @@
       <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
       <small class="text-ctp-subtext1">v{{ appVersion }}</small>
       <p class="text-ctp-subtext1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
+      <Button @click="closeWindow" class="mt-4">關閉</Button>
     </div>
     <div
       class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
@@ -64,15 +65,22 @@
 
 <script setup lang="ts">
 import logo from "@/assets/lighttp_logo_wordmark.svg";
+import Button from "@/components/ui/button/Button.vue";
 import Separator from "@/components/ui/separator/Separator.vue";
 import { getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
+import { Window } from "@tauri-apps/api/window";
 
 const appVersion = ref("");
 
 onMounted(async () => {
   appVersion.value = await getVersion();
 });
+
+function closeWindow() {
+  const appWindow = Window.getCurrent();
+  appWindow.close();
+}
 </script>
 
 <style scoped></style>
