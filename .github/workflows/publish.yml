@@ -1,0 +1,79 @@
+name: "Publish App"
+
+on:
+  push:
+    tags:
+      - "v*" # 當推送以 v 開頭的標籤（如 v1.0.0）時觸發
+
+jobs:
+  publish-tauri:
+    permissions:
+      contents: write # 必須：允許 action 創建 release 和上傳附件
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: "macos-latest"
+          - platform: "ubuntu-22.04"
+          - platform: "windows-latest"
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if version is bumped
+        shell: bash
+        run: |
+          # 1. 取得當前 tauri.conf.json 的版本
+          CURRENT_VERSION=$(grep '"version":' src-tauri/tauri.conf.json | head -1 | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+
+          # 2. 取得上一個 Git Tag (排除當前觸發的 Tag)
+          # 如果這是第一個 Tag，則設為 0.0.0
+          PREVIOUS_TAG=$(git tag --sort=-v:refname | sed -n '2p')
+          if [ -z "$PREVIOUS_TAG" ]; then
+            PREVIOUS_TAG="v0.0.0"
+          fi
+          PREVIOUS_VERSION=${PREVIOUS_TAG#v}
+
+          echo "Previous version: $PREVIOUS_VERSION"
+          echo "Current version:  $CURRENT_VERSION"
+
+          # 3. 使用 Node.js 比較版本號 (更精確)
+          node -e "
+            const semver = (v) => v.split('.').map(Number);
+            const curr = '$CURRENT_VERSION';
+            const prev = '$PREVIOUS_VERSION';
+            if (curr === prev) {
+              console.error('❌ 錯誤：版本號 ($CURRENT_VERSION) 未更新，請修改 tauri.conf.json');
+              process.exit(1);
+            }
+          "
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - name: Install frontend dependencies
+        run: npm install # 或 pnpm install / yarn install
+
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自動生成，無需手動設置
+        with:
+          tagName: app-v__VERSION__ # 使用 git tag
+          releaseName: "App Name v__VERSION__"
+          releaseBody: "See the assets to download this version and install."
+          releaseDraft: true # 發佈前為草稿，檢查後手動發佈
+          prerelease: false
