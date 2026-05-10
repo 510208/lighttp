@@ -5,9 +5,6 @@ import RequestBuilder from "@/layouts/RequestBuilder.vue";
 import ResponsePanel from "@/components/ResponsePanel/ResponsePanel.vue";
 import StatusBar from "@/components/StatusBar/StatusBar.vue";
 
-import { Toaster } from "@/components/ui/sonner";
-import "vue-sonner/style.css";
-
 import {
   ResizableHandle,
   ResizablePanel,
@@ -57,11 +54,5 @@ const toggleResponsePanel = () => {
         @toggle-response-panel="toggleResponsePanel"
       />
     </main>
-
-    <Toaster
-      position="bottom-right"
-      :closeButton="true"
-      closeButtonPosition="top-right"
-    />
   </div>
 </template>
