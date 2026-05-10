@@ -9,7 +9,8 @@
     </div>
 
     <!-- 視窗控制按鈕 -->
-    <div class="absolute top-0 right-0">
+    <div class="absolute top-0 right-0 flex items-center gap-2">
+      <DropdownMenu />
       <WindowControlButton />
     </div>
   </div>
@@ -18,4 +19,5 @@
 <script setup lang="ts">
 import logo from "@/assets/lighttp_logo.svg";
 import WindowControlButton from "./WindowControlButton.vue";
+import DropdownMenu from "./DropdownMenu.vue";
 </script>
