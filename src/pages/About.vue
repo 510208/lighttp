@@ -1,11 +1,63 @@
 <template>
-  <main class="items-left flex h-full flex-col justify-center px-8 py-10">
+  <main class="items-left mb- flex h-full flex-col justify-center px-8 py-10">
     <img :src="logo" alt="Logo" class="h-16 w-fit" />
     <Separator class="my-6" />
-    <div class="mt-10 flex flex-col items-center gap-2">
+    <div class="mt-4 mb-20 flex flex-col items-center gap-2">
       <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
       <small class="text-ctp-subtext1">v{{ appVersion }}</small>
-      <p class="text-ctp-subtext1">發送HTTP請求，不用那麼複雜</p>
+      <p class="text-ctp-subtext1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
+    </div>
+    <div
+      class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
+    >
+      <p>特別感謝以下協助者們：</p>
+      <ul class="text-ctp-subtext1 min-w-40 list-disc">
+        <li class="flex items-center gap-2">
+          <a
+            href="https://510208.github.io/"
+            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
+            target="_blank"
+          >
+            <img
+              src="https://gravatar.com/avatar/f7598bd8d4aba38d7219341f81a162fc842376b3b556b1995cbb97271d9e2915?v=1753291388000"
+              alt="SamHacker Avatar"
+              class="h-5 w-5 rounded-full"
+            />
+            <p>SamHacker</p>
+          </a>
+          - 也就是我，開發者本人 :D
+        </li>
+        <li class="flex items-center gap-2">
+          <a
+            href="https://zhenyuan.dev/"
+            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
+            target="_blank"
+          >
+            <img
+              src="https://gravatar.com/avatar/07f375105a68074c6b90379762cd1443"
+              alt="Zhenyuan Avatar"
+              class="h-5 w-5 rounded-full"
+            />
+            <p>Zhenyuan</p>
+          </a>
+          - 協助測試 Mac OS 版本
+        </li>
+        <li class="flex items-center gap-2">
+          <a
+            href="https://github.com/owoDennis911"
+            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
+            target="_blank"
+          >
+            <img
+              src="https://github.com/owoDennis911.png"
+              alt="Dennis911 Avatar"
+              class="h-5 w-5 rounded-full"
+            />
+            <p>Dennis911</p>
+          </a>
+          - 提供開發過程的建議
+        </li>
+      </ul>
     </div>
   </main>
 </template>
