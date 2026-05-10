@@ -8,6 +8,11 @@ const routes = [
     name: "Home",
     component: Home,
   },
+  {
+    path: "/about",
+    name: "About",
+    component: () => import("@/pages/About.vue"), // 使用懒加载
+  },
 ];
 
 const router = createRouter({
