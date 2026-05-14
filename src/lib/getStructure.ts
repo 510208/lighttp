@@ -154,46 +154,43 @@ function getCurlCommand(
   store: RequestStoreData,
   breakLineSymbol: string = "\\",
 ): string {
-  let command = `curl -X ${store.method.toUpperCase()} "${store.url}" ${breakLineSymbol}`;
+  // 1. 改用陣列收集每一行的指令片段
+  const parts: string[] = [];
+
+  // 基礎 URL
+  parts.push(`curl -X ${store.method.toUpperCase()} "${store.url}"`);
 
   // Headers
   store.headers.forEach((header) => {
     if (header.enabled) {
-      command += `\n  -H "${header.key}: ${header.value}" ${breakLineSymbol}`;
+      parts.push(`  -H "${header.key}: ${header.value}"`);
     }
   });
 
   // Auth
-  console.log("Auth type:", store.auth.type);
   if (store.auth.type === "basic" && store.auth.content) {
-    console.log("Auth content:", store.auth.content);
     const authContent = store.auth.content as BasicAuthContent;
-    command += `\n  -u "${authContent.username}:${authContent.password}" ${breakLineSymbol}`;
+    parts.push(`  -u "${authContent.username}:${authContent.password}"`);
   } else if (store.auth.type === "bearer token" && store.auth.content) {
     const token = (store.auth.content as { token: string }).token;
-    command += `\n  -H "Authorization: Bearer ${token}" ${breakLineSymbol}`;
+    parts.push(`  -H "Authorization: Bearer ${token}"`);
   }
 
   // Body
   if (store.bodyContent && store.bodyType !== "None") {
-    // Escape double quotes in body content
-    // const escapedBody = store.bodyContent.replace(/"/g, '\\"');
+    // 提示：若 body 內含單引號 '，在 bash 中直接用單引號包裹會出錯，建議維持轉義或處理
     const escapedBody = store.bodyContent;
-    // 將 body content 包裹在雙引號中，並添加 -d 參數
-    command += `\n  -d '${escapedBody}' ${breakLineSymbol}`;
+    parts.push(`  -d '${escapedBody}'`);
   }
 
   // Proxy
   if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
     const proxyUrlAuthPart = `${store.proxyConfig.auth ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@` : ""}`;
     const proxyUrl = `${store.proxyConfig.protocol}://${proxyUrlAuthPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
-    command += `\n  -x "${proxyUrl}" ${breakLineSymbol}`;
+    parts.push(`  -x "${proxyUrl}"`);
   }
 
-  // Remove the trailing backslash and newline
-  command = command.trim().replace(new RegExp(`${breakLineSymbol}$`), "");
-
-  return command;
+  return parts.join(` ${breakLineSymbol}\n`);
 }
 
 export {
