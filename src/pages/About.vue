@@ -1,12 +1,37 @@
 <template>
-  <main class="items-left mb- flex h-full flex-col justify-center px-8 py-10">
-    <img :src="logo" alt="Logo" class="h-16 w-fit" />
+  <main class="items-left flex h-full flex-col px-8 pt-20">
+    <div class="flex items-center justify-center">
+      <img :src="logo" alt="Logo" class="h-16 w-fit" />
+    </div>
     <Separator class="my-6" />
-    <div class="mt-4 mb-20 flex flex-col items-center gap-2">
+    <div class="flex flex-col items-center gap-2">
       <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
       <small class="text-ctp-subtext1">v{{ appVersion }}</small>
       <p class="text-ctp-subtext1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
-      <Button @click="closeWindow" class="mt-4">關閉</Button>
+      <ScrollArea
+        class="text-ctp-subtext1 h-28 rounded border p-2 font-mono text-sm"
+      >
+        <p>
+          此專案採用 MIT 授權，詳情請見
+          <a
+            href="https://github.com/510208/LigHTTP/blob/main/LICENSE"
+            class="text-ctp-blue hover:underline"
+            target="_blank"
+          >
+            LICENSE
+          </a>
+          檔案。
+        </p>
+        <p>其他使用的第三方套件授權如下：</p>
+        <ul class="list-disc pl-4">
+          <li v-for="(license, index) in dependencyLicense" :key="index">
+            <span class="text-ctp-blue">
+              {{ license.name }}
+            </span>
+            ：{{ license.license }}
+          </li>
+        </ul>
+      </ScrollArea>
     </div>
     <div
       class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
@@ -59,6 +84,7 @@
           - 提供開發過程的建議
         </li>
       </ul>
+      <Button @click="closeWindow" class="w-full">關閉</Button>
     </div>
   </main>
 </template>
@@ -70,6 +96,8 @@ import Separator from "@/components/ui/separator/Separator.vue";
 import { getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { dependencyLicense } from "@/constants/about";
 
 const appVersion = ref("");
 
