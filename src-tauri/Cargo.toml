@@ -28,4 +28,5 @@ log = "0.4.29"
 tracing-subscriber = "0.3.23"
 tracing = "0.1.44"
 tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
 
