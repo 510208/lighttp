@@ -12,6 +12,13 @@
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
+
+      <DropdownMenuItem @click="FileHelpers.saveWorkspaceToFile()">
+        儲存當前工作
+      </DropdownMenuItem>
+      <DropdownMenuItem @click="FileHelpers.loadWorkspaceFromFile()">
+        載入工作
+      </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>
@@ -26,8 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Info, EllipsisVertical } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
-
-import { Window } from "@/services";
+import { Window, FileHelpers } from "@/services";
 </script>
 
 <style scoped></style>
