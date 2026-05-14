@@ -22,9 +22,21 @@
           </a>
           檔案。
         </p>
-        <p>其他使用的第三方套件授權如下：</p>
+        <p>前端使用的其他套件與授權如下：</p>
         <ul class="list-disc pl-4">
-          <li v-for="(license, index) in dependencyLicense" :key="index">
+          <li
+            v-for="(license, index) in frontendDependencyLicense"
+            :key="index"
+          >
+            <span class="text-ctp-blue">
+              {{ license.name }}
+            </span>
+            ：{{ license.license }}
+          </li>
+        </ul>
+        <p>後端使用的其他套件與授權如下：</p>
+        <ul class="list-disc pl-4">
+          <li v-for="(license, index) in backendDependencyLicense" :key="index">
             <span class="text-ctp-blue">
               {{ license.name }}
             </span>
@@ -97,7 +109,10 @@ import { getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { dependencyLicense } from "@/constants/about";
+import {
+  frontendDependencyLicense,
+  backendDependencyLicense,
+} from "@/constants/about";
 
 const appVersion = ref("");
 

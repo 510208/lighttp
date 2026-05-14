@@ -1,4 +1,4 @@
-const dependencyLicense = [
+const frontendDependencyLicense = [
   {
     name: "@fontsource-variable/noto-sans-tc",
     license: "SIL Open Font License 1.1",
@@ -133,4 +133,47 @@ const dependencyLicense = [
   },
 ];
 
-export { dependencyLicense };
+const backendDependencyLicense = [
+  {
+    name: "tauri",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "tauri-plugin-opener",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "serde",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "serde_json",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "reqwest",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "base64",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "log",
+    license: "MIT OR Apache-2.0",
+  },
+  {
+    name: "tracing-subscriber",
+    license: "MIT",
+  },
+  {
+    name: "tracing",
+    license: "MIT",
+  },
+  {
+    name: "tauri-plugin-fs",
+    license: "MIT OR Apache-2.0",
+  },
+];
+
+export { frontendDependencyLicense, backendDependencyLicense };
