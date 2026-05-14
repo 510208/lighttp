@@ -1,11 +1,7 @@
-import {
-  useRequestStore,
-  type RequestStoreData,
-} from "@/stores/useRequestStore";
+import { useRequestStore } from "@/stores/useRequestStore";
 import { save, open } from "@tauri-apps/plugin-dialog";
 import { writeTextFile, readTextFile } from "@tauri-apps/plugin-fs";
 import { toast } from "vue-sonner";
-import { randomUUID } from "crypto";
 
 async function saveWorkspaceToFile(): Promise<void> {
   const data = useRequestStore().getRequestData();
