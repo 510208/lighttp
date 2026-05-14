@@ -1,11 +1,11 @@
-import { useRequestStore } from "@/stores/useRequestStore";
-import { save, open } from "@tauri-apps/plugin-dialog";
 import {
-  writeTextFile,
-  readTextFile,
-  BaseDirectory,
-} from "@tauri-apps/plugin-fs";
+  useRequestStore,
+  type RequestStoreData,
+} from "@/stores/useRequestStore";
+import { save, open } from "@tauri-apps/plugin-dialog";
+import { writeTextFile, readTextFile } from "@tauri-apps/plugin-fs";
 import { toast } from "vue-sonner";
+import { randomUUID } from "crypto";
 
 async function saveWorkspaceToFile(): Promise<void> {
   const data = useRequestStore().getRequestData();
@@ -15,7 +15,7 @@ async function saveWorkspaceToFile(): Promise<void> {
     filters: [
       {
         name: "LigHTTP Workspace JSON (*.lghttp.json)",
-        extensions: ["json"],
+        extensions: ["lghttp.json"],
       },
     ],
   });
@@ -24,7 +24,7 @@ async function saveWorkspaceToFile(): Promise<void> {
     return;
   }
 
-  await writeTextFile(`${filePath}.lghttp`, dataString);
+  await writeTextFile(`${filePath}`, dataString);
 
   toast.success("工作已成功儲存");
 }
