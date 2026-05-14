@@ -2,7 +2,10 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["main", "about"],
+  "windows": [
+    "main",
+    "about"
+  ],
   "permissions": [
     "core:default",
     "opener:default",
@@ -14,6 +17,7 @@
     "core:window:allow-internal-toggle-maximize",
     "fs:default",
     "core:window:allow-create",
-    "core:webview:allow-create-webview-window"
+    "core:webview:allow-create-webview-window",
+    "dialog:default"
   ]
 }
