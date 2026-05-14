@@ -2,10 +2,7 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": [
-    "main",
-    "about"
-  ],
+  "windows": ["main", "about"],
   "permissions": [
     "core:default",
     "opener:default",
@@ -18,6 +15,9 @@
     "fs:default",
     "core:window:allow-create",
     "core:webview:allow-create-webview-window",
-    "dialog:default"
+    "dialog:default",
+    "fs:allow-write-text-file",
+    "fs:allow-read-text-file",
+    { "identifier": "fs:allow-app-write-recursive" }
   ]
 }
