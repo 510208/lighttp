@@ -8,42 +8,6 @@
       <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
       <small class="text-ctp-subtext1">v{{ appVersion }}</small>
       <p class="text-ctp-subtext1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
-      <ScrollArea
-        class="text-ctp-subtext1 h-28 rounded border p-2 font-mono text-sm"
-      >
-        <p>
-          此專案採用 MIT 授權，詳情請見
-          <a
-            href="https://github.com/510208/LigHTTP/blob/main/LICENSE"
-            class="text-ctp-blue hover:underline"
-            target="_blank"
-          >
-            LICENSE
-          </a>
-          檔案。
-        </p>
-        <p>前端使用的其他套件與授權如下：</p>
-        <ul class="list-disc pl-4">
-          <li
-            v-for="(license, index) in frontendDependencyLicense"
-            :key="index"
-          >
-            <span class="text-ctp-blue">
-              {{ license.name }}
-            </span>
-            ：{{ license.license }}
-          </li>
-        </ul>
-        <p>後端使用的其他套件與授權如下：</p>
-        <ul class="list-disc pl-4">
-          <li v-for="(license, index) in backendDependencyLicense" :key="index">
-            <span class="text-ctp-blue">
-              {{ license.name }}
-            </span>
-            ：{{ license.license }}
-          </li>
-        </ul>
-      </ScrollArea>
     </div>
     <div
       class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
@@ -108,11 +72,6 @@ import Separator from "@/components/ui/separator/Separator.vue";
 import { getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  frontendDependencyLicense,
-  backendDependencyLicense,
-} from "@/constants/about";
 
 const appVersion = ref("");
 
