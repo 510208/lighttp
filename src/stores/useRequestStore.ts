@@ -181,6 +181,27 @@ export const useRequestStore = defineStore("request", () => {
     };
     bodyType.value = data.body.type;
     bodyContent.value = data.body.content;
+
+    if (data.proxy) {
+      // console.log("Loading proxy configuration: ", data.proxy);
+      proxyConfig.value = {
+        enabled: true,
+        checkBeforeSend: data.proxy.checkBeforeSend,
+        protocol: data.proxy.protocol,
+        host: data.proxy.host,
+        port: data.proxy.port,
+        auth: data.proxy.auth,
+      };
+    } else {
+      proxyConfig.value = {
+        enabled: false,
+        checkBeforeSend: false,
+        protocol: "http",
+        host: "",
+        port: 0,
+      };
+    }
+    // console.log("Proxy configuration after loading: ", proxyConfig.value);
   }
 
   return {
