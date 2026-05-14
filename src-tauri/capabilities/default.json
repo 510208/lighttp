@@ -16,8 +16,14 @@
     "core:window:allow-create",
     "core:webview:allow-create-webview-window",
     "dialog:default",
-    "fs:allow-write-text-file",
-    "fs:allow-read-text-file",
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [{ "path": "**" }]
+    },
     { "identifier": "fs:allow-app-write-recursive" }
   ]
 }
