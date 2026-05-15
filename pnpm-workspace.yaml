@@ -1,5 +1,5 @@
 allowBuilds:
   esbuild: true
-  tree-sitter: set this to true or false
-  tree-sitter-bash: set this to true or false
+  tree-sitter: true
+  tree-sitter-bash: true
   vue-demi: true
