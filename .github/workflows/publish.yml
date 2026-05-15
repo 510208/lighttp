@@ -48,7 +48,7 @@ jobs:
             const curr = '$CURRENT_VERSION';
             const prev = '$PREVIOUS_VERSION';
             if (curr === prev) {
-              console.error('❌ 錯誤：版本號 ($CURRENT_VERSION) 未更新，請修改 tauri.conf.json');
+              console.warn('Warn: 版本號 ($CURRENT_VERSION) 未更新，請修改 tauri.conf.json');
               process.exit(1);
             }
           "
@@ -78,8 +78,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自動生成，無需手動設置
         with:
-          tagName: app-v__VERSION__ # 使用 git tag
-          releaseName: "App Name v__VERSION__"
+          tagName: app-v__VERSION__
+          releaseName: "LigHTTP v__VERSION__"
           releaseBody: "See the assets to download this version and install."
           releaseDraft: true # 發佈前為草稿，檢查後手動發佈
           prerelease: false
