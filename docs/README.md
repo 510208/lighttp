@@ -1,4 +1,8 @@
-<left><img src="./assets/logo.svg" alt="LigHTTP Logo" height="80" /></left>
+<center><img src="./assets/cover.png" alt="LigHTTP Logo" /></center>
+
+
+
+<center><img src="./assets/logo.svg" alt="LigHTTP Logo" height="80" /></center>
 
 # LigHTTP
 
