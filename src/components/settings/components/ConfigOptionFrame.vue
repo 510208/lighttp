@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+import { Label } from "@/components/ui/label";
+
 interface Props {
   labelKey: string;
   descriptionKey: string;

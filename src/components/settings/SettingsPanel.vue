@@ -52,7 +52,7 @@ const settingsStore = useSettingsStore();
 
 onMounted(async () => {
   await settingsStore.$tauri.start();
-  settingsStore.setLanguage(await settingsStore.language);
+  settingsStore.setLanguage(settingsStore.language);
 });
 
 const props = defineProps<{ open?: boolean }>();

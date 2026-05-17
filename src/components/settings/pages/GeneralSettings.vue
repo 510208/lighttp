@@ -5,8 +5,8 @@
 
   <div class="mt-4 space-y-4">
     <ConfigOptionFrame
-      label-key="settings_panel.tabs.general.language.label"
-      description-key="settings_panel.tabs.general.language.description"
+      label-key="settings_panel.general.language.label"
+      description-key="settings_panel.general.language.description"
     >
       <Select v-model="language">
         <SelectTrigger class="w-32">
