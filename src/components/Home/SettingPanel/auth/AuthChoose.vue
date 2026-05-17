@@ -5,7 +5,11 @@
     @update:model-value="(v) => emit('update:modelValue', v as string)"
   >
     <SelectTrigger size="sm">
-      <SelectValue :placeholder="placeholder || '選擇認證方式'" />
+      <SelectValue
+        :placeholder="
+          placeholder || $t('settings_panel.tabs.auth.auth_choose.placeholder')
+        "
+      />
     </SelectTrigger>
     <SelectContent>
       <SelectItem

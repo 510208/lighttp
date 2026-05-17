@@ -5,8 +5,10 @@
     <IconContainer>
       <Ghost />
     </IconContainer>
-    <h3 class="text-ctp-text text-lg font-bold">沒有更多選項</h3>
-    <p>此選項無需進一步的認證設定</p>
+    <h3 class="text-ctp-text text-lg font-bold">
+      {{ $t("settings_panel.tabs.auth.none.title") }}
+    </h3>
+    <p>{{ $t("settings_panel.tabs.auth.none.description") }}</p>
   </div>
 </template>
 

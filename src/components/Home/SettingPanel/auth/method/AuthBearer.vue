@@ -1,13 +1,21 @@
 <template>
   <div class="flex h-full w-full flex-col gap-4 p-1">
-    <p class="font-bold">Bearer Token</p>
+    <p class="font-bold">{{ $t("settings_panel.tabs.auth.bearer.title") }}</p>
     <div class="flex flex-col">
       <div class="mb-4 flex flex-col gap-1 lg:flex-row lg:items-center">
-        <span class="text-sm font-semibold lg:min-w-[100px]">Token</span>
+        <span class="text-sm font-semibold lg:min-w-[100px]">
+          {{ $t("settings_panel.tabs.auth.bearer.token_label") }}
+        </span>
         <div class="flex w-full flex-col gap-2">
-          <Input v-model="token" placeholder="Bearer Token" class="w-full" />
+          <Input
+            v-model="token"
+            :placeholder="
+              $t('settings_panel.tabs.auth.bearer.token_placeholder')
+            "
+            class="w-full"
+          />
           <span class="text-muted-foreground text-xs">
-            輸入 Bearer Token，系統會自動處理，請勿手動包含 "Bearer " 前綴。
+            {{ $t("settings_panel.tabs.auth.bearer.hint") }}
           </span>
         </div>
       </div>

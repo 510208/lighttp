@@ -53,7 +53,9 @@ const selectedDescriptionHtml = computed(() => {
     <!-- 左欄：顯示認證選項 -->
     <ResizablePanel :default-size="30" class="p-4">
       <div class="mb-4 flex flex-col gap-1">
-        <span class="text-sm font-semibold">認證方式</span>
+        <span class="text-sm font-semibold">{{
+          $t("settings_panel.tabs.auth.type_label")
+        }}</span>
         <!-- v-model 現在綁定到 computed，會直接改動 Store -->
         <AuthChoose v-model="selectedAuthMethod" />
       </div>

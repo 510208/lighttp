@@ -1,16 +1,28 @@
 <template>
   <div class="flex h-full w-full flex-col gap-4 p-1">
-    <p class="font-bold">基本認證設定</p>
+    <p class="font-bold">{{ $t("settings_panel.tabs.auth.basic.title") }}</p>
     <div class="flex flex-col">
       <div class="mb-4 flex flex-col gap-1 lg:flex-row lg:items-center">
-        <span class="text-sm font-semibold lg:min-w-[100px]">使用者名稱</span>
-        <Input v-model="username" placeholder="username" class="w-full" />
+        <span class="text-sm font-semibold lg:min-w-[100px]">{{
+          $t("settings_panel.tabs.auth.basic.username_label")
+        }}</span>
+        <Input
+          v-model="username"
+          :placeholder="
+            $t('settings_panel.tabs.auth.basic.username_placeholder')
+          "
+          class="w-full"
+        />
       </div>
       <div class="mb-4 flex flex-col gap-1 lg:flex-row lg:items-center">
-        <span class="text-sm font-semibold lg:min-w-[100px]">密碼</span>
+        <span class="text-sm font-semibold lg:min-w-[100px]">{{
+          $t("settings_panel.tabs.auth.basic.password_label")
+        }}</span>
         <Input
           v-model="password"
-          placeholder="password"
+          :placeholder="
+            $t('settings_panel.tabs.auth.basic.password_placeholder')
+          "
           type="password"
           class="w-full"
         />
