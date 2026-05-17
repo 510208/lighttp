@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 import { changeLang } from "@/i18n";
 
 export const useSettingsStore = defineStore(
@@ -18,7 +18,7 @@ export const useSettingsStore = defineStore(
       backgroundImageUrl.value = url;
     }
 
-    const defaultIndentSize = ref(2);
+    const defaultIndentSize = ref(2) as Ref<number | string>;
 
     return {
       language,

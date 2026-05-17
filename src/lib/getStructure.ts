@@ -6,6 +6,25 @@ import {
 } from "quicktype-core";
 import { type RequestStoreData } from "@/stores/useRequestStore";
 import { BasicAuthContent } from "@/stores/authType";
+import { computed } from "vue";
+
+// 監聽 settingsStore 中的 defaultIndentSize 設定，並變動 indentString 裡的空白長度
+function getIndentString(defaultIndentSize: number | string): string {
+  // 如果 defaultIndentSize 是字串形式的數字，則重複空白字元；如果是字串，則直接使用該字串作為縮排
+  if (typeof defaultIndentSize === "number") {
+    return " ".repeat(defaultIndentSize);
+  } else if (typeof defaultIndentSize === "string") {
+    // 嘗試將字串轉換為數字，如果成功則重複空白字元；如果失敗則直接使用該字串作為縮排
+    const indentSize = parseInt(defaultIndentSize, 10);
+    if (!isNaN(indentSize)) {
+      return " ".repeat(indentSize);
+    } else if (defaultIndentSize === "tab") {
+      return "\t";
+    }
+    return defaultIndentSize;
+  }
+  return "  ";
+}
 
 function jsonIsValid(json: string): boolean {
   try {
@@ -19,6 +38,7 @@ function jsonIsValid(json: string): boolean {
 
 async function convertJsonToSchema(
   jsonString: string,
+  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   // Validate JSON first
@@ -40,6 +60,7 @@ async function convertJsonToSchema(
     const result = await quicktype({
       inputData,
       lang: "schema",
+      indentation: getIndentString(indentString),
     });
 
     return result.lines.join("\n");
@@ -53,6 +74,7 @@ async function convertJsonToSchema(
 
 async function convertJsonToTypeScript(
   jsonString: string,
+  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
@@ -73,6 +95,7 @@ async function convertJsonToTypeScript(
     const result = await quicktype({
       inputData,
       lang: "typescript",
+      indentation: getIndentString(indentString),
     });
 
     return result.lines.join("\n");
@@ -86,6 +109,7 @@ async function convertJsonToTypeScript(
 
 async function convertJsonToPython(
   jsonString: string,
+  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
@@ -106,6 +130,7 @@ async function convertJsonToPython(
     const result = await quicktype({
       inputData,
       lang: "python",
+      indentation: getIndentString(indentString),
     });
 
     return result.lines.join("\n");
@@ -119,6 +144,7 @@ async function convertJsonToPython(
 
 async function convertJsonToRust(
   jsonString: string,
+  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
@@ -139,6 +165,7 @@ async function convertJsonToRust(
     const result = await quicktype({
       inputData,
       lang: "rust",
+      indentation: getIndentString(indentString),
     });
 
     return result.lines.join("\n");
@@ -152,6 +179,7 @@ async function convertJsonToRust(
 
 function getCurlCommand(
   store: RequestStoreData,
+  indentString: string | number,
   breakLineSymbol: string = "\\",
 ): string {
   // 1. 改用陣列收集每一行的指令片段
@@ -163,31 +191,37 @@ function getCurlCommand(
   // Headers
   store.headers.forEach((header) => {
     if (header.enabled) {
-      parts.push(`  -H "${header.key}: ${header.value}"`);
+      parts.push(
+        `${getIndentString(indentString)}-H "${header.key}: ${header.value}"`,
+      );
     }
   });
 
   // Auth
   if (store.auth.type === "basic" && store.auth.content) {
     const authContent = store.auth.content as BasicAuthContent;
-    parts.push(`  -u "${authContent.username}:${authContent.password}"`);
+    parts.push(
+      `${getIndentString(indentString)}-u "${authContent.username}:${authContent.password}"`,
+    );
   } else if (store.auth.type === "bearer token" && store.auth.content) {
     const token = (store.auth.content as { token: string }).token;
-    parts.push(`  -H "Authorization: Bearer ${token}"`);
+    parts.push(
+      `${getIndentString(indentString)}-H "Authorization: Bearer ${token}"`,
+    );
   }
 
   // Body
   if (store.bodyContent && store.bodyType !== "None") {
     // 提示：若 body 內含單引號 '，在 bash 中直接用單引號包裹會出錯，建議維持轉義或處理
     const escapedBody = store.bodyContent;
-    parts.push(`  -d '${escapedBody}'`);
+    parts.push(`${getIndentString(indentString)}-d '${escapedBody}'`);
   }
 
   // Proxy
   if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
     const proxyUrlAuthPart = `${store.proxyConfig.auth ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@` : ""}`;
     const proxyUrl = `${store.proxyConfig.protocol}://${proxyUrlAuthPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
-    parts.push(`  -x "${proxyUrl}"`);
+    parts.push(`${getIndentString(indentString)}-x "${proxyUrl}"`);
   }
 
   return parts.join(` ${breakLineSymbol}\n`);

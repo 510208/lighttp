@@ -180,6 +180,9 @@ import { toast } from "vue-sonner";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
+import { useSettingsStore } from "@/stores/useSettingsStore.ts";
+const settingsStore = useSettingsStore();
+
 const forceShowMedia = ref(false);
 const mediaUrl = ref<string>("");
 
@@ -271,7 +274,10 @@ async function generateJsonSchema() {
     return;
   }
   try {
-    const jsonSchema = await convertJsonToSchema(responseStore.body);
+    const jsonSchema = await convertJsonToSchema(
+      responseStore.body,
+      settingsStore.defaultIndentSize,
+    );
     console.log("Generated JSON Schema:", jsonSchema);
 
     generatedSchema.value = jsonSchema;
@@ -298,7 +304,10 @@ async function generateTypeScriptType() {
     return;
   }
   try {
-    const typeScriptDef = await convertJsonToTypeScript(responseStore.body);
+    const typeScriptDef = await convertJsonToTypeScript(
+      responseStore.body,
+      settingsStore.defaultIndentSize,
+    );
     console.log("Generated TypeScript Definitions:", typeScriptDef);
 
     generatedSchema.value = typeScriptDef;
@@ -320,7 +329,10 @@ async function generatePythonType() {
     return;
   }
   try {
-    const pythonDef = await convertJsonToPython(responseStore.body);
+    const pythonDef = await convertJsonToPython(
+      responseStore.body,
+      settingsStore.defaultIndentSize,
+    );
     console.log("Generated Python Definitions:", pythonDef);
 
     generatedSchema.value = pythonDef;
@@ -342,7 +354,10 @@ async function generateRustType() {
     return;
   }
   try {
-    const rustDef = await convertJsonToRust(responseStore.body);
+    const rustDef = await convertJsonToRust(
+      responseStore.body,
+      settingsStore.defaultIndentSize,
+    );
     console.log("Generated Rust Definitions:", rustDef);
 
     generatedSchema.value = rustDef;
@@ -358,7 +373,11 @@ async function generateRustType() {
 
 //   curl 指令
 function generateCurlCommand(symbol: string) {
-  const curlCommand = getCurlCommand(requestStore, symbol);
+  const curlCommand = getCurlCommand(
+    requestStore,
+    settingsStore.defaultIndentSize,
+    symbol,
+  );
   generatedSchema.value = curlCommand;
   schemaLanguage.value = "shell";
   isModalOpen.value = true;

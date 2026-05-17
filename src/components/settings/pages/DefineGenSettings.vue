@@ -16,6 +16,9 @@
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
+            <SelectItem value="tab">
+              {{ $t("settings_panel.define_gen.indent.options.tab") }}
+            </SelectItem>
             <SelectItem value="2">
               {{
                 $t("settings_panel.define_gen.indent.options.spaces", {
