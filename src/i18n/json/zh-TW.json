@@ -53,5 +53,19 @@
   "settings_panel.tabs.proxy.auth.username.placeholder": "username",
   "settings_panel.tabs.proxy.auth.password.label": "密碼",
   "settings_panel.tabs.proxy.auth.password.placeholder": "password",
-  "settings_panel.tabs.proxy.check_before_send.label": "在發送請求前先測試 Proxy 是否可用"
+  "settings_panel.tabs.proxy.check_before_send.label": "在發送請求前先測試 Proxy 是否可用",
+
+  "response_panel.title": "結果",
+  "response_panel.status.loading": "載入中",
+  "response_panel.status.no_response": "無回應",
+
+  "response_panel.waiting_response.title": "等待回應中",
+  "response_panel.waiting_response.description": "趁這個時間休息一下如何？",
+
+  "response_panel.error_response.title": "回應錯誤",
+  "response_panel.error_response.description": "完了，出現錯誤了。請檢查以下資訊：",
+  "response_panel.error_response.no_error_message": "無錯誤訊息可顯示",
+
+  "response_panel.tabs.body": "主體",
+  "response_panel.tabs.headers": "標頭"
 }
