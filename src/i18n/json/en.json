@@ -22,13 +22,18 @@
   "home.settings_panel.tabs.auth": "Authentication",
   "home.settings_panel.tabs.auth.type_label": "Authentication Type",
   "home.settings_panel.tabs.auth.auth_choose.placeholder": "Select Authentication Type",
+
   "home.settings_panel.tabs.auth.none.title": "No More Options",
+  "home.settings_panel.tabs.auth.none.hint": "No authentication will be used.\n\nSuitable for public APIs that do not require authentication.",
   "home.settings_panel.tabs.auth.none.description": "This option does not require further authentication settings",
+
   "home.settings_panel.tabs.auth.basic.title": "Basic Authentication Settings",
+  "home.settings_panel.tabs.auth.basic.hint": "Basic authentication method.\n\nWhen using this method, the system will automatically add an Authorization: Basic ... header to the request.",
   "home.settings_panel.tabs.auth.basic.username_label": "Username",
   "home.settings_panel.tabs.auth.basic.username_placeholder": "username",
   "home.settings_panel.tabs.auth.basic.password_label": "Password",
   "home.settings_panel.tabs.auth.basic.password_placeholder": "password",
+
   "home.settings_panel.tabs.auth.bearer.title": "Bearer Token Settings",
   "home.settings_panel.tabs.auth.bearer.token_label": "Token",
   "home.settings_panel.tabs.auth.bearer.token_placeholder": "Bearer token",
@@ -36,8 +41,12 @@
 
   "home.settings_panel.tabs.body": "Body",
   "home.settings_panel.tabs.body.type_label": "Content Type",
+
+  "home.settings_panel.tabs.body.no_body.hint": "A request body that contains no content.\n\nSuitable for GET, DELETE, and other methods that typically do not require a body.",
   "home.settings_panel.tabs.body.no_body.title": "No Body Required",
   "home.settings_panel.tabs.body.no_body.description": "This request method does not require sending a body",
+
+  "home.settings_panel.tabs.body.body_original.hint": "Use plain text (including JSON, XML, etc.) as the request body.\n\nSuitable for scenarios where you need to send raw text data, such as JSON API requests.",
   "home.settings_panel.tabs.body.body_original.choose_language": "Choose Language",
   "home.settings_panel.tabs.body.body_original.language_placeholder": "Choose Language",
   "home.settings_panel.tabs.body.body_original.load_from_file": "Load from File",

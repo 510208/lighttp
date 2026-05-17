@@ -22,22 +22,31 @@
   "home.settings_panel.tabs.auth": "認證",
   "home.settings_panel.tabs.auth.type_label": "認證方式",
   "home.settings_panel.tabs.auth.auth_choose.placeholder": "選擇認證方式",
+
   "home.settings_panel.tabs.auth.none.title": "沒有更多選項",
+  "home.settings_panel.tabs.auth.none.hint": "不使用任何認證方式。\n\n適用於不需要身份驗證的公開 API。",
   "home.settings_panel.tabs.auth.none.description": "此選項無需進一步的認證設定",
+
   "home.settings_panel.tabs.auth.basic.title": "基本認證設定",
+  "home.settings_panel.tabs.auth.basic.hint": "基本驗證方式。\n\n使用此方式後系統會自動在 Header 中加入 Authorization: Basic ... 標頭。",
   "home.settings_panel.tabs.auth.basic.username_label": "使用者名稱",
   "home.settings_panel.tabs.auth.basic.username_placeholder": "username",
   "home.settings_panel.tabs.auth.basic.password_label": "密碼",
   "home.settings_panel.tabs.auth.basic.password_placeholder": "password",
+
   "home.settings_panel.tabs.auth.bearer.title": "Bearer Token 設定",
+  "home.settings_panel.tabs.auth.bearer.hint": "Bearer Token 認證方式。\n\nBearer Token 是一種常見的 API 認證方式，通常用於 OAuth 2.0 中。\n使用此方式後系統會自動在 Header 中加入 Authorization: Bearer ... 標頭。",
   "home.settings_panel.tabs.auth.bearer.token_label": "Token",
   "home.settings_panel.tabs.auth.bearer.token_placeholder": "Bearer token",
-  "home.settings_panel.tabs.auth.bearer.hint": "輸入 Bearer Token，系統會自動處理，請勿手動包含 \"Bearer \" 前綴。",
 
   "home.settings_panel.tabs.body": "主體",
   "home.settings_panel.tabs.body.type_label": "內容類型",
+
+  "home.settings_panel.tabs.body.no_body.hint": "不包含任何內容的請求體。\n\n適用於 GET、DELETE 等通常不需要主體的請求方法。",
   "home.settings_panel.tabs.body.no_body.title": "無需主體",
   "home.settings_panel.tabs.body.no_body.description": "此請求方式無需發送 Body 資料",
+
+  "home.settings_panel.tabs.body.body_original.hint": "使用純文本（含JSON、XML等）作為請求主體。\n\n適用於需要發送原始文本資料的情境，如 JSON API 請求。",
   "home.settings_panel.tabs.body.body_original.choose_language": "選擇語言",
   "home.settings_panel.tabs.body.body_original.language_placeholder": "選擇語言",
   "home.settings_panel.tabs.body.body_original.load_from_file": "從檔案匯入",
@@ -50,7 +59,7 @@
   "home.settings_panel.tabs.proxy.port.label": "端口",
   "home.settings_panel.tabs.proxy.auth.enable_auth.label": "我的 Proxy 有登入驗證",
   "home.settings_panel.tabs.proxy.auth.username.label": "帳號",
-  "home.ettings_panel.tabs.proxy.auth.username.placeholder": "username",
+  "home.settings_panel.tabs.proxy.auth.username.placeholder": "username",
   "home.settings_panel.tabs.proxy.auth.password.label": "密碼",
   "home.settings_panel.tabs.proxy.auth.password.placeholder": "password",
   "home.settings_panel.tabs.proxy.check_before_send.label": "在發送請求前先測試 Proxy 是否可用",
