@@ -10,7 +10,10 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import BackgroundImg from "@/components/common/BackgroundImg.vue";
 
+const settingsStore = useSettingsStore();
 const isResponsePanelOpen = ref(true);
 
 const toggleResponsePanel = () => {
@@ -21,7 +24,11 @@ const toggleResponsePanel = () => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen flex-col">
+  <BackgroundImg :backgroundImageUrl="settingsStore.backgroundImageUrl" />
+
+  <div
+    class="relative isolate z-10 flex h-screen w-screen flex-col bg-transparent"
+  >
     <TitleBar />
 
     <main class="min-h-0 flex-1">
