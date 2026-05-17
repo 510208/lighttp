@@ -6,7 +6,6 @@ export const useSettingsStore = defineStore(
   "settings",
   () => {
     const language = ref("zh-TW");
-
     function setLanguage(newLang: string) {
       language.value = newLang;
 
@@ -14,9 +13,17 @@ export const useSettingsStore = defineStore(
       changeLang(newLang);
     }
 
+    const backgroundImageUrl = ref("");
+    function setBackgroundImageUrl(url: string) {
+      backgroundImageUrl.value = url;
+    }
+
     return {
       language,
       setLanguage,
+
+      backgroundImageUrl,
+      setBackgroundImageUrl,
     };
   },
   {
