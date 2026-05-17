@@ -138,6 +138,7 @@
   "settings_panel.title": "設定",
   "settings_panel.tabs.general": "一般",
   "settings_panel.tabs.themes": "主題",
+  "settings_panel.tabs.define_gen": "定義生成器",
 
   "settings_panel.general.title": "一般設定",
   "settings_panel.general.language.label": "介面語言",
@@ -147,5 +148,10 @@
   "settings_panel.themes.title": "主題設定",
   "settings_panel.themes.theme_selection.label": "背景圖片網址",
   "settings_panel.themes.theme_selection.description": "輸入一個直連圖片網址來作為應用程式的背景圖片。",
-  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg"
+  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
+
+  "settings_panel.define_gen.title": "定義生成器設定",
+  "settings_panel.define_gen.indent.label": "預設縮排大小",
+  "settings_panel.define_gen.indent.description": "設定生成的結構定義中使用的縮排空格數量。預設為 2。此設定可能會被某些生成器覆蓋。",
+  "settings_panel.define_gen.indent.options.spaces": "{count} 個空格"
 }
