@@ -20,6 +20,9 @@
           <TabsTrigger value="themes" class="sh-settings-tab">
             <Palette />{{ $t("settings_panel.tabs.themes") }}
           </TabsTrigger>
+          <TabsTrigger value="define_gen" class="sh-settings-tab">
+            <Hash />{{ $t("settings_panel.tabs.define_gen") }}
+          </TabsTrigger>
         </TabsList>
 
         <div class="h-full flex-1 p-6">
@@ -28,6 +31,9 @@
           </TabsContent>
           <TabsContent value="themes">
             <ThemesSettings />
+          </TabsContent>
+          <TabsContent value="define_gen">
+            <DefineGenSettings />
           </TabsContent>
         </div>
       </Tabs>
@@ -44,9 +50,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { computed } from "vue";
-import { Settings, Palette } from "@lucide/vue";
+import { Settings, Palette, Hash } from "@lucide/vue";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
+import DefineGenSettings from "./pages/DefineGenSettings.vue";
 import ConfigLoader from "@/components/core/ConfigLoader.vue";
 
 const props = defineProps<{ open?: boolean }>();

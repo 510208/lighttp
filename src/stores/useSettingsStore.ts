@@ -18,12 +18,16 @@ export const useSettingsStore = defineStore(
       backgroundImageUrl.value = url;
     }
 
+    const defaultIndentSize = ref(2);
+
     return {
       language,
       setLanguage,
 
       backgroundImageUrl,
       setBackgroundImageUrl,
+
+      defaultIndentSize,
     };
   },
   {
