@@ -114,5 +114,19 @@
   "home.response_panel.header_table.value_header": "值",
   "home.response_panel.header_table.copy_hint": "點擊下方按鈕可複製完整內容",
   "home.response_panel.header_table.toast.copy_success": "已複製到剪貼簿",
-  "home.response_panel.header_table.toast.copy_error": "複製失敗"
+  "home.response_panel.header_table.toast.copy_error": "複製失敗",
+
+  "home.status_bar.left_side_status.ready": "已就緒",
+  "home.status_bar.left_side_status.loading": "等待中",
+  "home.status_bar.left_side_status.success": "成功 ({status})",
+  "home.status_bar.left_side_status.error_client": "客戶端錯誤 ({status})",
+  "home.status_bar.left_side_status.error_server": "伺服器錯誤 ({status})",
+  "home.status_bar.left_side_status.none": "無狀態",
+
+  "home.status_bar.proxy_status.success_text": "代理已設置",
+  "home.status_bar.proxy_status.loading_text": "代理設定不完整",
+  "home.status_bar.proxy_status.none": "代理已禁用",
+
+  "home.status_bar.collapse_response_panel.collapse": "收合回應面板",
+  "home.status_bar.collapse_response_panel.expand": "展開回應面板"
 }

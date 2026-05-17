@@ -33,10 +33,14 @@
           :size="16"
           :class="{ 'rotate-180': !props.responseOpen }"
         />
-        {{ props.responseOpen ? "收合回應面板" : "展開回應面板" }}
+        {{
+          props.responseOpen
+            ? $t("home.status_bar.collapse_response_panel.collapse")
+            : $t("home.status_bar.collapse_response_panel.expand")
+        }}
       </button>
 
-      <StatusBadge status="none">Lighttp v{{ appVersion }}</StatusBadge>
+      <StatusBadge status="none"> Lighttp v{{ appVersion }} </StatusBadge>
     </div>
   </div>
 </template>
@@ -61,6 +65,9 @@ import {
 import { useResponseStore } from "@/stores/useResponseStore.ts";
 import { useRequestStore } from "@/stores/useRequestStore.ts";
 import { watch, ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const requestStore = useRequestStore();
 const responseStore = useResponseStore();
@@ -69,7 +76,7 @@ const requestTime = ref<number | null>(null);
 const leftSideStatus = ref({
   statProp: "ready", // 預設為 ready
   icon: Ellipsis,
-  content: "已就緒", // 預設顯示 Ready
+  content: t("home.status_bar.left_side_status.ready"), // 預設顯示 Ready
 } as {
   statProp:
     | "ready"
@@ -86,7 +93,7 @@ const leftSideStatus = ref({
 const proxyStatus = ref({
   statProp: "none",
   icon: Globe,
-  content: "代理已禁用",
+  content: t("home.status_bar.proxy_status.none"),
 } as {
   statProp:
     | "ready"
@@ -114,28 +121,41 @@ watch(
     if (newStatus === null) {
       // 當 status 是 "ready" 時，顯示 Ready
       leftSideStatus.value.statProp = "ready";
-      leftSideStatus.value.content = "已就緒";
+      leftSideStatus.value.content = t(
+        "home.status_bar.left_side_status.ready",
+      );
       leftSideStatus.value.icon = Ellipsis;
     } else if (newStatus === undefined) {
       leftSideStatus.value.statProp = "loading";
-      leftSideStatus.value.content = "等待中";
+      leftSideStatus.value.content = t(
+        "home.status_bar.left_side_status.loading",
+      );
       leftSideStatus.value.icon = Plug;
     } else if (newStatus >= 200 && newStatus < 300) {
       leftSideStatus.value.statProp = "success";
-      leftSideStatus.value.content = `成功 (${newStatus})`;
+      leftSideStatus.value.content = t(
+        "home.status_bar.left_side_status.success",
+        { status: newStatus },
+      );
       leftSideStatus.value.icon = CheckCircle;
     } else if (newStatus >= 400 && newStatus < 500) {
       leftSideStatus.value.statProp = "error";
-      leftSideStatus.value.content = `客戶端錯誤 (${newStatus})`;
+      leftSideStatus.value.content = t(
+        "home.status_bar.left_side_status.error_client",
+        { status: newStatus },
+      );
       leftSideStatus.value.icon = PcCase;
     } else if (newStatus >= 500 && newStatus < 600) {
       leftSideStatus.value.statProp = "error";
-      leftSideStatus.value.content = `伺服器錯誤 (${newStatus})`;
+      leftSideStatus.value.content = t(
+        "home.status_bar.left_side_status.error_server",
+        { status: newStatus },
+      );
       leftSideStatus.value.icon = ServerOff;
     } else {
       // 其他狀態顯示 None
       leftSideStatus.value.statProp = "none";
-      leftSideStatus.value.content = "無狀態";
+      leftSideStatus.value.content = t("home.status_bar.left_side_status.none");
       leftSideStatus.value.icon = Loader;
     }
     //#endregion
@@ -157,16 +177,20 @@ function checkProxyStatus() {
       requestStore.proxyConfig.port != 0
     ) {
       proxyStatus.value.statProp = "successText";
-      proxyStatus.value.content = "代理已設置";
+      proxyStatus.value.content = t(
+        "home.status_bar.proxy_status.success_text",
+      );
       proxyStatus.value.icon = GlobeLock;
     } else {
       proxyStatus.value.statProp = "loadingText";
-      proxyStatus.value.content = "代理設定不完整";
+      proxyStatus.value.content = t(
+        "home.status_bar.proxy_status.loading_text",
+      );
       proxyStatus.value.icon = GlobeOff;
     }
   } else {
     proxyStatus.value.statProp = "none";
-    proxyStatus.value.content = "代理已禁用";
+    proxyStatus.value.content = t("home.status_bar.proxy_status.none");
     proxyStatus.value.icon = Globe;
   }
 }

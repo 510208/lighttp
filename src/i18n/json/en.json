@@ -114,5 +114,19 @@
   "home.response_panel.header_table.value_header": "Value",
   "home.response_panel.header_table.copy_hint": "Click the button below to copy the full content",
   "home.response_panel.header_table.toast.copy_success": "Copied to clipboard",
-  "home.response_panel.header_table.toast.copy_error": "Failed to copy"
+  "home.response_panel.header_table.toast.copy_error": "Failed to copy",
+
+  "home.status_bar.left_side_status.ready": "Ready",
+  "home.status_bar.left_side_status.loading": "Loading",
+  "home.status_bar.left_side_status.success": "Success ({status})",
+  "home.status_bar.left_side_status.error_client": "Client Error ({status})",
+  "home.status_bar.left_side_status.error_server": "Server Error ({status})",
+  "home.status_bar.left_side_status.none": "No Status",
+
+  "home.status_bar.proxy_status.success_text": "Proxy Configured",
+  "home.status_bar.proxy_status.loading_text": "Proxy Configuration Incomplete",
+  "home.status_bar.proxy_status.none": "Proxy Disabled",
+
+  "home.status_bar.collapse_response_panel.collapse": "Collapse RP",
+  "home.status_bar.collapse_response_panel.expand": "Expand RP"
 }
