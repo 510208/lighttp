@@ -8,25 +8,25 @@
     <DropdownMenuContent>
       <DropdownMenuItem @click="FileHelpers.saveWorkspaceToFile()">
         <Save />
-        儲存當前工作
+        {{ $t("title_bar.dropdown_menu.save") }}
       </DropdownMenuItem>
       <DropdownMenuItem @click="FileHelpers.loadWorkspaceFromFile()">
         <FolderOpen />
-        載入工作
+        {{ $t("title_bar.dropdown_menu.load") }}
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
 
       <DropdownMenuItem @click="openSettings()">
         <Bolt />
-        設定
+        {{ $t("title_bar.dropdown_menu.settings") }}
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
 
       <DropdownMenuItem @click="Window.openAboutWindow()">
         <Info />
-        關於 LigHTTP
+        {{ $t("title_bar.dropdown_menu.about") }}
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>

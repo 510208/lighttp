@@ -128,5 +128,20 @@
   "home.status_bar.proxy_status.none": "Proxy Disabled",
 
   "home.status_bar.collapse_response_panel.collapse": "Collapse RP",
-  "home.status_bar.collapse_response_panel.expand": "Expand RP"
+  "home.status_bar.collapse_response_panel.expand": "Expand RP",
+
+  "title_bar.dropdown_menu.save": "Save Current Workspace",
+  "title_bar.dropdown_menu.load": "Load Workspace from File",
+  "title_bar.dropdown_menu.settings": "Settings",
+  "title_bar.dropdown_menu.about": "About LigHTTP",
+
+  "settings_panel.title": "Settings",
+  "settings_panel.tabs.general": "General",
+  "settings_panel.tabs.themes": "Themes",
+
+  "settings_panel.general.title": "General Settings",
+  "settings_panel.tabs.general.language.label": "Interface Language",
+  "settings_panel.tabs.general.language.description": "Select the language to be used in the interface.",
+
+  "settings_panel.themes.title": "Theme Settings"
 }
