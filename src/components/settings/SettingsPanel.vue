@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { Settings, Palette } from "@lucide/vue";
 import { Label } from "@/components/ui/label";
 import { useSettingsStore } from "@/stores/useSettingsStore";
@@ -74,6 +74,11 @@ const settingsStore = useSettingsStore();
 const language = computed({
   get: () => settingsStore.language,
   set: (v: string) => settingsStore.setLanguage(v),
+});
+
+onMounted(async () => {
+  await settingsStore.$tauri.start();
+  settingsStore.setLanguage(await settingsStore.language);
 });
 
 const props = defineProps<{ open?: boolean }>();
