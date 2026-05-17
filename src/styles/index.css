@@ -188,3 +188,7 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
 ::-webkit-scrollbar-track {
   background-color: var(--color-scrollbar-track, transparent);
 }
+
+.sh-settings-tab {
+  @apply data-[state=active]:bg-ctp-surface1 data-[state=active]:text-ctp-text h-auto w-full flex-none justify-start gap-2 rounded-md px-3 py-1 text-left data-[state=active]:shadow-none;
+}
