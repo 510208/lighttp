@@ -1,18 +1,20 @@
 <template>
   <Select v-model="requestStore.method">
     <SelectTrigger
-      class="min-h-12.5 min-w-[70px] border-none rounded-none bg-ctp-surface0 hover:bg-ctp-surface1 focus:ring-2 focus:ring-ctp-surface2"
+      class="bg-ctp-surface0 hover:bg-ctp-surface1 focus:ring-ctp-surface2 min-h-12.5 min-w-[70px] rounded-none border-none focus:ring-2"
       :class="currentTriggerColor"
     >
       <div class="flex flex-col items-start gap-1">
-        <p class="text-[10px] text-muted-foreground tracking-[1px]">請求類型</p>
+        <p class="text-muted-foreground text-[10px] tracking-[1px]">
+          {{ $t("target_input.method_select.label") }}
+        </p>
         <!-- 這裡確保 SelectValue 繼承父層顏色，或直接給它 font-bold -->
-        <SelectValue class="font-bold font-space" />
+        <SelectValue class="font-space font-bold" />
       </div>
     </SelectTrigger>
 
     <SelectContent
-      class="bg-ctp-surface0 border border-ctp-surface2 rounded-lg"
+      class="bg-ctp-surface0 border-ctp-surface2 rounded-lg border"
     >
       <SelectGroup>
         <!-- 使用物件迴圈可以減少重複程式碼 -->

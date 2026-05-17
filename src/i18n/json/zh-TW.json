@@ -1,4 +1,8 @@
 {
+  "target_input.method_select.label": "請求類型",
+  "target_input.url_input.placeholder": "輸入 URL 或貼上",
+  "target_input.send_button.text": "送出",
+
   "settings_panel.tabs.params": "參數",
   "settings_panel.tabs.params.add_button_text": "新增參數",
   "settings_panel.tabs.params.key_title": "參數",

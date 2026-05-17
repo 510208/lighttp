@@ -38,7 +38,7 @@ function handleEnter() {
     <input
       v-model="requestStore.url"
       type="text"
-      placeholder="Enter URL or paste text"
+      :placeholder="$t('target_input.url_input.placeholder')"
       class="flex-1 bg-transparent px-4 py-2 text-sm text-[#cdd6f4] placeholder-[#6c7086] outline-none"
       @keyup.enter="handleEnter"
       @blur="handleUrlBlur"
@@ -47,7 +47,7 @@ function handleEnter() {
       @click="Request.handleSend"
       class="text-ctp-subtext0 bg-ctp-surface0 hover:bg-ctp-surface2 min-h-12.5 w-24 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all"
     >
-      送出
+      {{ $t("target_input.send_button.text") }}
       <SendHorizontal />
     </Button>
   </div>
