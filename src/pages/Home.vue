@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/resizable";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import BackgroundImg from "@/components/common/BackgroundImg.vue";
+import ConfigLoader from "@/components/core/ConfigLoader.vue";
 
 const settingsStore = useSettingsStore();
 const isResponsePanelOpen = ref(true);
@@ -25,6 +26,7 @@ const toggleResponsePanel = () => {
 
 <template>
   <BackgroundImg :backgroundImageUrl="settingsStore.backgroundImageUrl" />
+  <ConfigLoader />
 
   <div
     class="relative isolate z-10 flex h-screen w-screen flex-col bg-transparent"

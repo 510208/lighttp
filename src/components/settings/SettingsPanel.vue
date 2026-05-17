@@ -42,19 +42,10 @@ import {
   DialogTrigger,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { Settings, Palette } from "@lucide/vue";
-import { useSettingsStore } from "@/stores/useSettingsStore";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
-
-const settingsStore = useSettingsStore();
-
-// 確保在組件掛載時就啟動 Tauri 並載入設定
-onMounted(async () => {
-  await settingsStore.$tauri.start();
-  settingsStore.setLanguage(settingsStore.language);
-});
 
 const props = defineProps<{ open?: boolean }>();
 const emit = defineEmits(["update:open"]);
