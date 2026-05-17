@@ -6,7 +6,6 @@ import {
 } from "quicktype-core";
 import { type RequestStoreData } from "@/stores/useRequestStore";
 import { BasicAuthContent } from "@/stores/authType";
-import { computed } from "vue";
 
 // 監聽 settingsStore 中的 defaultIndentSize 設定，並變動 indentString 裡的空白長度
 function getIndentString(defaultIndentSize: number | string): string {

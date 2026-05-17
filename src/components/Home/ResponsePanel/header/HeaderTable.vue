@@ -94,6 +94,9 @@ import {
 import { Ellipsis } from "@lucide/vue";
 import { toast } from "vue-sonner";
 import Separator from "../../../ui/separator/Separator.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const responseStore = useResponseStore();
 
@@ -114,10 +117,10 @@ function breakLongValue(value: string): string {
 function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
-      toast.success($t("home.response_panel.header_table.toast.copy_success"));
+      toast.success(t("home.response_panel.header_table.toast.copy_success"));
     },
     (_err) => {
-      toast.error($t("home.response_panel.header_table.toast.copy_error"));
+      toast.error(t("home.response_panel.header_table.toast.copy_error"));
     },
   );
 }
