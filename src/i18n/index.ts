@@ -16,10 +16,14 @@ const i18n = createI18n({
   messages: messages as any,
 });
 
-export function changeLang(lang: string) {
+function changeLang(lang: string) {
   i18n.global.locale.value = lang;
 }
 
 const locale = i18n.global.locale;
+const languages: Record<keyof typeof messages, string> = {
+  "zh-TW": "繁體中文",
+  en: "English",
+};
 
-export { useI18n, locale, i18n };
+export { useI18n, changeLang, locale, languages, i18n };
