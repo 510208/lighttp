@@ -55,7 +55,9 @@ const selectedDescriptionHtml = computed(() => {
   >
     <ResizablePanel :default-size="30" class="p-4">
       <div class="mb-4 flex flex-col gap-1">
-        <span class="text-sm font-semibold">內容類型</span>
+        <span class="text-sm font-semibold">
+          {{ $t("settings_panel.tabs.body.type_label") }}
+        </span>
         <BodyChoose v-model="selectedBodyMethod" />
       </div>
 

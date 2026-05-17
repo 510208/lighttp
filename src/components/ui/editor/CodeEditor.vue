@@ -178,7 +178,9 @@ function autoDetectLanguage(fileName: string) {
   <div class="flex flex-col">
     <div class="flex justify-between">
       <div class="flex items-center gap-2 p-2 px-4">
-        <span class="text-sm font-semibold">選擇語言</span>
+        <span class="text-sm font-semibold">
+          {{ $t("settings_panel.tabs.body.body_original.choose_language") }}
+        </span>
         <Select v-model="language" @update:model-value="changeLanguage">
           <SelectTrigger class="h-8 w-[180px]">
             <SelectValue placeholder="選擇語言" size="sm" />
@@ -197,7 +199,7 @@ function autoDetectLanguage(fileName: string) {
       <div class="flex items-center gap-2 p-2 px-4">
         <Button variant="ghost" @click="handleFileUpload">
           <Upload class="h-4 w-4" />
-          讀取檔案
+          {{ $t("settings_panel.tabs.body.body_original.load_from_file") }}
         </Button>
       </div>
     </div>

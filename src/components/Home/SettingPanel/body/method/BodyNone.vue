@@ -5,8 +5,10 @@
     <IconContainer>
       <Ghost />
     </IconContainer>
-    <h3 class="text-ctp-text text-lg font-bold">無需主體</h3>
-    <p>此請求方式無需發送 Body 資料</p>
+    <h3 class="text-ctp-text text-lg font-bold">
+      {{ $t("settings_panel.tabs.body.no_body.title") }}
+    </h3>
+    <p>{{ $t("settings_panel.tabs.body.no_body.description") }}</p>
   </div>
 </template>
 
