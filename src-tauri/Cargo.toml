@@ -29,4 +29,6 @@ tracing-subscriber = "0.3.23"
 tracing = "0.1.44"
 tauri-plugin-fs = "2"
 tauri-plugin-dialog = "2"
+tauri-store = "1.2.2"
+tauri-plugin-pinia = "4.2.0"
 

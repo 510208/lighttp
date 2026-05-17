@@ -38,6 +38,9 @@ importers:
       '@tauri-apps/plugin-opener':
         specifier: ^2
         version: 2.5.3
+      '@tauri-store/pinia':
+        specifier: ^4.2.0
+        version: 4.2.0(typescript@5.6.3)
       '@vueuse/core':
         specifier: ^14.2.1
         version: 14.2.1(vue@3.5.33(typescript@5.6.3))
@@ -708,6 +711,12 @@ packages:
   '@tauri-apps/plugin-opener@2.5.3':
     resolution: {integrity: sha512-CCcUltXMOfUEArbf3db3kCE7Ggy1ExBEBl51Ko2ODJ6GDYHRp1nSNlQm5uNCFY5k7/ufaK5Ib3Du/Zir19IYQQ==}
 
+  '@tauri-store/pinia@4.2.0':
+    resolution: {integrity: sha512-fOwbrAuAN5kdjU42jjgOb6qAisglyskgVgAfSdLyz3lyxgN/2xRR4boQmzD6M40Q5mmX9TxMuAaL2bm5AZyEmw==}
+
+  '@tauri-store/shared@0.10.3':
+    resolution: {integrity: sha512-6S2SbYxZUBOLL/t+49cIF4gdZNxYnw9yitNlIUsgiPI5ApRtdXfj4JdQd7WmDwoQXXTOzlOYaqGpmICWhzmmRg==}
+
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
@@ -883,6 +892,9 @@ packages:
   entities@7.0.1:
     resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
     engines: {node: '>=0.12'}
+
+  es-toolkit@1.46.1:
+    resolution: {integrity: sha512-5eNtXOs3tbfxXOj04tjjseeWkRWaoCjdEI+96DgwzZoe6c9juL49pXlzAFTI72aWC9Y8p7168g6XIKjh7k6pyQ==}
 
   esbuild@0.25.12:
     resolution: {integrity: sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==}
@@ -1817,6 +1829,20 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.10.1
 
+  '@tauri-store/pinia@4.2.0(typescript@5.6.3)':
+    dependencies:
+      '@tauri-apps/api': 2.11.0
+      '@tauri-store/shared': 0.10.3
+      pinia: 3.0.4(typescript@5.6.3)(vue@3.5.33(typescript@5.6.3))
+      vue: 3.5.33(typescript@5.6.3)
+    transitivePeerDependencies:
+      - typescript
+
+  '@tauri-store/shared@0.10.3':
+    dependencies:
+      '@tauri-apps/api': 2.11.0
+      es-toolkit: 1.46.1
+
   '@types/estree@1.0.8': {}
 
   '@types/node@25.6.0':
@@ -2033,6 +2059,8 @@ snapshots:
       tapable: 2.3.3
 
   entities@7.0.1: {}
+
+  es-toolkit@1.46.1: {}
 
   esbuild@0.25.12:
     optionalDependencies:
