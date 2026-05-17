@@ -2,7 +2,9 @@
   <div class="min-h-ui flex w-full flex-col gap-4">
     <div class="flex items-center gap-2">
       <Switch id="proxy-enabled" v-model="requestStore.proxyConfig.enabled" />
-      <label for="proxy-enabled" class="text-sm font-medium">啟用 Proxy</label>
+      <label for="proxy-enabled" class="text-sm font-medium">
+        {{ $t("settings_panel.tabs.proxy.enable") }}
+      </label>
     </div>
 
     <div
@@ -16,7 +18,7 @@
         <div class="flex items-center gap-2">
           <div class="flex flex-1 flex-col gap-1 transition-colors">
             <label class="text-sm font-semibold" for="proxy-host">
-              Proxy 主機
+              {{ $t("settings_panel.tabs.proxy.hostname.label") }}
             </label>
             <div class="flex overflow-hidden rounded-md border">
               <Select
@@ -24,7 +26,13 @@
                 class="w-32 flex-shrink-0 rounded-none border-0 bg-transparent p-0"
               >
                 <SelectTrigger class="rounded-none border-0">
-                  <SelectValue placeholder="選擇協議" />
+                  <SelectValue
+                    :placeholder="
+                      $t(
+                        'settings_panel.tabs.proxy.hostname.protocol_placeholder',
+                      )
+                    "
+                  />
                 </SelectTrigger>
                 <SelectContent align="start" class="mt-2">
                   <SelectItem value="http">HTTP</SelectItem>
@@ -50,7 +58,9 @@
               <Input
                 id="proxy-host"
                 v-model="requestStore.proxyConfig.host"
-                placeholder="例如: proxy.example.com"
+                :placeholder="
+                  $t('settings_panel.tabs.proxy.hostname.placeholder')
+                "
                 class="focus-visible:bg-ctp-surface0 flex-1 rounded-none border-none transition-colors [&:focus-visible]:ring-0"
               />
             </div>
@@ -62,7 +72,9 @@
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold" for="proxy-port">端口</label>
+            <label class="text-sm font-semibold" for="proxy-port">
+              {{ $t("settings_panel.tabs.proxy.port.label") }}
+            </label>
             <Input
               id="proxy-port"
               v-model.number="requestStore.proxyConfig.port"
@@ -82,31 +94,35 @@
         <div class="flex items-center gap-2">
           <Switch id="proxy-auth-enabled" v-model="proxyAuthEnabled" />
           <label for="proxy-auth-enabled" class="text-sm font-medium">
-            我的 Proxy 有登入驗證
+            {{ $t("settings_panel.tabs.proxy.auth.enable_auth.label") }}
           </label>
         </div>
 
         <div v-if="requestStore.proxyConfig.auth" class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold" for="proxy-username"
-              >帳號</label
-            >
+            <label class="text-sm font-semibold" for="proxy-username">{{
+              $t("settings_panel.tabs.proxy.auth.username.label")
+            }}</label>
             <Input
               id="proxy-username"
               v-model="requestStore.proxyConfig.auth.username"
-              placeholder="username"
+              :placeholder="
+                $t('settings_panel.tabs.proxy.auth.username.placeholder')
+              "
               :disabled="!proxyAuthEnabled"
             />
           </div>
           <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold" for="proxy-password"
-              >密碼</label
-            >
+            <label class="text-sm font-semibold" for="proxy-password">{{
+              $t("settings_panel.tabs.proxy.auth.password.label")
+            }}</label>
             <Input
               id="proxy-password"
               v-model="requestStore.proxyConfig.auth.password"
               type="password"
-              placeholder="password"
+              :placeholder="
+                $t('settings_panel.tabs.proxy.auth.password.placeholder')
+              "
               :disabled="!proxyAuthEnabled"
             />
           </div>
@@ -123,7 +139,7 @@
             v-model="requestStore.proxyConfig.checkBeforeSend"
           />
           <label for="proxy-check-before-send" class="text-sm font-medium">
-            在發送請求前先測試 Proxy 是否可用
+            {{ $t("settings_panel.tabs.proxy.check_before_send.label") }}
           </label>
         </div>
       </div>

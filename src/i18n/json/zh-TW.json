@@ -38,5 +38,16 @@
   "settings_panel.tabs.body.body_original.language_placeholder": "選擇語言",
   "settings_panel.tabs.body.body_original.load_from_file": "從檔案匯入",
 
-  "settings_panel.tabs.proxy": "代理"
+  "settings_panel.tabs.proxy": "代理",
+  "settings_panel.tabs.proxy.enable": "啟用 Proxy",
+  "settings_panel.tabs.proxy.hostname.label": "Proxy 主機",
+  "settings_panel.tabs.proxy.hostname.placeholder": "例如: proxy.example.com",
+  "settings_panel.tabs.proxy.hostname.protocol_placeholder": "選擇協議",
+  "settings_panel.tabs.proxy.port.label": "端口",
+  "settings_panel.tabs.proxy.auth.enable_auth.label": "我的 Proxy 有登入驗證",
+  "settings_panel.tabs.proxy.auth.username.label": "帳號",
+  "settings_panel.tabs.proxy.auth.username.placeholder": "username",
+  "settings_panel.tabs.proxy.auth.password.label": "密碼",
+  "settings_panel.tabs.proxy.auth.password.placeholder": "password",
+  "settings_panel.tabs.proxy.check_before_send.label": "在發送請求前先測試 Proxy 是否可用"
 }
