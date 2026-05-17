@@ -1,4 +1,5 @@
 <template>
+  <ConfigLoader />
   <Dialog v-model:open="isOpen">
     <DialogTrigger>
       <slot name="settings" />
@@ -46,6 +47,7 @@ import { computed } from "vue";
 import { Settings, Palette } from "@lucide/vue";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
+import ConfigLoader from "@/components/core/ConfigLoader.vue";
 
 const props = defineProps<{ open?: boolean }>();
 const emit = defineEmits(["update:open"]);

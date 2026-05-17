@@ -11,9 +11,7 @@
       <Select v-model="language">
         <SelectTrigger class="w-32">
           <SelectValue
-            :placeholder="
-              $t('settings_panel.tabs.general.language.placeholder')
-            "
+            :placeholder="$t('settings_panel.general.language.placeholder')"
           />
         </SelectTrigger>
         <SelectContent>
