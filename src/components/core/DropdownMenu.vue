@@ -17,12 +17,21 @@
 
       <DropdownMenuSeparator />
 
+      <DropdownMenuItem @click="openSettings()">
+        <Bolt />
+        設定
+      </DropdownMenuItem>
+
+      <DropdownMenuSeparator />
+
       <DropdownMenuItem @click="Window.openAboutWindow()">
         <Info />
         關於 LigHTTP
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
+
+  <SettingPanel v-model:open="isSettingsOpen" />
 </template>
 
 <script setup lang="ts">
@@ -33,9 +42,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Info, EllipsisVertical, Save, FolderOpen } from "@lucide/vue";
+import { Info, EllipsisVertical, Save, FolderOpen, Bolt } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
 import { Window, FileHelpers } from "@/services";
+import SettingPanel from "@/components/settings/SettingsPanel.vue";
+import { ref } from "vue";
+
+const isSettingsOpen = ref(false);
+
+function openSettings() {
+  isSettingsOpen.value = true;
+}
 </script>
 
 <style scoped></style>
