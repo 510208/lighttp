@@ -4,8 +4,12 @@
       <Table class="h-full w-full table-fixed overflow-y-scroll">
         <TableHeader>
           <TableRow class="border-ctp-surface1">
-            <TableHead>鍵</TableHead>
-            <TableHead>值</TableHead>
+            <TableHead>{{
+              $t("home.response_panel.header_table.key_header")
+            }}</TableHead>
+            <TableHead>{{
+              $t("home.response_panel.header_table.value_header")
+            }}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -54,7 +58,7 @@
                   >
                   <Separator class="my-2" />
                   <p class="text-ctp-text-subtle text-sm">
-                    點擊下方按鈕可複製完整內容
+                    {{ $t("home.response_panel.header_table.copy_hint") }}
                   </p>
                 </HoverCardContent>
               </HoverCard>
@@ -110,10 +114,10 @@ function breakLongValue(value: string): string {
 function copyToClipboard(text: string) {
   navigator.clipboard.writeText(text).then(
     () => {
-      toast.success("已複製到剪貼簿");
+      toast.success($t("home.response_panel.header_table.toast.copy_success"));
     },
     (_err) => {
-      toast.error("複製失敗");
+      toast.error($t("home.response_panel.header_table.toast.copy_error"));
     },
   );
 }

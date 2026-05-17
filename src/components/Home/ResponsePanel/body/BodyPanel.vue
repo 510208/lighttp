@@ -16,9 +16,9 @@
         <IconContainer><Binary /></IconContainer>
 
         <p class="text-ctp-overlay2 text-sm">
-          回應內容為媒體類型，為保證系統安全已隱藏。<br />
+          {{ $t("home.response_panel.body_panel.media_hidden_warning") }}<br />
 
-          可點擊下方按鈕強制顯示（請確保回應內容安全無害）。
+          {{ $t("home.response_panel.body_panel.media_hidden_hint") }}
         </p>
 
         <Button
@@ -26,10 +26,12 @@
           @click="
             forceShowMedia = true;
 
-            toast.success('已強制顯示回應內容，請注意安全！');
+            toast.success(
+              $t('home.response_panel.body_panel.toast.force_show_success'),
+            );
           "
         >
-          強制顯示回應內容
+          {{ $t("home.response_panel.body_panel.force_show_button") }}
         </Button>
       </div>
 
@@ -68,30 +70,32 @@
         <DropdownMenuContent align="end">
           <DropdownMenuItem @click="copyToClipboard">
             <Copy />
-            複製回應結果
+            {{ $t("home.response_panel.body_panel.copy_response") }}
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem @click="generateJsonSchema">
             <Braces />
-            生成 JSON Schema
+            {{ $t("home.response_panel.body_panel.generate_json_schema") }}
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <BookA />
-              生成型別定義
+              {{
+                $t("home.response_panel.body_panel.generate_type_definition")
+              }}
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent class="mr-2">
                 <DropdownMenuItem @click="generatePythonType">
-                  Python
+                  {{ $t("home.response_panel.body_panel.language_python") }}
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="generateTypeScriptType">
-                  TypeScript
+                  {{ $t("home.response_panel.body_panel.language_typescript") }}
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="generateRustType">
-                  Rust
+                  {{ $t("home.response_panel.body_panel.language_rust") }}
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
@@ -102,15 +106,21 @@
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Terminal />
-              生成 Curl 指令
+              {{ $t("home.response_panel.body_panel.generate_curl") }}
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent class="mr-2">
                 <DropdownMenuItem @click="generateCurlCommand('`')">
-                  <Grid2x2 /> 生成適用於 PowerShell 的 Curl 指令
+                  <Grid2x2 />
+                  {{
+                    $t(
+                      "home.response_panel.body_panel.generate_curl_powershell",
+                    )
+                  }}
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="generateCurlCommand('\\')">
-                  <Terminal /> 生成適用於 bash 或其他 Shell 的 Curl 指令
+                  <Terminal />
+                  {{ $t("home.response_panel.body_panel.generate_curl_bash") }}
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
@@ -166,6 +176,9 @@ import {
 import { onUnmounted, ref, watch } from "vue";
 import StructureDialog from "./StructureDialog.vue";
 import { toast } from "vue-sonner";
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const forceShowMedia = ref(false);
 const mediaUrl = ref<string>("");
@@ -238,11 +251,13 @@ function copyToClipboard() {
   navigator.clipboard
     .writeText(textToCopy)
     .then(() => {
-      toast.success("成功複製回應結果到剪貼簿！");
+      toast.success(t("home.response_panel.body_panel.toast.copy_success"));
     })
     .catch((err) => {
       console.error("Failed to copy response body: ", err);
-      toast.error(`複製回應結果到剪貼簿失敗: ${err}`);
+      toast.error(
+        t("home.response_panel.body_panel.toast.copy_error", { error: err }),
+      );
     });
 }
 
@@ -250,7 +265,9 @@ function copyToClipboard() {
 async function generateJsonSchema() {
   if (responseStore.body === "") {
     console.warn("Response body is empty. Cannot generate JSON Schema.");
-    toast.error("回應結果為空，無法生成 JSON Schema。");
+    toast.error(
+      t("home.response_panel.body_panel.toast.empty_body_json_schema"),
+    );
     return;
   }
   try {
@@ -275,7 +292,9 @@ async function generateTypeScriptType() {
     console.warn(
       "Response body is empty. Cannot generate TypeScript definitions.",
     );
-    toast.error("回應結果為空，無法生成 TypeScript 定義。");
+    toast.error(
+      t("home.response_panel.body_panel.toast.empty_body_typescript"),
+    );
     return;
   }
   try {
@@ -297,7 +316,7 @@ async function generateTypeScriptType() {
 async function generatePythonType() {
   if (responseStore.body === "") {
     console.warn("Response body is empty. Cannot generate Python definitions.");
-    toast.error("回應結果為空，無法生成 Python 定義。");
+    toast.error(t("home.response_panel.body_panel.toast.empty_body_python"));
     return;
   }
   try {
@@ -319,7 +338,7 @@ async function generatePythonType() {
 async function generateRustType() {
   if (responseStore.body === "") {
     console.warn("Response body is empty. Cannot generate Rust definitions.");
-    toast.error("回應結果為空，無法生成 Rust 定義。");
+    toast.error(t("home.response_panel.body_panel.toast.empty_body_rust"));
     return;
   }
   try {
@@ -402,7 +421,9 @@ watch(
         mediaUrl.value = URL.createObjectURL(blob);
       } catch (error) {
         console.error("[Base64 Decode Error]:", error);
-        toast.error("媒體解碼失敗，請檢查回應格式是否為有效的 Base64。");
+        toast.error(
+          t("home.response_panel.body_panel.toast.media_decode_error"),
+        );
       }
     }
   },

@@ -13,6 +13,9 @@ import { Copy } from "@lucide/vue";
 
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+
 // 定義 Props
 interface Props {
   open: boolean;
@@ -36,7 +39,7 @@ const emit = defineEmits<{
 const copyToClipboard = () => {
   if (props.schema) {
     navigator.clipboard.writeText(props.schema);
-    toast.success("已複製到剪貼簿！");
+    toast.success(t("home.response_panel.structure_dialog.toast.copy_success"));
   }
 };
 </script>
@@ -45,9 +48,15 @@ const copyToClipboard = () => {
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogContent class="sm:max-w-[600px]">
       <DialogHeader>
-        <DialogTitle>產生的 {{ props.language || "JSON" }} 結構</DialogTitle>
+        <DialogTitle
+          >{{ t("home.response_panel.structure_dialog.title_prefix") }}
+          {{ props.language || "JSON" }}
+          {{
+            t("home.response_panel.structure_dialog.title_suffix")
+          }}</DialogTitle
+        >
         <DialogDescription>
-          以下是根據您的設定所產生的結構化資料。
+          {{ t("home.response_panel.structure_dialog.description") }}
         </DialogDescription>
       </DialogHeader>
 
@@ -59,32 +68,32 @@ const copyToClipboard = () => {
           :language="props.language || 'json'"
         />
         <p v-else class="text-muted-foreground text-center text-sm">
-          沒有可顯示的 Schema。
+          {{ t("home.response_panel.structure_dialog.no_schema") }}
         </p>
       </div>
 
       <DialogFooter class="flex items-center !justify-between">
         <div>
           <p class="text-muted-foreground text-left text-xs">
-            Schema 生成作業由
+            {{ t("home.response_panel.structure_dialog.credit_text") }}
             <a
               href="https://quicktype.io/"
               target="_blank"
               class="text-primary underline"
             >
-              quicktype-core
+              {{ t("home.response_panel.structure_dialog.credit_lib_name") }}
             </a>
-            提供技術支持。
+            {{ t("home.response_panel.structure_dialog.credit_suffix") }}
           </p>
         </div>
 
         <div class="flex gap-2">
           <Button variant="outline" @click="emit('update:open', false)">
-            關閉
+            {{ t("home.response_panel.structure_dialog.close_button") }}
           </Button>
           <Button @click="copyToClipboard">
             <Copy :size="16" />
-            複製結構
+            {{ t("home.response_panel.structure_dialog.copy_button") }}
           </Button>
         </div>
       </DialogFooter>
