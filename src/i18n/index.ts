@@ -10,7 +10,7 @@ const messages = {
 const i18n = createI18n({
   legacy: false,
   // 預設語言
-  locale: "en",
+  locale: "zh-TW",
   // 自動注入至全域，讓組件可以直接使用 $t 來翻譯
   globalInjection: true,
   messages: messages as any,
