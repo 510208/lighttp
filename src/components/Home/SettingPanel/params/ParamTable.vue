@@ -1,8 +1,8 @@
 <template>
   <EditableTable
-    :addButtonText="$t('settings_panel.tabs.params.add_button_text')"
-    :keyTitle="$t('settings_panel.tabs.params.key_title')"
-    :valueTitle="$t('settings_panel.tabs.params.value_title')"
+    :addButtonText="$t('home.settings_panel.tabs.params.add_button_text')"
+    :keyTitle="$t('home.settings_panel.tabs.params.key_title')"
+    :valueTitle="$t('home.settings_panel.tabs.params.value_title')"
     @add="requestStore.addParam()"
   >
     <ParamTableLine

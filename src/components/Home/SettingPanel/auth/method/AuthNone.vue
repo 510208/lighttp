@@ -6,9 +6,9 @@
       <Ghost />
     </IconContainer>
     <h3 class="text-ctp-text text-lg font-bold">
-      {{ $t("settings_panel.tabs.auth.none.title") }}
+      {{ $t("home.settings_panel.tabs.auth.none.title") }}
     </h3>
-    <p>{{ $t("settings_panel.tabs.auth.none.description") }}</p>
+    <p>{{ $t("home.settings_panel.tabs.auth.none.description") }}</p>
   </div>
 </template>
 

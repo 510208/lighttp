@@ -6,7 +6,7 @@
         <Library />
         {{
           $t(
-            "settings_panel.tabs.headers.header_template_picker.add_button_text",
+            "home.settings_panel.tabs.headers.header_template_picker.add_button_text",
           )
         }}
       </Button>
@@ -15,7 +15,9 @@
       <DialogHeader>
         <DialogTitle class="flex items-center gap-2">
           <Library />
-          {{ $t("settings_panel.tabs.headers.header_template_picker.title") }}
+          {{
+            $t("home.settings_panel.tabs.headers.header_template_picker.title")
+          }}
         </DialogTitle>
       </DialogHeader>
       <div class="flex max-h-60 gap-2 overflow-y-auto">
@@ -50,7 +52,7 @@
             <p class="text-ctp-textSubtle mb-1 text-xs">
               {{
                 $t(
-                  "settings_panel.tabs.headers.header_template_picker.value_label",
+                  "home.settings_panel.tabs.headers.header_template_picker.value_label",
                 )
               }}
             </p>
@@ -58,7 +60,7 @@
               v-model="selectedHeaderTemplate.value"
               :placeholder="
                 $t(
-                  'settings_panel.tabs.headers.header_template_picker.value_placeholder',
+                  'home.settings_panel.tabs.headers.header_template_picker.value_placeholder',
                 )
               "
               class="mb-2 w-full"
@@ -71,7 +73,7 @@
           <Button variant="outline">
             {{
               $t(
-                "settings_panel.tabs.headers.header_template_picker.cancel_button_text",
+                "home.settings_panel.tabs.headers.header_template_picker.cancel_button_text",
               )
             }}
           </Button>
@@ -83,7 +85,7 @@
           <Plus />
           {{
             $t(
-              "settings_panel.tabs.headers.header_template_picker.confirm_button_text",
+              "home.settings_panel.tabs.headers.header_template_picker.confirm_button_text",
             )
           }}
         </Button>

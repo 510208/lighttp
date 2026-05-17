@@ -3,7 +3,7 @@
     <div class="flex items-center gap-2">
       <Switch id="proxy-enabled" v-model="requestStore.proxyConfig.enabled" />
       <label for="proxy-enabled" class="text-sm font-medium">
-        {{ $t("settings_panel.tabs.proxy.enable") }}
+        {{ $t("home.settings_panel.tabs.proxy.enable") }}
       </label>
     </div>
 
@@ -18,7 +18,7 @@
         <div class="flex items-center gap-2">
           <div class="flex flex-1 flex-col gap-1 transition-colors">
             <label class="text-sm font-semibold" for="proxy-host">
-              {{ $t("settings_panel.tabs.proxy.hostname.label") }}
+              {{ $t("home.settings_panel.tabs.proxy.hostname.label") }}
             </label>
             <div class="flex overflow-hidden rounded-md border">
               <Select
@@ -29,7 +29,7 @@
                   <SelectValue
                     :placeholder="
                       $t(
-                        'settings_panel.tabs.proxy.hostname.protocol_placeholder',
+                        'home.settings_panel.tabs.proxy.hostname.protocol_placeholder',
                       )
                     "
                   />
@@ -59,7 +59,7 @@
                 id="proxy-host"
                 v-model="requestStore.proxyConfig.host"
                 :placeholder="
-                  $t('settings_panel.tabs.proxy.hostname.placeholder')
+                  $t('home.settings_panel.tabs.proxy.hostname.placeholder')
                 "
                 class="focus-visible:bg-ctp-surface0 flex-1 rounded-none border-none transition-colors [&:focus-visible]:ring-0"
               />
@@ -73,7 +73,7 @@
 
           <div class="flex flex-col gap-1">
             <label class="text-sm font-semibold" for="proxy-port">
-              {{ $t("settings_panel.tabs.proxy.port.label") }}
+              {{ $t("home.settings_panel.tabs.proxy.port.label") }}
             </label>
             <Input
               id="proxy-port"
@@ -94,34 +94,34 @@
         <div class="flex items-center gap-2">
           <Switch id="proxy-auth-enabled" v-model="proxyAuthEnabled" />
           <label for="proxy-auth-enabled" class="text-sm font-medium">
-            {{ $t("settings_panel.tabs.proxy.auth.enable_auth.label") }}
+            {{ $t("home.settings_panel.tabs.proxy.auth.enable_auth.label") }}
           </label>
         </div>
 
         <div v-if="requestStore.proxyConfig.auth" class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
             <label class="text-sm font-semibold" for="proxy-username">{{
-              $t("settings_panel.tabs.proxy.auth.username.label")
+              $t("home.settings_panel.tabs.proxy.auth.username.label")
             }}</label>
             <Input
               id="proxy-username"
               v-model="requestStore.proxyConfig.auth.username"
               :placeholder="
-                $t('settings_panel.tabs.proxy.auth.username.placeholder')
+                $t('home.settings_panel.tabs.proxy.auth.username.placeholder')
               "
               :disabled="!proxyAuthEnabled"
             />
           </div>
           <div class="flex flex-col gap-1">
             <label class="text-sm font-semibold" for="proxy-password">{{
-              $t("settings_panel.tabs.proxy.auth.password.label")
+              $t("home.settings_panel.tabs.proxy.auth.password.label")
             }}</label>
             <Input
               id="proxy-password"
               v-model="requestStore.proxyConfig.auth.password"
               type="password"
               :placeholder="
-                $t('settings_panel.tabs.proxy.auth.password.placeholder')
+                $t('home.settings_panel.tabs.proxy.auth.password.placeholder')
               "
               :disabled="!proxyAuthEnabled"
             />
@@ -139,7 +139,7 @@
             v-model="requestStore.proxyConfig.checkBeforeSend"
           />
           <label for="proxy-check-before-send" class="text-sm font-medium">
-            {{ $t("settings_panel.tabs.proxy.check_before_send.label") }}
+            {{ $t("home.settings_panel.tabs.proxy.check_before_send.label") }}
           </label>
         </div>
       </div>

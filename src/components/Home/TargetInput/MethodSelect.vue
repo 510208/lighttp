@@ -6,7 +6,7 @@
     >
       <div class="flex flex-col items-start gap-1">
         <p class="text-muted-foreground text-[10px] tracking-[1px]">
-          {{ $t("target_input.method_select.label") }}
+          {{ $t("home.target_input.method_select.label") }}
         </p>
         <!-- 這裡確保 SelectValue 繼承父層顏色，或直接給它 font-bold -->
         <SelectValue class="font-space font-bold" />

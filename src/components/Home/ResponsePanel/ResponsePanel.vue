@@ -6,14 +6,14 @@
   >
     <div class="mt-4 flex items-center gap-2 px-10">
       <h2 class="text-ctp-overlay2 mr-4 text-sm font-bold">
-        {{ $t("response_panel.title") }}
+        {{ $t("home.response_panel.title") }}
       </h2>
       <PanelBadge :variant="responseStatus" :icon="Dot">
         {{
           responseStore.status === undefined
-            ? $t("response_panel.status.loading")
+            ? $t("home.response_panel.status.loading")
             : responseStore.status === null
-              ? $t("response_panel.status.no_response")
+              ? $t("home.response_panel.status.no_response")
               : responseStore.status
         }}
       </PanelBadge>
@@ -39,12 +39,12 @@
         <TabsOptions
           value="body"
           name="Body"
-          :chinese-name="$t('response_panel.tabs.body')"
+          :chinese-name="$t('home.response_panel.tabs.body')"
         />
         <TabsOptions
           value="headers"
           name="Headers"
-          :chinese-name="$t('response_panel.tabs.headers')"
+          :chinese-name="$t('home.response_panel.tabs.headers')"
         />
       </TabsList>
       <div

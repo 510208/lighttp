@@ -7,7 +7,8 @@
     <SelectTrigger size="sm">
       <SelectValue
         :placeholder="
-          placeholder || $t('settings_panel.tabs.auth.auth_choose.placeholder')
+          placeholder ||
+          $t('home.settings_panel.tabs.auth.auth_choose.placeholder')
         "
       />
     </SelectTrigger>
