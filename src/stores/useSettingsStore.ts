@@ -18,12 +18,28 @@ export const useSettingsStore = defineStore(
       backgroundImageUrl.value = url;
     }
 
+    const uiFont = ref("");
+    function setUiFont(font: string) {
+      uiFont.value = font;
+    }
+
+    const editorFont = ref("");
+    function setEditorFont(font: string) {
+      editorFont.value = font;
+    }
+
     return {
       language,
       setLanguage,
 
       backgroundImageUrl,
       setBackgroundImageUrl,
+
+      uiFont,
+      setUiFont,
+
+      editorFont,
+      setEditorFont,
     };
   },
   {
