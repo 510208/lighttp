@@ -8,6 +8,8 @@ import BodyChoose from "./BodyChoose.vue";
 import { bodyMethods } from "@/constants/methods.ts";
 import { computed } from "vue";
 import { useRequestStore } from "@/stores/useRequestStore.ts";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const requestStore = useRequestStore();
 
@@ -43,7 +45,7 @@ const escapeHtml = (str: string) =>
 
 const selectedDescriptionHtml = computed(() => {
   const method = bodyMethods.find((m) => m.label === requestStore.bodyType);
-  const desc = method?.description || "";
+  const desc = method?.descriptionKey ? t(method.descriptionKey) : "";
   return escapeHtml(desc).replace(/\r?\n/g, "<br/>");
 });
 </script>

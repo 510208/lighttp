@@ -8,6 +8,8 @@ import AuthChoose from "./AuthChoose.vue";
 import { authMethods } from "../../../../constants/methods.ts";
 import { computed } from "vue";
 import { useRequestStore } from "@/stores/useRequestStore.ts"; // 引入您的 Store
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const requestStore = useRequestStore();
 
@@ -40,8 +42,8 @@ const escapeHtml = (str: string) =>
 const selectedDescriptionHtml = computed(() => {
   const desc =
     authMethods.find((m) => m.value === selectedAuthMethod.value)
-      ?.description || "";
-  return escapeHtml(desc).replace(/\r?\n/g, "<br/>");
+      ?.descriptionKey || null;
+  return escapeHtml(desc ? t(desc) : "").replace(/\r?\n/g, "<br/>");
 });
 </script>
 
