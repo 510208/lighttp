@@ -142,6 +142,10 @@
   "settings_panel.general.title": "General Settings",
   "settings_panel.tabs.general.language.label": "Interface Language",
   "settings_panel.tabs.general.language.description": "Select the language to be used in the interface.",
+  "settings_panel.tabs.general.language.placeholder": "Select Language",
 
-  "settings_panel.themes.title": "Theme Settings"
+  "settings_panel.themes.title": "Theme Settings",
+  "settings_panel.tabs.themes.theme_selection.label": "Background Image URL",
+  "settings_panel.tabs.themes.theme_selection.description": "Enter a direct image URL to use as the application's background image.",
+  "settings_panel.tabs.themes.theme_selection.placeholder": "https://example.com/image.jpg"
 }
