@@ -13,24 +13,6 @@
         v-model="settingsStore.backgroundImageUrl"
       />
     </ConfigOptionFrame>
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.ui_font.label"
-      description-key="settings_panel.themes.ui_font.description"
-    >
-      <Input
-        :placeholder="$t('settings_panel.themes.ui_font.placeholder')"
-        v-model="settingsStore.uiFont"
-      />
-    </ConfigOptionFrame>
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.editor_font.label"
-      description-key="settings_panel.themes.editor_font.description"
-    >
-      <Input
-        :placeholder="$t('settings_panel.themes.editor_font.placeholder')"
-        v-model="settingsStore.editorFont"
-      />
-    </ConfigOptionFrame>
   </div>
 </template>
 

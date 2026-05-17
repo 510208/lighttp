@@ -147,11 +147,5 @@
   "settings_panel.themes.title": "主題設定",
   "settings_panel.themes.theme_selection.label": "背景圖片網址",
   "settings_panel.themes.theme_selection.description": "輸入一個直連圖片網址來作為應用程式的背景圖片。",
-  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
-  "settings_panel.themes.ui_font.label": "介面字體",
-  "settings_panel.themes.ui_font.description": "輸入字體名稱以更改應用程式的介面字體，可以包含多個字體作為備選方案（例如 'Helvetica, Arial, sans-serif'）。",
-  "settings_panel.themes.ui_font.placeholder": "sans-serif",
-  "settings_panel.themes.editor_font.label": "程式碼字體",
-  "settings_panel.themes.editor_font.description": "輸入字體名稱以更改應用程式的程式碼字體，可以包含多個字體作為備選方案（例如 'Helvetica, Arial, sans-serif'）。",
-  "settings_panel.themes.editor_font.placeholder": "monospace"
+  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg"
 }

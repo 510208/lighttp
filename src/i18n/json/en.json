@@ -147,11 +147,5 @@
   "settings_panel.themes.title": "Theme Settings",
   "settings_panel.themes.theme_selection.label": "Background Image URL",
   "settings_panel.themes.theme_selection.description": "Enter a direct image URL to use as the application's background image.",
-  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
-  "settings_panel.themes.ui_font.label": "UI Font",
-  "settings_panel.themes.ui_font.description": "Enter the font name to change the application's UI font, which can include multiple fonts as fallback options (e.g., 'Helvetica, Arial, sans-serif').",
-  "settings_panel.themes.ui_font.placeholder": "sans-serif",
-  "settings_panel.themes.editor_font.label": "Editor Font",
-  "settings_panel.themes.editor_font.description": "Enter the font name to change the application's code font, which can include multiple fonts as fallback options (e.g., 'Helvetica, Arial, sans-serif').",
-  "settings_panel.themes.editor_font.placeholder": "monospace"
+  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg"
 }
