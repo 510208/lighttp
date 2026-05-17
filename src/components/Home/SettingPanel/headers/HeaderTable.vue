@@ -1,8 +1,8 @@
 <template>
   <EditableTable
-    addButtonText="新增標頭"
-    keyTitle="請求標頭"
-    valueTitle="內容"
+    :addButtonText="$t('settings_panel.tabs.headers.add_button_text')"
+    :keyTitle="$t('settings_panel.tabs.headers.key_title')"
+    :valueTitle="$t('settings_panel.tabs.headers.value_title')"
     @add="requestStore.addHeader()"
   >
     <!-- 依模板新增按鈕 -->

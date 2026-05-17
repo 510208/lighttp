@@ -1,1 +1,22 @@
-{}
+{
+  "settings_panel.tabs.params": "參數",
+  "settings_panel.tabs.params.add_button_text": "新增參數",
+  "settings_panel.tabs.params.key_title": "參數",
+  "settings_panel.tabs.params.value_title": "數值",
+
+  "settings_panel.tabs.headers": "標頭",
+  "settings_panel.tabs.headers.add_button_text": "新增標頭",
+  "settings_panel.tabs.headers.key_title": "請求標頭",
+  "settings_panel.tabs.headers.value_title": "內容",
+  "settings_panel.tabs.headers.header_template_picker.add_button_text": "從模板新增",
+  "settings_panel.tabs.headers.header_template_picker.title": "選擇標頭模板",
+  "settings_panel.tabs.headers.header_template_picker.value_label": "值：",
+  "settings_panel.tabs.headers.header_template_picker.value_placeholder": "請輸入欲使用的標頭內容...",
+  "settings_panel.tabs.headers.header_template_picker.cancel_button_text": "關閉",
+  "settings_panel.tabs.headers.header_template_picker.confirm_button_text": "新增標頭",
+
+  "settings_panel.tabs.auth": "認證",
+
+  "settings_panel.tabs.body": "主體",
+  "settings_panel.tabs.proxy": "代理"
+}

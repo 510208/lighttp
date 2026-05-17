@@ -1,8 +1,8 @@
 <template>
   <EditableTable
-    addButtonText="新增參數"
-    keyTitle="參數"
-    valueTitle="數值"
+    :addButtonText="$t('settings_panel.tabs.params.add_button_text')"
+    :keyTitle="$t('settings_panel.tabs.params.key_title')"
+    :valueTitle="$t('settings_panel.tabs.params.value_title')"
     @add="requestStore.addParam()"
   >
     <ParamTableLine

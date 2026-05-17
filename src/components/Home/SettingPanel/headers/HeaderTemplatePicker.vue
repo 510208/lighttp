@@ -3,18 +3,24 @@
   <Dialog v-model:open="open">
     <DialogTrigger>
       <Button variant="outline" class="gap-2 border-dashed">
-        <Library /> 從模板新增
+        <Library />
+        {{
+          $t(
+            "settings_panel.tabs.headers.header_template_picker.add_button_text",
+          )
+        }}
       </Button>
     </DialogTrigger>
     <DialogContent class="min-w-160" align="start">
       <DialogHeader>
-        <DialogTitle class="flex gap-2 items-center">
-          <Library /> 選擇標頭模板
+        <DialogTitle class="flex items-center gap-2">
+          <Library />
+          {{ $t("settings_panel.tabs.headers.header_template_picker.title") }}
         </DialogTitle>
       </DialogHeader>
-      <div class="flex gap-2 max-h-60 overflow-y-auto">
+      <div class="flex max-h-60 gap-2 overflow-y-auto">
         <!-- 左欄顯示所有的標頭模板 -->
-        <div class="w-60 max-h-full overflow-y-auto overflow-x-hidden">
+        <div class="max-h-full w-60 overflow-x-hidden overflow-y-auto">
           <div
             class="flex"
             v-for="template in headerTemplates"
@@ -22,7 +28,7 @@
           >
             <Button
               variant="ghost"
-              class="p-2 rounded cursor-pointer hover:bg-ctp-surface1"
+              class="hover:bg-ctp-surface1 cursor-pointer rounded p-2"
               @click="selectTemplate(template)"
             >
               {{ template.key }}
@@ -31,34 +37,55 @@
         </div>
 
         <!-- 右欄顯示選中模板的詳細內容 -->
-        <div v-if="selectedHeaderTemplate" class="p-2 flex-1">
-          <h4 class="text-base font-semibold mb-1">
+        <div v-if="selectedHeaderTemplate" class="flex-1 p-2">
+          <h4 class="mb-1 text-base font-semibold">
             {{ selectedHeaderTemplate.key }}
           </h4>
-          <p class="text-sm text-ctp-textSubtle">
+          <p class="text-ctp-textSubtle text-sm">
             {{ selectedHeaderTemplate.description }}
           </p>
 
           <!-- 內容輸入框 -->
           <div class="mt-4">
-            <p class="text-xs text-ctp-textSubtle mb-1">值：</p>
+            <p class="text-ctp-textSubtle mb-1 text-xs">
+              {{
+                $t(
+                  "settings_panel.tabs.headers.header_template_picker.value_label",
+                )
+              }}
+            </p>
             <Input
               v-model="selectedHeaderTemplate.value"
-              placeholder="請輸入欲使用的標頭內容..."
-              class="w-full mb-2"
+              :placeholder="
+                $t(
+                  'settings_panel.tabs.headers.header_template_picker.value_placeholder',
+                )
+              "
+              class="mb-2 w-full"
             />
           </div>
         </div>
       </div>
       <DialogFooter>
         <DialogClose as-child>
-          <Button variant="outline">關閉</Button>
+          <Button variant="outline">
+            {{
+              $t(
+                "settings_panel.tabs.headers.header_template_picker.cancel_button_text",
+              )
+            }}
+          </Button>
         </DialogClose>
         <Button
           type="submit"
           @click="selectedHeaderTemplate && addTemplate(selectedHeaderTemplate)"
         >
-          <Plus /> 新增標頭
+          <Plus />
+          {{
+            $t(
+              "settings_panel.tabs.headers.header_template_picker.confirm_button_text",
+            )
+          }}
         </Button>
       </DialogFooter>
     </DialogContent>
