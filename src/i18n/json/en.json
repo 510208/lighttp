@@ -138,6 +138,7 @@
   "settings_panel.title": "Settings",
   "settings_panel.tabs.general": "General",
   "settings_panel.tabs.themes": "Themes",
+  "settings_panel.tabs.define_gen": "Definition Gen",
 
   "settings_panel.general.title": "General Settings",
   "settings_panel.general.language.label": "Interface Language",
@@ -147,5 +148,11 @@
   "settings_panel.themes.title": "Theme Settings",
   "settings_panel.themes.theme_selection.label": "Background Image URL",
   "settings_panel.themes.theme_selection.description": "Enter a direct image URL to use as the application's background image.",
-  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg"
+  "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
+
+  "settings_panel.define_gen.title": "Definition Generator Settings",
+  "settings_panel.define_gen.indent.label": "Default Indent Size",
+  "settings_panel.define_gen.indent.description": "Set the number of spaces to use for indentation in the generated structure definitions. Default is 2. This setting may be overridden by certain generators.",
+  "settings_panel.define_gen.indent.options.spaces": "{count} spaces",
+  "settings_panel.define_gen.indent.options.tab": "Tab character"
 }

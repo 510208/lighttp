@@ -153,5 +153,6 @@
   "settings_panel.define_gen.title": "定義生成器設定",
   "settings_panel.define_gen.indent.label": "預設縮排大小",
   "settings_panel.define_gen.indent.description": "設定生成的結構定義中使用的縮排空格數量。預設為 2。此設定可能會被某些生成器覆蓋。",
-  "settings_panel.define_gen.indent.options.spaces": "{count} 個空格"
+  "settings_panel.define_gen.indent.options.spaces": "{count} 個空格",
+  "settings_panel.define_gen.indent.options.tab": "移位字元 (Tab)"
 }
