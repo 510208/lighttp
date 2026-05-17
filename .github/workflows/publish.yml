@@ -31,34 +31,28 @@ jobs:
         id: get-version
         shell: bash
         run: |
-          # 1. 取得當前專案設定檔中的版本號
+          # 1. 取得當前專案設定檔（tauri.conf.json）中的版本號
           CURRENT_VERSION=$(grep '"version":' src-tauri/tauri.conf.json | head -1 | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+          TARGET_TAG="app-v$CURRENT_VERSION"
+
+          # 將純版本號存入環境變數供後面重新命名步驟使用
           echo "VERSION=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-          # 2. 安全取得目前觸發的 Tag 名稱（若為手動觸發則無）
-          TRIGGERED_TAG="${{ github.ref_name }}"
+          echo "Checking if $TARGET_TAG already exists in global remote history..."
 
-          # 3. 取得 Git 歷史中「排除目前觸發標籤」之後的最新已存在 Tag
-          # 如果是手動觸發，就直接拿最新的 Tag
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            LATEST_TAG=$(git tag --sort=-v:refname | grep -v -x "$TRIGGERED_TAG" | head -n 1)
-          else
-            LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
-          fi
+          # 2. 直接對 GitHub 遠端庫查詢全部 Tag 列表 (最精確，且不需要處理本地 clone 深度問題)
+          # 只要遠端返回的 refs/tags/ 目錄包含此 Tag，就代表歷史上發布過
+          IF_EXISTS=$(git ls-remote --tags origin "refs/tags/${TARGET_TAG}" | awk '{print $2}')
 
-          if [ -z "$LATEST_TAG" ]; then
-            LATEST_TAG="v0.0.0"
-          fi
-          LATEST_VERSION=${LATEST_TAG#v}
-
-          echo "Latest deployed version in Git: $LATEST_VERSION"
-          echo "Current local project version:  $CURRENT_VERSION"
-
-          # 4. 嚴格比對：如果版本號與已發布的舊版本相同，直接中斷
-          if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
-            echo "❌ 錯誤：本地 tauri.conf.json 的版本號 ($CURRENT_VERSION) 已經在歷史中發布過！"
-            echo "請先修改專案版本號（例如改為 0.2.1 或 0.3.0）後再重新提交。"
+          if [ ! -z "$IF_EXISTS" ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "❌ 嚴格阻斷：版本衝突！"
+            echo "目標 Tag [ $TARGET_TAG ] 在此專案的 GitHub 歷史紀錄中早就已經存在！"
+            echo "請先至專案內修改 tauri.conf.json 的 \"version\"（例如升級至 0.2.1 或 0.3.0）再行觸發。"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             exit 1
+          else
+            echo "✅ 安全放行：$TARGET_TAG 是一個全未出現過的全新版本，開始建構！"
           fi
 
       - name: Setup node
