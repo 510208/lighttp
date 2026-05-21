@@ -63,7 +63,7 @@
             class="border-ctp-surface-variant bg-ctp-surface flex h-full items-center justify-center rounded-md border"
           >
             <p class="text-ctp-overlay2">
-              {{ responseStore.bodyBinaryB64 }}
+              {{ responseStore.bodyBinary }}
             </p>
           </div>
         </TabsContent>

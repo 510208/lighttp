@@ -15,21 +15,19 @@ export const useResponseStore = defineStore("response", () => {
   const status = ref<number | null | undefined>(null);
   const body = ref<string>("");
   const headers = ref<Record<string, string>>({});
-
   const timeTaken = ref<number | null>(null);
+  const bodyBinary = ref<Blob>(new Blob());
+  const contentType = ref<string>("text/plain");
+  const hexViewerBuffer = ref<Uint8Array>(new Uint8Array(0));
 
   // 計算body的檔案大小
   const size = ref<number>(0);
   watch(body, (newBody) => {
     size.value = new Blob([newBody]).size;
   });
-  const bodyBinary = ref<Blob>(new Blob());
 
-  const contentType = ref<string>("text/plain");
-
-  function setResponse(payload: any) {
+  async function setResponse(payload: any) {
     try {
-      // 檢查 payload 是否為物件，如果是字串則嘗試解析
       let responseObj: ResponseState;
       if (typeof payload === "string") {
         responseObj = JSON.parse(payload);
@@ -43,7 +41,19 @@ export const useResponseStore = defineStore("response", () => {
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
       contentType.value = headers.value["Content-Type"] || "text/plain";
-      bodyBinary.value = responseObj.bodyBinary || new Blob();
+
+      const incomingBlob = responseObj.bodyBinary || new Blob();
+      bodyBinary.value = incomingBlob;
+
+      // 核心轉換邏輯：將 Blob 轉換為 Uint8Array
+      if (incomingBlob.size > 0) {
+        // 利用 Blob 原生的 arrayBuffer 異步方法獲取底層二進位數據
+        const arrayBuffer = await incomingBlob.arrayBuffer();
+        hexViewerBuffer.value = new Uint8Array(arrayBuffer);
+      } else {
+        hexViewerBuffer.value = new Uint8Array(0);
+      }
+
       console.log("[setResponse] Response payload type:", contentType.value);
     } catch (e) {
       console.error("[setResponse] Failed to parse response payload:", e);
@@ -52,6 +62,7 @@ export const useResponseStore = defineStore("response", () => {
       body.value = "";
       timeTaken.value = null;
       contentType.value = "text/plain";
+      hexViewerBuffer.value = new Uint8Array(0);
     }
   }
 
@@ -66,6 +77,8 @@ export const useResponseStore = defineStore("response", () => {
     timeTaken,
     size,
     bodyBinary,
+    contentType,
+    hexViewerBuffer,
 
     setStatus,
     setResponse,

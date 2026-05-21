@@ -7,19 +7,48 @@ import {
 
 import { toast } from "vue-sonner";
 
-function base64ToBlob(base64: string, mimeType: string): Blob {
-  // 將 base64 字串分割成 metadata 和資料部分
-  const byteString = window.atob(base64.split(",")[1]);
+function base64ToBlob(base64Str: string, mimeType: string): Blob {
+  try {
+    let cleanBase64 = base64Str;
 
-  // 將 byteString 轉換成 ArrayBuffer
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
+    // 防禦性處理：若包含 Data URL 前綴（有逗號），則擷取後半段；否則直接使用原字串
+    if (cleanBase64.includes(",")) {
+      cleanBase64 = cleanBase64.split(",")[1];
+    }
+
+    // 將 URL 安全型字元轉換為標準 Base64 字元（預防性清洗）
+    cleanBase64 = cleanBase64.replace(/-/g, "+").replace(/_/g, "/");
+
+    // 補齊可能缺失的等號填充符
+    const padLength = cleanBase64.length % 4;
+    if (padLength > 0) {
+      cleanBase64 += "=".repeat(4 - padLength);
+    }
+
+    // 解碼為二進位字串
+    const byteString = window.atob(cleanBase64);
+    const length = byteString.length;
+
+    // 分配連續記憶體緩衝區
+    const arrayBuffer = new ArrayBuffer(length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([uint8Array], { type: mimeType });
+  } catch (error) {
+    console.error(
+      "[base64ToBlob] 轉換失敗，傳入數據：",
+      {
+        preview: base64Str?.substring(0, 30),
+        length: base64Str?.length,
+      },
+      error,
+    );
+    return new Blob([], { type: mimeType });
   }
-
-  // 將 ArrayBuffer 轉換成 Blob
-  return new Blob([ia], { type: mimeType });
 }
 
 async function sendRequest(): Promise<ResponseState | null> {
@@ -49,7 +78,7 @@ async function sendRequest(): Promise<ResponseState | null> {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
-    // console.log("[handleSend] Response from Rust:", response);
+    console.log("[handleSend] Response from Rust:", response);
 
     const responseDataParsed: ResponseState = {
       status: response.status,
@@ -86,7 +115,7 @@ async function handleSend() {
       await new Promise((resolve) => setTimeout(resolve, 200)); // 模擬處理時間，讓 loading 狀態更明顯
       // 當 sendRequest resolve 時執行
       if (data) {
-        responseStore.setResponse(data);
+        await responseStore.setResponse(data);
         return `收到結果: ${data.status} (${data.timeTaken != null ? data.timeTaken.toFixed(2) : "NaN"} ms)`;
       }
       return "請求完成";
