@@ -46,6 +46,11 @@
           name="Headers"
           :chinese-name="$t('home.response_panel.tabs.headers')"
         />
+        <TabsOptions
+          value="binary"
+          name="Binary"
+          :chinese-name="$t('home.response_panel.tabs.binary')"
+        />
       </TabsList>
       <div
         id="setting-panel-content"
@@ -53,6 +58,15 @@
       >
         <TabsContent value="body" as-child><BodyPanel /></TabsContent>
         <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
+        <TabsContent value="binary" as-child>
+          <div
+            class="border-ctp-surface-variant bg-ctp-surface flex h-full items-center justify-center rounded-md border"
+          >
+            <p class="text-ctp-overlay2">
+              {{ responseStore.bodyBinaryB64 }}
+            </p>
+          </div>
+        </TabsContent>
       </div>
     </Tabs>
   </div>
