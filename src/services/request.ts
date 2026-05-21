@@ -58,7 +58,7 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
       body_type: response.body_type || "text/plain",
       size: new Blob([response.body]).size,
-      bodyBinaryB64: base64ToBlob(
+      bodyBinary: base64ToBlob(
         response.bodyBinaryB64 || "",
         response.body_type || "application/octet-stream",
       ),
