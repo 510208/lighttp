@@ -168,20 +168,30 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
     let headers = response.headers().clone();
     let content_type = get_content_type(&headers);
 
+    // 讀取原始回應內容為二進位位元組，避免 Response 被提前消耗
+    let body_bytes = response.bytes().await.unwrap_or_default();
+
+    // 將原始二進位內容進行 Base64 編碼
+    let base64_encoded = general_purpose::STANDARD.encode(&body_bytes);
+
     if is_media_content_type(&content_type) {
-        let body_bytes = response.bytes().await.unwrap_or_default();
         ResponsePayload {
             status,
             headers: to_hashmap(&headers),
             body_type: content_type,
-            body: general_purpose::STANDARD.encode(body_bytes),
+            body: base64_encoded.clone(),
+            body_binary_b64: Some(base64_encoded),
         }
     } else {
+        // 將二進位位元組轉換為 UTF-8 字串，若轉換失敗則回傳空字串
+        let text_body = String::from_utf8(body_bytes.to_vec()).unwrap_or_default();
+
         ResponsePayload {
             status,
             headers: to_hashmap(&headers),
             body_type: content_type,
-            body: response.text().await.unwrap_or_default(),
+            body: text_body,
+            body_binary_b64: Some(base64_encoded),
         }
     }
 }
@@ -195,6 +205,7 @@ fn build_error_response(status: u16, message: String) -> ResponsePayload {
         headers: HashMap::new(),
         body_type: "text".into(), // 錯誤情況下，body_type 可以設為 "text"
         body: message,
+        body_binary_b64: None,
     }
 }
 

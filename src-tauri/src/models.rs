@@ -113,8 +113,12 @@ pub struct RequestPayload {
 
 #[derive(Serialize, Debug)]
 pub struct ResponsePayload {
-    pub status: u16,                      // HTTP 狀態碼 (例如 200, 404)
-    pub body_type: String,                // 回應主體的類型 (例如 "text", "json", "binary")
-    pub body: String,                     // 回應的主體內容
+    pub status: u16,       // HTTP 狀態碼 (例如 200, 404)
+    pub body_type: String, // 回應主體的類型 (例如 "text", "json", "binary")
+    pub body: String,      // 回應的主體內容
+
+    #[serde(rename = "bodyBinaryB64")]
+    pub body_binary_b64: Option<String>, // 如果 body_type 是 "binary"，則這裡會有 base64 編碼的二進位資料
+
     pub headers: HashMap<String, String>, // 回應標頭
 }
