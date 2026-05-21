@@ -7,6 +7,11 @@ import {
 
 import type { AuthStore, AuthStoreForBackend } from "./authType.d";
 import type { ProxyConfig } from "./proxyConfig.d";
+import { getVersion } from "@tauri-apps/api/app";
+
+const defaultUA = await getVersion().then((version) => {
+  return `LigHTTP/${version}`;
+});
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
@@ -14,7 +19,20 @@ export const useRequestStore = defineStore("request", () => {
 
   // 基礎資料
   const params = ref<KeyValuePair[]>([]);
-  const headers = ref<KeyValuePair[]>([]);
+  const headers = ref<KeyValuePair[]>([
+    {
+      id: crypto.randomUUID(),
+      enabled: true,
+      key: "Content-Type",
+      value: "application/json",
+    },
+    {
+      id: crypto.randomUUID(),
+      enabled: true,
+      key: "User-Agent",
+      value: defaultUA,
+    },
+  ]);
 
   // 認證資料
   const auth = ref<AuthStore>({
