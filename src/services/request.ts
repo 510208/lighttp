@@ -7,6 +7,21 @@ import {
 
 import { toast } from "vue-sonner";
 
+function base64ToBlob(base64: string, mimeType: string): Blob {
+  // 將 base64 字串分割成 metadata 和資料部分
+  const byteString = window.atob(base64.split(",")[1]);
+
+  // 將 byteString 轉換成 ArrayBuffer
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  // 將 ArrayBuffer 轉換成 Blob
+  return new Blob([ia], { type: mimeType });
+}
+
 async function sendRequest(): Promise<ResponseState | null> {
   const requestStore = useRequestStore();
   const responseStore = useResponseStore();
@@ -43,6 +58,10 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
       body_type: response.body_type || "text/plain",
       size: new Blob([response.body]).size,
+      bodyBinaryB64: base64ToBlob(
+        response.bodyBinaryB64 || "",
+        response.body_type || "application/octet-stream",
+      ),
     };
 
     // toast.success(
