@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col border-t">
+  <div class="relative flex h-full flex-col border-t">
     <CodeViewer
       :model-value="responseStore.body"
       :language="responseLanguage"
@@ -36,7 +36,6 @@
       </div>
 
       <div v-else class="h-full">
-        <!-- 根據不同的 Content-Type 渲染標籤 -->
         <template v-if="getMediaType() === 'image'">
           <img
             :src="mediaUrl"
@@ -52,146 +51,31 @@
           <audio :src="mediaUrl" controls></audio>
         </template>
 
-        <!-- 其他二進位檔案或未知媒體 -->
         <template v-else>
           <iframe :src="mediaUrl" class="h-full w-full rounded"></iframe>
         </template>
       </div>
     </div>
-
-    <!-- 絕對值定位的按鈕，用於提供更多操作 -->
-    <div class="absolute right-6 bottom-10">
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button variant="outline" size="icon-sm">
-            <EllipsisVertical />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem @click="copyToClipboard">
-            <Copy />
-            {{ $t("home.response_panel.body_panel.copy_response") }}
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem @click="generateJsonSchema">
-            <Braces />
-            {{ $t("home.response_panel.body_panel.generate_json_schema") }}
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <BookA />
-              {{
-                $t("home.response_panel.body_panel.generate_type_definition")
-              }}
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent class="mr-2">
-                <DropdownMenuItem @click="generatePythonType">
-                  {{ $t("home.response_panel.body_panel.language_python") }}
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="generateTypeScriptType">
-                  {{ $t("home.response_panel.body_panel.language_typescript") }}
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="generateRustType">
-                  {{ $t("home.response_panel.body_panel.language_rust") }}
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <Terminal />
-              {{ $t("home.response_panel.body_panel.generate_curl") }}
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent class="mr-2">
-                <DropdownMenuItem @click="generateCurlCommand('`')">
-                  <Grid2x2 />
-                  {{
-                    $t(
-                      "home.response_panel.body_panel.generate_curl_powershell",
-                    )
-                  }}
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="generateCurlCommand('\\')">
-                  <Terminal />
-                  {{ $t("home.response_panel.body_panel.generate_curl_bash") }}
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <StructureDialog
-        v-model:open="isModalOpen"
-        :schema="generatedSchema"
-        :language="schemaLanguage"
-      />
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuPortal,
-} from "@/components/ui/dropdown-menu";
 import IconContainer from "@/components/ui/icon-ct/IconContainer.vue";
-import Button from "../../../ui/button/Button.vue";
+import { Button } from "@/components/ui/button";
 import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 
-import { useRequestStore } from "@/stores/useRequestStore.ts";
 import { useResponseStore } from "@/stores/useResponseStore.ts";
-
-import {
-  EllipsisVertical,
-  Copy,
-  Braces,
-  BookA,
-  Binary,
-  Terminal,
-  Grid2x2,
-} from "@lucide/vue";
-import {
-  convertJsonToSchema,
-  convertJsonToTypeScript,
-  convertJsonToPython,
-  convertJsonToRust,
-  getCurlCommand,
-} from "@/lib/getStructure.ts";
-
+import { Binary } from "@lucide/vue";
 import { onUnmounted, ref, watch } from "vue";
-import StructureDialog from "./StructureDialog.vue";
 import { toast } from "vue-sonner";
-
 import { useI18n } from "vue-i18n";
+
 const { t } = useI18n();
-
-import { useSettingsStore } from "@/stores/useSettingsStore.ts";
-const settingsStore = useSettingsStore();
-
 const forceShowMedia = ref(false);
 const mediaUrl = ref<string>("");
 
-const requestStore = useRequestStore();
 const responseStore = useResponseStore();
 const URL = globalThis.URL;
-
-const isModalOpen = ref(false);
-const generatedSchema = ref<string | null>(null);
 
 // 監控 responseStore.header中的 Content-Type，根據不同的類型設置 responseLanguage
 const responseLanguage = ref<string>("json");
@@ -233,157 +117,6 @@ watch(
   { immediate: true },
 );
 
-const schemaLanguage = ref<string>("json");
-
-function getContent() {
-  if (responseStore.body === "") {
-    return "";
-  }
-  const bodyObject = JSON.parse(responseStore.body);
-  console.log("[Parsed Body Object]:", bodyObject);
-  console.log(
-    "[Stringified Body Object]:",
-    JSON.stringify(bodyObject, null, 2),
-  );
-  return JSON.stringify(bodyObject, null, 2);
-}
-
-// 複製
-function copyToClipboard() {
-  const textToCopy = getContent();
-  navigator.clipboard
-    .writeText(textToCopy)
-    .then(() => {
-      toast.success(t("home.response_panel.body_panel.toast.copy_success"));
-    })
-    .catch((err) => {
-      console.error("Failed to copy response body: ", err);
-      toast.error(
-        t("home.response_panel.body_panel.toast.copy_error", { error: err }),
-      );
-    });
-}
-
-// 生成 JSON Schema
-async function generateJsonSchema() {
-  if (responseStore.body === "") {
-    console.warn("Response body is empty. Cannot generate JSON Schema.");
-    toast.error(
-      t("home.response_panel.body_panel.toast.empty_body_json_schema"),
-    );
-    return;
-  }
-  try {
-    const jsonSchema = await convertJsonToSchema(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
-    console.log("Generated JSON Schema:", jsonSchema);
-
-    generatedSchema.value = jsonSchema;
-    schemaLanguage.value = "json";
-    isModalOpen.value = true;
-  } catch (error) {
-    console.error(
-      "Failed to parse response body or generate JSON Schema: ",
-      error,
-    );
-  }
-}
-
-// 生成型別定義
-//   TypeScript
-async function generateTypeScriptType() {
-  if (responseStore.body === "") {
-    console.warn(
-      "Response body is empty. Cannot generate TypeScript definitions.",
-    );
-    toast.error(
-      t("home.response_panel.body_panel.toast.empty_body_typescript"),
-    );
-    return;
-  }
-  try {
-    const typeScriptDef = await convertJsonToTypeScript(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
-    console.log("Generated TypeScript Definitions:", typeScriptDef);
-
-    generatedSchema.value = typeScriptDef;
-    schemaLanguage.value = "typescript";
-    isModalOpen.value = true;
-  } catch (error) {
-    console.error(
-      "Failed to parse response body or generate TypeScript definitions: ",
-      error,
-    );
-  }
-}
-
-//   Python
-async function generatePythonType() {
-  if (responseStore.body === "") {
-    console.warn("Response body is empty. Cannot generate Python definitions.");
-    toast.error(t("home.response_panel.body_panel.toast.empty_body_python"));
-    return;
-  }
-  try {
-    const pythonDef = await convertJsonToPython(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
-    console.log("Generated Python Definitions:", pythonDef);
-
-    generatedSchema.value = pythonDef;
-    schemaLanguage.value = "python";
-    isModalOpen.value = true;
-  } catch (error) {
-    console.error(
-      "Failed to parse response body or generate Python definitions: ",
-      error,
-    );
-  }
-}
-
-//   Rust
-async function generateRustType() {
-  if (responseStore.body === "") {
-    console.warn("Response body is empty. Cannot generate Rust definitions.");
-    toast.error(t("home.response_panel.body_panel.toast.empty_body_rust"));
-    return;
-  }
-  try {
-    const rustDef = await convertJsonToRust(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
-    console.log("Generated Rust Definitions:", rustDef);
-
-    generatedSchema.value = rustDef;
-    schemaLanguage.value = "rust";
-    isModalOpen.value = true;
-  } catch (error) {
-    console.error(
-      "Failed to parse response body or generate Rust definitions: ",
-      error,
-    );
-  }
-}
-
-//   curl 指令
-function generateCurlCommand(symbol: string) {
-  const curlCommand = getCurlCommand(
-    requestStore,
-    settingsStore.defaultIndentSize,
-    symbol,
-  );
-  generatedSchema.value = curlCommand;
-  schemaLanguage.value = "shell";
-  isModalOpen.value = true;
-}
-
-// ------
 function getMediaType(): "image" | "video" | "audio" | "other" {
   const contentType =
     Object.entries(responseStore.headers)
