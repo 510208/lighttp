@@ -7,50 +7,6 @@ import {
 
 import { toast } from "vue-sonner";
 
-function base64ToBlob(base64Str: string, mimeType: string): Blob {
-  try {
-    let cleanBase64 = base64Str;
-
-    // 防禦性處理：若包含 Data URL 前綴（有逗號），則擷取後半段；否則直接使用原字串
-    if (cleanBase64.includes(",")) {
-      cleanBase64 = cleanBase64.split(",")[1];
-    }
-
-    // 將 URL 安全型字元轉換為標準 Base64 字元（預防性清洗）
-    cleanBase64 = cleanBase64.replace(/-/g, "+").replace(/_/g, "/");
-
-    // 補齊可能缺失的等號填充符
-    const padLength = cleanBase64.length % 4;
-    if (padLength > 0) {
-      cleanBase64 += "=".repeat(4 - padLength);
-    }
-
-    // 解碼為二進位字串
-    const byteString = window.atob(cleanBase64);
-    const length = byteString.length;
-
-    // 分配連續記憶體緩衝區
-    const arrayBuffer = new ArrayBuffer(length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-
-    for (let i = 0; i < length; i++) {
-      uint8Array[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([uint8Array], { type: mimeType });
-  } catch (error) {
-    console.error(
-      "[base64ToBlob] 轉換失敗，傳入數據：",
-      {
-        preview: base64Str?.substring(0, 30),
-        length: base64Str?.length,
-      },
-      error,
-    );
-    return new Blob([], { type: mimeType });
-  }
-}
-
 async function sendRequest(): Promise<ResponseState | null> {
   const requestStore = useRequestStore();
   const responseStore = useResponseStore();
@@ -87,10 +43,8 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
       body_type: response.body_type || "text/plain",
       size: new Blob([response.body]).size,
-      bodyBinary: base64ToBlob(
-        response.bodyBinaryB64 || "",
-        response.body_type || "application/octet-stream",
-      ),
+      bodyBinary: response.bodyBinary as Uint8Array,
+      bodyB64: response.body_binary_b64,
     };
 
     // toast.success(
