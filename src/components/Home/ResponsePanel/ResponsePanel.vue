@@ -58,15 +58,7 @@
       >
         <TabsContent value="body" as-child><BodyPanel /></TabsContent>
         <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
-        <TabsContent value="binary" as-child>
-          <div
-            class="border-ctp-surface-variant bg-ctp-surface flex h-full items-center justify-center rounded-md border"
-          >
-            <p class="text-ctp-overlay2">
-              {{ responseStore.bodyBinary }}
-            </p>
-          </div>
-        </TabsContent>
+        <TabsContent value="binary" as-child><BinaryPanel /></TabsContent>
       </div>
     </Tabs>
   </div>
@@ -79,6 +71,7 @@ import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import TabsOptions from "@/components/common/TabsOption.vue";
 import PanelBadge from "./common/PanelBadge.vue";
 import BodyPanel from "./body/BodyPanel.vue";
+import BinaryPanel from "./binary/BinaryPanel.vue";
 import HeaderTable from "./header/HeaderTable.vue";
 import WaitingResponse from "./WaitingResponseMessage.vue";
 import ErrorResponse from "./ErrorResponse.vue";
