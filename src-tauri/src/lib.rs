@@ -180,6 +180,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
             headers: to_hashmap(&headers),
             body_type: content_type,
             body: base64_encoded.clone(),
+            body_binary: body_bytes.to_vec(),
             body_binary_b64: Some(base64_encoded),
         }
     } else {
@@ -191,6 +192,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
             headers: to_hashmap(&headers),
             body_type: content_type,
             body: text_body,
+            body_binary: body_bytes.to_vec(), // 非媒體類型仍然返回二進位資料
             body_binary_b64: Some(base64_encoded),
         }
     }
@@ -205,6 +207,7 @@ fn build_error_response(status: u16, message: String) -> ResponsePayload {
         headers: HashMap::new(),
         body_type: "text".into(), // 錯誤情況下，body_type 可以設為 "text"
         body: message,
+        body_binary: Vec::new(), // 錯誤情況下，二進位資料為空
         body_binary_b64: None,
     }
 }

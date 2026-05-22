@@ -117,8 +117,9 @@ pub struct ResponsePayload {
     pub body_type: String, // 回應主體的類型 (例如 "text", "json", "binary")
     pub body: String,      // 回應的主體內容
 
-    #[serde(rename = "bodyBinaryB64")]
-    pub body_binary_b64: Option<String>, // 如果 body_type 是 "binary"，則這裡會有 base64 編碼的二進位資料
+    #[serde(rename = "bodyBinary")]
+    pub body_binary: Vec<u8>, // 如果 body_type 是 "binary"，則這裡會有 base64 編碼的二進位資料
+    pub body_binary_b64: Option<String>, // 原始的 base64 編碼字串，保留以供前端使用
 
     pub headers: HashMap<String, String>, // 回應標頭
 }
