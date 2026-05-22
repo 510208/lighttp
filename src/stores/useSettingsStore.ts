@@ -6,19 +6,22 @@ export const useSettingsStore = defineStore(
   "settings",
   () => {
     const language = ref("zh-TW");
+    const backgroundImageUrl = ref("");
+    const defaultIndentSize = ref(2) as Ref<number | string>;
+    const hexViewerConfig = ref({
+      enabled: true,
+      theme: "terminal",
+    });
+
     function setLanguage(newLang: string) {
       language.value = newLang;
-
       // 重新載入語言以應用新的語言設定
       changeLang(newLang);
     }
 
-    const backgroundImageUrl = ref("");
     function setBackgroundImageUrl(url: string) {
       backgroundImageUrl.value = url;
     }
-
-    const defaultIndentSize = ref(2) as Ref<number | string>;
 
     return {
       language,
@@ -28,6 +31,8 @@ export const useSettingsStore = defineStore(
       setBackgroundImageUrl,
 
       defaultIndentSize,
+
+      hexViewerConfig,
     };
   },
   {
