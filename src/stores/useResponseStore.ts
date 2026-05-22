@@ -7,7 +7,8 @@ export interface ResponseState {
   size: number;
   headers: Record<string, string>;
   timeTaken: number | null;
-  bodyBinary: Blob;
+  bodyBinary: Uint8Array;
+  bodyB64?: string; // 可選的 base64 編碼字串，保留以供前端使用
   body_type: string;
 }
 
@@ -16,7 +17,7 @@ export const useResponseStore = defineStore("response", () => {
   const body = ref<string>("");
   const headers = ref<Record<string, string>>({});
   const timeTaken = ref<number | null>(null);
-  const bodyBinary = ref<Blob>(new Blob());
+  const bodyBinaryB64 = ref<string>(""); // 用於存儲從 Rust 後端接收到的 base64 編碼字串
   const contentType = ref<string>("text/plain");
   const hexViewerBuffer = ref<Uint8Array>(new Uint8Array(0));
 
@@ -41,20 +42,19 @@ export const useResponseStore = defineStore("response", () => {
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
       contentType.value = headers.value["Content-Type"] || "text/plain";
-
-      const incomingBlob = responseObj.bodyBinary || new Blob();
-      bodyBinary.value = incomingBlob;
-
-      // 核心轉換邏輯：將 Blob 轉換為 Uint8Array
-      if (incomingBlob.size > 0) {
-        // 利用 Blob 原生的 arrayBuffer 異步方法獲取底層二進位數據
-        const arrayBuffer = await incomingBlob.arrayBuffer();
-        hexViewerBuffer.value = new Uint8Array(arrayBuffer);
-      } else {
-        hexViewerBuffer.value = new Uint8Array(0);
-      }
+      bodyBinaryB64.value = responseObj.bodyB64 || "";
+      hexViewerBuffer.value = new Uint8Array(responseObj.bodyBinary);
 
       console.log("[setResponse] Response payload type:", contentType.value);
+      console.log("[setResponse] ResponseStore:", {
+        status: status.value,
+        headers: headers.value,
+        body: body.value,
+        timeTaken: timeTaken.value,
+        contentType: contentType.value,
+        bodyBinaryB64: bodyBinaryB64.value,
+        hexViewerBuffer: hexViewerBuffer.value,
+      });
     } catch (e) {
       console.error("[setResponse] Failed to parse response payload:", e);
       status.value = null;
@@ -76,7 +76,7 @@ export const useResponseStore = defineStore("response", () => {
     body,
     timeTaken,
     size,
-    bodyBinary,
+    bodyBinaryB64,
     contentType,
     hexViewerBuffer,
 
