@@ -61,6 +61,8 @@
         <TabsContent value="binary" as-child><BinaryPanel /></TabsContent>
       </div>
     </Tabs>
+
+    <ActionDropdown />
   </div>
   <WaitingResponse v-else-if="responseIsNormal === undefined" />
   <ErrorResponse v-else :responseStoreBody="responseStore.body" />
@@ -80,6 +82,7 @@ import { useResponseStore } from "@/stores/useResponseStore.ts";
 import { computed, ref, watch } from "vue";
 
 import { Dot, Timer, File } from "@lucide/vue";
+import ActionDropdown from "@/components/Home/ResponsePanel/common/ActionDropdown.vue";
 
 const responseStore = useResponseStore();
 const responseStatus = computed(() => {
