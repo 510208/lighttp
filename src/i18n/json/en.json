@@ -149,6 +149,11 @@
   "settings_panel.themes.theme_selection.label": "Background Image URL",
   "settings_panel.themes.theme_selection.description": "Enter a direct image URL to use as the application's background image.",
   "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
+  "settings_panel.themes.binary_editor_theme.label": "Binary Editor Theme",
+  "settings_panel.themes.binary_editor_theme.description": "Select the theme style for the binary editor.",
+  "settings_panel.themes.binary_editor_theme.dark_themes": "Dark Themes",
+  "settings_panel.themes.binary_editor_theme.light_themes": "Light Themes",
+  "settings_panel.themes.binary_editor_theme.default": "Default",
 
   "settings_panel.define_gen.title": "Definition Generator Settings",
   "settings_panel.define_gen.indent.label": "Default Indent Size",

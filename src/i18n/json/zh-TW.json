@@ -150,6 +150,11 @@
   "settings_panel.themes.theme_selection.label": "背景圖片網址",
   "settings_panel.themes.theme_selection.description": "輸入一個直連圖片網址來作為應用程式的背景圖片。",
   "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
+  "settings_panel.themes.binary_editor_theme.label": "二進位編輯器主題",
+  "settings_panel.themes.binary_editor_theme.description": "選擇二進位編輯器的主題風格。",
+  "settings_panel.themes.binary_editor_theme.dark_themes": "深色主題",
+  "settings_panel.themes.binary_editor_theme.light_themes": "淺色主題",
+  "settings_panel.themes.binary_editor_theme.default": "預設",
 
   "settings_panel.define_gen.title": "定義生成器設定",
   "settings_panel.define_gen.indent.label": "預設縮排大小",
