@@ -7,15 +7,18 @@
       :window-size="0x4000"
       @update-virtual-data="handleUpdateVirtualData"
       statusbar="top"
+      :theme="settingsStore.hexViewerConfig.theme"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useResponseStore } from "@/stores/useResponseStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 import { VueHexWindowRequest } from "vuehex";
 
 const responseStore = useResponseStore();
+const settingsStore = useSettingsStore();
 
 // Save the FULL data BEFORE clearing hexViewerBuffer
 const fullImageData = new Uint8Array(responseStore.hexViewerBuffer);
