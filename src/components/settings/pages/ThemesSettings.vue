@@ -42,6 +42,7 @@
     <ConfigOptionFrame
       label-key="settings_panel.themes.theme_file.label"
       description-key="settings_panel.themes.theme_file.description"
+      beta
     >
       <Input
         id="picture"
@@ -53,6 +54,7 @@
     <ConfigOptionFrame
       label-key="settings_panel.themes.current_theme.label"
       description-key="settings_panel.themes.current_theme.description"
+      beta
     >
       <div
         class="bg-lh-surface-0 flex flex-1 flex-col gap-1 rounded border p-2"
@@ -88,6 +90,7 @@
     <ConfigOptionFrame
       label-key="settings_panel.themes.reset_theme.label"
       description-key="settings_panel.themes.reset_theme.description"
+      beta
     >
       <Button
         @click="resetColorTheme()"
