@@ -2,6 +2,19 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import { changeLang } from "@/i18n";
 
+interface HexViewerConfig {
+  enabled: boolean;
+  theme: string;
+}
+
+interface ColorTheme {
+  name: string;
+  description: string;
+  author: string;
+  license: string;
+  css: string | null;
+}
+
 export const useSettingsStore = defineStore(
   "settings",
   () => {
@@ -11,7 +24,15 @@ export const useSettingsStore = defineStore(
     const hexViewerConfig = ref({
       enabled: true,
       theme: "terminal",
-    });
+    } as unknown as Ref<HexViewerConfig>);
+    const colorTheme = ref({
+      name: "Mocha Theme",
+      description: "The default Catppuccin Mocha theme for LigHTTP.",
+      author: "SamHacker",
+      license: "MIT",
+
+      css: null,
+    } as unknown as Ref<ColorTheme>);
 
     function setLanguage(newLang: string) {
       language.value = newLang;
@@ -33,6 +54,8 @@ export const useSettingsStore = defineStore(
       defaultIndentSize,
 
       hexViewerConfig,
+
+      colorTheme,
     };
   },
   {
@@ -46,3 +69,6 @@ export const useSettingsStore = defineStore(
     },
   },
 );
+
+export type SettingsStore = ReturnType<typeof useSettingsStore>;
+export type { HexViewerConfig, ColorTheme };
