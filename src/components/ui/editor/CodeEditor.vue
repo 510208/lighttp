@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
+
 // Monaco types may not be available in some environments. Use a lightweight local alias
 // to avoid TypeScript errors when the module or its type declarations aren't found.
 type MonacoEditorAlias = any;
@@ -49,9 +50,10 @@ onMounted(async () => {
       editorInstance.value = monaco.editor.create(editorContainer.value, {
         value: code.value,
         language: language.value,
-        theme: "vs-dark",
+        theme: "catppuccinomocha",
         automaticLayout: true,
       });
+
       emit("update:modelValue", code.value);
 
       editorInstance.value.getModel().onDidChangeContent(() => {
