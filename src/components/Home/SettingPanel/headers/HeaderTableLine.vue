@@ -12,7 +12,7 @@
       />
     </TableCell>
 
-    <TableCell class="font-space text-sm text-ctp-text">
+    <TableCell class="font-space text-ctp-text text-sm">
       <Input
         :model-value="props.param"
         :default-value="props.param"
@@ -20,11 +20,11 @@
           (e: any) =>
             requestStore.updateHeader(props.id, { key: e.target.value })
         "
-        class="border-none bg-transparent focus-visible:ring-0"
+        class="border-none bg-transparent font-mono focus-visible:ring-0"
       />
     </TableCell>
 
-    <TableCell class="font-space text-sm text-ctp-text">
+    <TableCell class="font-space text-ctp-text text-sm">
       <Input
         :model-value="props.value"
         :default-value="props.value"
@@ -32,7 +32,7 @@
           (e: any) =>
             requestStore.updateHeader(props.id, { value: e.target.value })
         "
-        class="border-none bg-transparent focus-visible:ring-0"
+        class="border-none bg-transparent font-mono focus-visible:ring-0"
       />
     </TableCell>
 
