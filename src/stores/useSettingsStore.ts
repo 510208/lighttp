@@ -15,6 +15,33 @@ interface ColorTheme {
   css: string | null;
 }
 
+function loadColorTheme(cssContent: string): ColorTheme {
+  // 提取出 CSS 中的Metadata
+  // /*
+  // Theme Name:     Mocha Theme
+  // Description:    The default Catppuccin Mocha theme for LigHTTP.
+  // Author:         SamHacker
+  // License:        MIT
+  // */
+  // @theme inline { /* ... */ }
+  const metadataRegex =
+    /\/\*\s*Theme Name:\s*(.+?)\s*Description:\s*(.+?)\s*Author:\s*(.+?)\s*License:\s*(.+?)\s*\*\//s;
+  const match = cssContent.match(metadataRegex);
+  if (!match) {
+    throw new Error("Invalid theme CSS: Missing metadata");
+  }
+
+  const [_, name, description, author, license] = match;
+
+  return {
+    name: name.trim(),
+    description: description.trim(),
+    author: author.trim(),
+    license: license.trim(),
+    css: cssContent,
+  };
+}
+
 export const useSettingsStore = defineStore(
   "settings",
   () => {
@@ -71,4 +98,5 @@ export const useSettingsStore = defineStore(
 );
 
 export type SettingsStore = ReturnType<typeof useSettingsStore>;
+export { loadColorTheme };
 export type { HexViewerConfig, ColorTheme };
