@@ -39,7 +39,7 @@ function handleEnter() {
       v-model="requestStore.url"
       type="text"
       :placeholder="$t('home.target_input.url_input.placeholder')"
-      class="flex-1 bg-transparent px-4 py-2 text-sm text-[#cdd6f4] placeholder-[#6c7086] outline-none"
+      class="text-lh-text placeholder:text-lh-subtext-0 flex-1 bg-transparent px-4 py-2 text-sm outline-none"
       @keyup.enter="handleEnter"
       @blur="handleUrlBlur"
     />
