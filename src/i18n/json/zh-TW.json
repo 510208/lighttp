@@ -79,6 +79,7 @@
   "home.response_panel.tabs.headers": "標頭",
   "home.response_panel.tabs.binary": "原始",
 
+  "home.response_panel.body_panel.save_as_file": "另存為檔案",
   "home.response_panel.body_panel.copy_response": "複製回應結果",
   "home.response_panel.body_panel.generate_json_schema": "生成 JSON Schema",
   "home.response_panel.body_panel.generate_type_definition": "生成型別定義",

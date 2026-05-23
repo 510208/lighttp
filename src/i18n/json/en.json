@@ -78,6 +78,7 @@
   "home.response_panel.tabs.body": "Body",
   "home.response_panel.tabs.headers": "Headers",
 
+  "home.response_panel.body_panel.save_as_file": "Save as File",
   "home.response_panel.body_panel.copy_response": "Copy Response",
   "home.response_panel.body_panel.generate_json_schema": "Generate JSON Schema",
   "home.response_panel.body_panel.generate_type_definition": "Generate Type Definition",
