@@ -156,6 +156,9 @@
   "settings_panel.themes.binary_editor_theme.dark_themes": "深色主題",
   "settings_panel.themes.binary_editor_theme.light_themes": "淺色主題",
   "settings_panel.themes.binary_editor_theme.default": "預設",
+  "settings_panel.themes.theme_file.label": "自訂色彩主題",
+  "settings_panel.themes.theme_file.description": "輸入一個 CSS 檔案的路徑，該檔案應包含有效的主題設定。這允許您完全自訂應用程式的外觀。",
+  "settings_panel.themes.theme_file.upload_button": "上傳 CSS 檔案",
 
   "settings_panel.define_gen.title": "定義生成器設定",
   "settings_panel.define_gen.indent.label": "預設縮排大小",

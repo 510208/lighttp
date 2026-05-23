@@ -38,6 +38,13 @@
         </SelectContent>
       </Select>
     </ConfigOptionFrame>
+    <Separator />
+    <ConfigOptionFrame
+      label-key="settings_panel.themes.theme_file.label"
+      description-key="settings_panel.themes.theme_file.description"
+    >
+      <Input id="picture" type="file" accept=".css" />
+    </ConfigOptionFrame>
   </div>
 </template>
 
@@ -54,6 +61,7 @@ import {
   SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
+import Button from "@/components/ui/button/Button.vue";
 
 const settingsStore = useSettingsStore();
 </script>
