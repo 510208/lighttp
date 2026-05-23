@@ -7,6 +7,9 @@
 @import "@fontsource-variable/noto-sans-tc/wght.css";
 @import "@fontsource-variable/space-grotesk/wght.css";
 
+/* LigHTTP Theme */
+@import "./mocha.lhtheme.css";
+
 @custom-variant dark (&);
 
 #app {
@@ -69,45 +72,6 @@
 
   --font-sans: "Noto Sans TC Variable", sans-serif;
   --font-space: "Space Grotesk Variable", monospace;
-}
-
-/* LigHTTP */
-@theme inline {
-  /* Main Colors */
-  --color-lh-rosewater: var(--catppuccin-color-rosewater);
-  --color-lh-flamingo: var(--catppuccin-color-flamingo);
-  --color-lh-pink: var(--catppuccin-color-pink);
-  --color-lh-mauve: var(--catppuccin-color-mauve);
-  --color-lh-red: var(--catppuccin-color-red);
-  --color-lh-maroon: var(--catppuccin-color-maroon);
-  --color-lh-peach: var(--catppuccin-color-peach);
-  --color-lh-yellow: var(--catppuccin-color-yellow);
-  --color-lh-green: var(--catppuccin-color-green);
-  --color-lh-teal: var(--catppuccin-color-teal);
-  --color-lh-sky: var(--catppuccin-color-sky);
-  --color-lh-sapphire: var(--catppuccin-color-sapphire);
-  --color-lh-blue: var(--catppuccin-color-blue);
-  --color-lh-lavender: var(--catppuccin-color-lavender);
-
-  /* Text Colors */
-  --color-lh-text: var(--catppuccin-color-text);
-  --color-lh-subtext-0: var(--catppuccin-color-subtext0);
-  --color-lh-subtext-1: var(--catppuccin-color-subtext1);
-
-  /* Overlay Colors */
-  --color-lh-overlay-0: var(--catppuccin-color-overlay0);
-  --color-lh-overlay-1: var(--catppuccin-color-overlay1);
-  --color-lh-overlay-2: var(--catppuccin-color-overlay2);
-
-  /* Surface Colors */
-  --color-lh-surface-0: var(--catppuccin-color-surface0);
-  --color-lh-surface-1: var(--catppuccin-color-surface1);
-  --color-lh-surface-2: var(--catppuccin-color-surface2);
-
-  /* Secondary Panes */
-  --color-lh-base: var(--catppuccin-color-base);
-  --color-lh-mantle: var(--catppuccin-color-mantle);
-  --color-lh-crust: var(--catppuccin-color-crust);
 }
 
 @layer base {
@@ -230,5 +194,5 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
 }
 
 .sh-settings-tab {
-  @apply data-[state=active]:bg-lh-surface1 data-[state=active]:text-lh-text h-auto w-full flex-none justify-start gap-2 rounded-md px-3 py-1 text-left data-[state=active]:shadow-none;
+  @apply data-[state=active]:bg-lh-surface-1 data-[state=active]:text-lh-text h-auto w-full flex-none justify-start gap-2 rounded-md px-3 py-1 text-left data-[state=active]:shadow-none;
 }
