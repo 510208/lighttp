@@ -1,6 +1,6 @@
 <template>
   <TableRow
-    class="hover:bg-ctp-surface0/50 transition-colors"
+    class="hover:bg-lh-surface-0/50 transition-colors"
     :data-disabled="!isEnabled"
     :data-param-id="props.id"
   >
@@ -12,7 +12,7 @@
       />
     </TableCell>
 
-    <TableCell class="font-space text-ctp-text text-sm">
+    <TableCell class="font-space text-lh-text text-sm">
       <Input
         :model-value="props.param"
         :default-value="props.param"
@@ -24,7 +24,7 @@
       />
     </TableCell>
 
-    <TableCell class="font-space text-ctp-text text-sm">
+    <TableCell class="font-space text-lh-text text-sm">
       <Input
         :model-value="props.value"
         :default-value="props.value"
@@ -42,7 +42,7 @@
         size="icon"
         @click="requestStore.removeHeader(props.id)"
       >
-        <Trash class="text-ctp-red" :size="16" />
+        <Trash class="text-lh-red" :size="16" />
       </Button>
     </TableCell>
   </TableRow>

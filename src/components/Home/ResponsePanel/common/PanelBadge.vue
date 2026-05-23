@@ -20,18 +20,18 @@ interface Props {
 }
 
 const statusColors = {
-  none: "bg-ctp-overlay2/20",
-  error: "bg-ctp-red/20 ",
-  success: "bg-ctp-green/20",
-  loading: "bg-ctp-peach/20",
-  ready: "bg-ctp-overlay1/20",
+  none: "bg-lh-overlay-2/20",
+  error: "bg-lh-red/20 ",
+  success: "bg-lh-green/20",
+  loading: "bg-lh-peach/20",
+  ready: "bg-lh-overlay-1/20",
 };
 const statusClasses = {
-  none: "!text-ctp-overlay2 border-ctp-overlay2/30",
-  error: "!text-ctp-red border-ctp-red/30",
-  success: "!text-ctp-green border-ctp-green/30",
-  loading: "!text-ctp-peach border-ctp-peach/30",
-  ready: "!text-ctp-text border-ctp-overlay1/30",
+  none: "!text-lh-overlay-2 border-lh-overlay-2/30",
+  error: "!text-lh-red border-lh-red/30",
+  success: "!text-lh-green border-lh-green/30",
+  loading: "!text-lh-peach border-lh-peach/30",
+  ready: "!text-lh-text border-lh-overlay-1/30",
 };
 const generalClass =
   "text-xs flex items-center flex gap-1 text-mono px-2 py-1 rounded-[10px] border";

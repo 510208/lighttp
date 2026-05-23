@@ -23,14 +23,14 @@ interface Props {
 }
 
 const statusColors = {
-  ready: "bg-ctp-overlay2 text-ctp-base",
-  error: "bg-ctp-red text-ctp-base",
-  errorText: "text-ctp-red",
-  success: "bg-ctp-green text-ctp-base",
-  successText: "text-ctp-green",
-  loading: "bg-ctp-peach text-ctp-base",
-  loadingText: "text-ctp-peach",
-  none: "hover:bg-ctp-surface0 transition-colors duration-200 text-white pointer-events-none text-ctp-subtext0",
+  ready: "bg-lh-overlay-2 text-lh-base",
+  error: "bg-lh-red text-lh-base",
+  errorText: "text-lh-red",
+  success: "bg-lh-green text-lh-base",
+  successText: "text-lh-green",
+  loading: "bg-lh-peach text-lh-base",
+  loadingText: "text-lh-peach",
+  none: "hover:bg-lh-surface-0 transition-colors duration-200 text-white pointer-events-none text-lh-subtext-0",
 };
 const generalClass = "px-3 text-xs flex h-full items-center flex gap-1";
 const statusColorsWithGeneral = Object.fromEntries(

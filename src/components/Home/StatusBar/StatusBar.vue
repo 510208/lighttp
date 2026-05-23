@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-ctp-base absolute bottom-0 left-0 flex h-6 w-full items-center justify-between"
+    class="bg-lh-base absolute bottom-0 left-0 flex h-6 w-full items-center justify-between"
   >
     <!-- 左側 -->
     <div class="flex h-full items-center gap-0 text-sm">
@@ -26,7 +26,7 @@
     <div class="flex h-full items-center gap-0 text-sm">
       <button
         type="button"
-        class="hover:bg-ctp-surface0 flex h-full items-center gap-1 px-2 text-xs transition-colors"
+        class="hover:bg-lh-surface-0 flex h-full items-center gap-1 px-2 text-xs transition-colors"
         @click="$emit('toggle-response-panel')"
       >
         <ChevronDown

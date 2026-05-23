@@ -6,14 +6,14 @@
     <Separator class="my-6" />
     <div class="flex flex-col items-center gap-2">
       <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
-      <small class="text-ctp-subtext1">v{{ appVersion }}</small>
-      <p class="text-ctp-subtext1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
+      <small class="text-lh-subtext-1">v{{ appVersion }}</small>
+      <p class="text-lh-subtext-1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
     </div>
     <div
       class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
     >
       <p>特別感謝以下協助者們：</p>
-      <ul class="text-ctp-subtext1 min-w-40 list-disc">
+      <ul class="text-lh-subtext-1 min-w-40 list-disc">
         <li class="flex items-center gap-2">
           <a
             href="https://510208.github.io/"

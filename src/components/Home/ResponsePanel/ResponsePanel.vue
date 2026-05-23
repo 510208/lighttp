@@ -1,11 +1,11 @@
 <template>
   <!-- 回應面板 -->
   <div
-    class="bg-ctp-surface border-ctp-surface-variant flex h-full min-h-0 flex-col gap-0"
+    class="bg-lh-surface- border-lh-surface--variant flex h-full min-h-0 flex-col gap-0"
     v-if="responseIsNormal === true"
   >
     <div class="mt-4 flex items-center gap-2 px-10">
-      <h2 class="text-ctp-overlay2 mr-4 text-sm font-bold">
+      <h2 class="text-lh-overlay-2 mr-4 text-sm font-bold">
         {{ $t("home.response_panel.title") }}
       </h2>
       <PanelBadge :variant="responseStatus" :icon="Dot">

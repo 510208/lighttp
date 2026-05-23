@@ -61,7 +61,7 @@
                 :placeholder="
                   $t('home.settings_panel.tabs.proxy.hostname.placeholder')
                 "
-                class="focus-visible:bg-ctp-surface0 flex-1 rounded-none border-none transition-colors [&:focus-visible]:ring-0"
+                class="focus-visible:bg-lh-surface-0 flex-1 rounded-none border-none transition-colors [&:focus-visible]:ring-0"
               />
             </div>
           </div>

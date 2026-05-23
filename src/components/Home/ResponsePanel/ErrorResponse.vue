@@ -1,13 +1,13 @@
 <template>
   <div class="flex h-full flex-col items-center justify-center gap-4 border-t">
     <IconContainer variant="error">
-      <CircleX class="text-ctp-red-100" />
+      <CircleX class="text-lh-red-100" />
     </IconContainer>
     <div class="flex flex-col items-center justify-center gap-0">
-      <h2 class="text-ctp-red-100 text-lg font-semibold">
+      <h2 class="text-lh-red-100 text-lg font-semibold">
         {{ $t("home.response_panel.error_response.title") }}
       </h2>
-      <p class="text-ctp-red-300 text-sm">
+      <p class="text-lh-red-300 text-sm">
         {{ $t("home.response_panel.error_response.description") }}
       </p>
       <pre

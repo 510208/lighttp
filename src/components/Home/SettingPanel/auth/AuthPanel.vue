@@ -50,7 +50,7 @@ const selectedDescriptionHtml = computed(() => {
 <template>
   <ResizablePanelGroup
     direction="horizontal"
-    class="border-ctp-surface1 min-h-ui rounded-lg border"
+    class="border-lh-surface-1 min-h-ui rounded-lg border"
   >
     <!-- 左欄：顯示認證選項 -->
     <ResizablePanel :default-size="30" class="p-4">
@@ -63,7 +63,7 @@ const selectedDescriptionHtml = computed(() => {
       </div>
 
       <div
-        class="text-ctp-text text-sm"
+        class="text-lh-text text-sm"
         v-if="selectedAuthMethod"
         v-html="selectedDescriptionHtml"
       ></div>

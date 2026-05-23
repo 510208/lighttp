@@ -1,11 +1,11 @@
 <template>
   <div
-    class="text-ctp-text flex h-full w-full flex-col items-center justify-center gap-2 text-sm"
+    class="text-lh-text flex h-full w-full flex-col items-center justify-center gap-2 text-sm"
   >
     <IconContainer>
       <Ghost />
     </IconContainer>
-    <h3 class="text-ctp-text text-lg font-bold">
+    <h3 class="text-lh-text text-lg font-bold">
       {{ $t("home.settings_panel.tabs.auth.none.title") }}
     </h3>
     <p>{{ $t("home.settings_panel.tabs.auth.none.description") }}</p>

@@ -32,7 +32,7 @@ function handleEnter() {
 
 <template>
   <div
-    class="bg-ctp-base border-ctp-surface0 focus-within:border-ctp-surface2 flex flex-1 items-stretch overflow-hidden rounded-lg border transition-colors duration-200"
+    class="bg-lh-base border-lh-surface-0 focus-within:border-lh-surface-2 flex flex-1 items-stretch overflow-hidden rounded-lg border transition-colors duration-200"
   >
     <MethodSelect />
     <input
@@ -45,7 +45,7 @@ function handleEnter() {
     />
     <Button
       @click="Request.handleSend"
-      class="text-ctp-subtext0 bg-ctp-surface0 hover:bg-ctp-surface2 min-h-12.5 w-24 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all"
+      class="text-lh-subtext-0 bg-lh-surface-0 hover:bg-lh-surface-2 min-h-12.5 w-24 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all"
     >
       {{ $t("home.target_input.send_button.text") }}
       <SendHorizontal />

@@ -30,7 +30,7 @@
           >
             <Button
               variant="ghost"
-              class="hover:bg-ctp-surface1 cursor-pointer rounded p-2"
+              class="hover:bg-lh-surface-1 cursor-pointer rounded p-2"
               @click="selectTemplate(template)"
             >
               {{ template.key }}
@@ -43,13 +43,13 @@
           <h4 class="mb-1 text-base font-semibold">
             {{ selectedHeaderTemplate.key }}
           </h4>
-          <p class="text-ctp-textSubtle text-sm">
+          <p class="text-lh-textSubtle text-sm">
             {{ selectedHeaderTemplate.description }}
           </p>
 
           <!-- 內容輸入框 -->
           <div class="mt-4">
-            <p class="text-ctp-textSubtle mb-1 text-xs">
+            <p class="text-lh-textSubtle mb-1 text-xs">
               {{
                 $t(
                   "home.settings_panel.tabs.headers.header_template_picker.value_label",

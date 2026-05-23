@@ -10,12 +10,12 @@
       class="flex h-full w-full items-center justify-center overflow-auto bg-zinc-900 p-4"
     >
       <div
-        class="bg-ctp-surface-variant flex h-full flex-col items-center justify-center gap-4 rounded p-6"
+        class="bg-lh-surface--variant flex h-full flex-col items-center justify-center gap-4 rounded p-6"
         v-if="!forceShowMedia"
       >
         <IconContainer><Binary /></IconContainer>
 
-        <p class="text-ctp-overlay2 text-sm">
+        <p class="text-lh-overlay-2 text-sm">
           {{ $t("home.response_panel.body_panel.media_hidden_warning") }}<br />
 
           {{ $t("home.response_panel.body_panel.media_hidden_hint") }}

@@ -1,7 +1,7 @@
 <template>
   <Select v-model="requestStore.method">
     <SelectTrigger
-      class="bg-ctp-surface0 hover:bg-ctp-surface1 focus:ring-ctp-surface2 min-h-12.5 min-w-[70px] rounded-none border-none focus:ring-2"
+      class="bg-lh-surface-0 hover:bg-lh-surface-1 focus:ring-lh-surface-2 min-h-12.5 min-w-[70px] rounded-none border-none focus:ring-2"
       :class="currentTriggerColor"
     >
       <div class="flex flex-col items-start gap-1">
@@ -14,7 +14,7 @@
     </SelectTrigger>
 
     <SelectContent
-      class="bg-ctp-surface0 border-ctp-surface2 rounded-lg border"
+      class="bg-lh-surface-0 border-lh-surface-2 rounded-lg border"
     >
       <SelectGroup>
         <!-- 使用物件迴圈可以減少重複程式碼 -->
@@ -58,13 +58,13 @@ type Method =
 // 定義每個方法對應的顏色
 const methodColors: Record<Method, string> = {
   NONE: "text-muted-foreground",
-  GET: "text-ctp-green",
-  POST: "text-ctp-peach",
-  OPTIONS: "text-ctp-mauve",
-  DELETE: "text-ctp-red",
-  HEAD: "text-ctp-blue",
-  PATCH: "text-ctp-yellow",
-  PUT: "text-ctp-teal",
+  GET: "text-lh-green",
+  POST: "text-lh-peach",
+  OPTIONS: "text-lh-mauve",
+  DELETE: "text-lh-red",
+  HEAD: "text-lh-blue",
+  PATCH: "text-lh-yellow",
+  PUT: "text-lh-teal",
 };
 
 // 根據選中的值動態回傳顏色 class

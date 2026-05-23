@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full min-h-ui">
+  <div class="min-h-ui flex w-full flex-col gap-4">
     <div class="flex gap-2">
       <Button variant="outline" class="w-auto gap-2" @click="$emit('add')">
         <Plus :size="16" />{{ addButtonText }}
@@ -8,13 +8,13 @@
     </div>
 
     <div
-      class="max-h-60 overflow-x-hidden overflow-y-auto border rounded-lg border-ctp-surface1"
+      class="border-lh-surface-1 max-h-60 overflow-x-hidden overflow-y-auto rounded-lg border"
     >
       <Table class="w-full table-fixed">
-        <TableHeader class="sticky top-0 bg-ctp-crust z-10">
-          <TableRow class="hover:bg-transparent border-ctp-surface1">
+        <TableHeader class="bg-lh-crust sticky top-0 z-10">
+          <TableRow class="border-lh-surface-1 hover:bg-transparent">
             <TableHead class="w-12 text-center">
-              <Check class="mx-auto text-ctp-subtext1" :size="16" />
+              <Check class="text-lh-subtext-1 mx-auto" :size="16" />
             </TableHead>
             <TableHead class="w-1/2">{{ keyTitle }}</TableHead>
             <TableHead class="w-1/2">{{ valueTitle }}</TableHead>

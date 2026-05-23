@@ -43,7 +43,7 @@ const props = defineProps<ToasterProps>();
       </div>
     </template>
     <template #close-icon>
-      <XIcon class="text-ctp-subtext0 size-4" />
+      <XIcon class="text-lh-subtext-0 size-4" />
     </template>
   </Sonner>
 </template>

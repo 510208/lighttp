@@ -8,7 +8,7 @@
         <h2 class="text-lg font-semibold text-white">
           {{ $t("home.response_panel.waiting_response.title") }}
         </h2>
-        <p class="text-ctp-overlay2 text-sm">
+        <p class="text-lh-overlay-2 text-sm">
           {{ $t("home.response_panel.waiting_response.description") }}
         </p>
       </div>

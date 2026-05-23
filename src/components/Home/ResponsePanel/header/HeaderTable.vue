@@ -3,7 +3,7 @@
     <div class="h-full overflow-x-hidden overflow-y-auto rounded-lg">
       <Table class="h-full w-full table-fixed overflow-y-scroll">
         <TableHeader>
-          <TableRow class="border-ctp-surface1">
+          <TableRow class="border-lh-surface-1">
             <TableHead>{{
               $t("home.response_panel.header_table.key_header")
             }}</TableHead>
@@ -17,12 +17,12 @@
           <TableRow
             v-for="(value, key) in responseStore.headers"
             :key="key"
-            class="border-ctp-surface1"
+            class="border-lh-surface-1"
           >
             <TableCell class="break-words">
               <HoverCard v-if="getHeaderTemplate(key)" class="inline-block">
                 <HoverCardTrigger
-                  class="border-ctp-text-subtle cursor-help border-b border-dotted"
+                  class="border-lh-text-subtle cursor-help border-b border-dotted"
                 >
                   {{ parseHeaderKey(key) }}
                 </HoverCardTrigger>
@@ -31,7 +31,7 @@
                     <p class="text-sm font-semibold">
                       {{ parseHeaderKey(key) }}
                     </p>
-                    <p class="text-ctp-text-subtle text-sm whitespace-pre-wrap">
+                    <p class="text-lh-text-subtle text-sm whitespace-pre-wrap">
                       {{ getHeaderTemplate(key)?.description }}
                     </p>
                   </div>
@@ -44,10 +44,10 @@
               {{ breakLongValue(value) }}
               <HoverCard v-if="value.length > 40" class="inline-block">
                 <HoverCardTrigger
-                  class="text-ctp-text-subtle ml-2 text-sm"
+                  class="text-lh-text-subtle ml-2 text-sm"
                   @click="copyToClipboard(value)"
                 >
-                  <div class="bg-ctp-surface1 rounded border px-1">
+                  <div class="bg-lh-surface-1 rounded border px-1">
                     <Ellipsis :size="16" />
                   </div>
                 </HoverCardTrigger>
@@ -57,7 +57,7 @@
                     >{{ value }}</pre
                   >
                   <Separator class="my-2" />
-                  <p class="text-ctp-text-subtle text-sm">
+                  <p class="text-lh-text-subtle text-sm">
                     {{ $t("home.response_panel.header_table.copy_hint") }}
                   </p>
                 </HoverCardContent>

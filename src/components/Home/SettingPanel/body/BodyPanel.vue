@@ -53,7 +53,7 @@ const selectedDescriptionHtml = computed(() => {
 <template>
   <ResizablePanelGroup
     direction="horizontal"
-    class="border-ctp-surface1 min-h-ui rounded-lg border"
+    class="border-lh-surface-1 min-h-ui rounded-lg border"
   >
     <ResizablePanel :default-size="30" class="p-4">
       <div class="mb-4 flex flex-col gap-1">
@@ -64,7 +64,7 @@ const selectedDescriptionHtml = computed(() => {
       </div>
 
       <div
-        class="text-ctp-text text-sm"
+        class="text-lh-text text-sm"
         v-if="selectedBodyMethod"
         v-html="selectedDescriptionHtml"
       ></div>

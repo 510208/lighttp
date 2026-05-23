@@ -9,7 +9,7 @@
     >
       <Tabs class="flex h-full flex-row">
         <TabsList
-          class="bg-ctp-surface0 border-ctp-surface1 flex h-full w-[180px] flex-col items-stretch justify-start gap-1 overflow-y-auto rounded-none border-r px-3 py-4 lg:w-[220px]"
+          class="bg-lh-surface-0 border-lh-surface-1 flex h-full w-[180px] flex-col items-stretch justify-start gap-1 overflow-y-auto rounded-none border-r px-3 py-4 lg:w-[220px]"
         >
           <DialogTitle class="mb-4 ml-2 text-lg font-semibold">
             {{ $t("settings_panel.title") }}
