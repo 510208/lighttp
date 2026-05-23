@@ -11,6 +11,12 @@
           <Copy />
           {{ $t("home.response_panel.body_panel.copy_response") }}
         </DropdownMenuItem>
+        <DropdownMenuItem
+          @click="saveResponseToFile(responseStore.hexViewerBuffer)"
+        >
+          <Download />
+          {{ $t("home.response_panel.body_panel.save_as_file") }}
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
@@ -94,6 +100,7 @@ import {
   BookA,
   Terminal,
   Grid2x2,
+  Download,
 } from "@lucide/vue";
 import { useRequestStore } from "@/stores/useRequestStore.ts";
 import { useResponseStore } from "@/stores/useResponseStore.ts";
@@ -106,6 +113,7 @@ import {
   getCurlCommand,
 } from "@/lib/getStructure.ts";
 import { useI18n } from "vue-i18n";
+import { saveResponseToFile } from "@/services/responseToFile";
 
 const { t } = useI18n();
 const requestStore = useRequestStore();
