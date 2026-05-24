@@ -2,17 +2,20 @@ import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
 interface UpdateInfo {
+  needsUpdate: boolean;
   currentVersion: string;
-  version: string;
+  version?: string;
   date?: string;
   body?: string;
-  rawJson: Record<string, unknown>;
+  rawJson?: Record<string, unknown>;
 }
 
 async function checkForUpdates() {
   const update = await check();
+  const currentVersion = update?.currentVersion || "unknown";
   if (update) {
     const updateInfo: UpdateInfo = {
+      needsUpdate: true,
       currentVersion: update.currentVersion,
       version: update.version,
       date: update.date,
@@ -25,7 +28,10 @@ async function checkForUpdates() {
   }
 
   console.log("[updater] Up-to-date.");
-  return null;
+  return {
+    needsUpdate: false,
+    currentVersion: currentVersion,
+  } as UpdateInfo;
 }
 
 async function runUpdate() {
