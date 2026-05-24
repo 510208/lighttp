@@ -90,6 +90,8 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自動生成，無需手動設置
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+
         with:
           tagName: app-v__VERSION__
           releaseName: "LigHTTP v__VERSION__"
