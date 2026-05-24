@@ -89,7 +89,6 @@ import {
   runUpdate,
 } from "@/services/updater";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "vue-i18n";
 const appVersion = ref("");
 const latestInfo = ref(null) as Ref<null | string | UpdateInfo>;
 
