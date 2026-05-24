@@ -38,6 +38,9 @@ importers:
       '@tauri-apps/plugin-opener':
         specifier: ^2
         version: 2.5.3
+      '@tauri-apps/plugin-updater':
+        specifier: ~2
+        version: 2.10.1
       '@tauri-store/pinia':
         specifier: ^4.2.0
         version: 4.2.0(typescript@5.6.3)
@@ -713,6 +716,9 @@ packages:
 
   '@tauri-apps/plugin-opener@2.5.3':
     resolution: {integrity: sha512-CCcUltXMOfUEArbf3db3kCE7Ggy1ExBEBl51Ko2ODJ6GDYHRp1nSNlQm5uNCFY5k7/ufaK5Ib3Du/Zir19IYQQ==}
+
+  '@tauri-apps/plugin-updater@2.10.1':
+    resolution: {integrity: sha512-NFYMg+tWOZPJdzE/PpFj2qfqwAWwNS3kXrb1tm1gnBJ9mYzZ4WDRrwy8udzWoAnfGCHLuePNLY1WVCNHnh3eRA==}
 
   '@tauri-store/pinia@4.2.0':
     resolution: {integrity: sha512-fOwbrAuAN5kdjU42jjgOb6qAisglyskgVgAfSdLyz3lyxgN/2xRR4boQmzD6M40Q5mmX9TxMuAaL2bm5AZyEmw==}
@@ -1836,6 +1842,10 @@ snapshots:
   '@tauri-apps/plugin-opener@2.5.3':
     dependencies:
       '@tauri-apps/api': 2.10.1
+
+  '@tauri-apps/plugin-updater@2.10.1':
+    dependencies:
+      '@tauri-apps/api': 2.11.0
 
   '@tauri-store/pinia@4.2.0(typescript@5.6.3)':
     dependencies:
