@@ -1,10 +1,20 @@
-<center><img src="./assets/cover.png" alt="LigHTTP Logo" /></center>
+<img src="./assets/cover.png" alt="LigHTTP Logo" />
 
-
-
-<center><img src="./assets/logo.svg" alt="LigHTTP Logo" height="80" /></center>
+<img src="./assets/logo.svg" alt="LigHTTP Logo" width="200" align="right" />
 
 # LigHTTP
+
+<div>
+  <a href="https://github.com/510208/lighttp/actions/workflows/publish.yml"><img alt="Publish App" src="https://github.com/510208/lighttp/actions/workflows/publish.yml/badge.svg?event=push?style=for-the-badge" /></a>
+  <img alt="GitHub License" src="https://img.shields.io/github/license/510208/lighttp?style=flat-square">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/510208/lighttp?style=flat-square">
+  <img alt="GitHub repo file or directory count" src="https://img.shields.io/github/directory-file-count/510208/lighttp?style=flat-square">
+  <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/510208/lighttp/total?style=flat-square">
+  <a href="https://discord.gg/73Bne5AWDn"><img alt="Discord" src="https://img.shields.io/discord/1107600478889582642?style=flat-square"></a>
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/510208/lighttp?style=flat-square&logo=vue.js">
+  <img alt="GitHub commits since latest release" src="https://img.shields.io/github/commits-since/510208/lighttp/latest?sort=semver&style=flat-square">
+</div>
+<a href="https://github.com/510208/lighttp/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/510208/lighttp?display_name=release&style=for-the-badge"></a>
 
 LigHTTP is **a lightweight HTTP client** built using Rust and Tauri. It provides a simple and efficient way to serve static files and handle HTTP requests. With its minimalistic design, LigHTTP is ideal for developers who need a fast and reliable client for their web applications.
 
