@@ -59,3 +59,4 @@ async function runUpdate() {
 }
 
 export { checkForUpdates, runUpdate };
+export type { UpdateInfo };
