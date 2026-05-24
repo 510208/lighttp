@@ -23,6 +23,9 @@
           <TabsTrigger value="define_gen" class="sh-settings-tab">
             <Hash />{{ $t("settings_panel.tabs.define_gen") }}
           </TabsTrigger>
+          <TabsTrigger value="update" class="sh-settings-tab">
+            <CircleFadingArrowUp />{{ $t("settings_panel.tabs.update") }}
+          </TabsTrigger>
         </TabsList>
 
         <div class="h-full flex-1 overflow-auto p-6">
@@ -34,6 +37,9 @@
           </TabsContent>
           <TabsContent value="define_gen">
             <DefineGenSettings />
+          </TabsContent>
+          <TabsContent value="update">
+            <UpdateSettings />
           </TabsContent>
         </div>
       </Tabs>
@@ -50,10 +56,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { computed } from "vue";
-import { Settings, Palette, Hash } from "@lucide/vue";
+import { Settings, Palette, Hash, CircleFadingArrowUp } from "@lucide/vue";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
 import DefineGenSettings from "./pages/DefineGenSettings.vue";
+import UpdateSettings from "./pages/UpdateSettings.vue";
+
 import ConfigLoader from "@/components/core/ConfigLoader.vue";
 
 const props = defineProps<{ open?: boolean }>();
