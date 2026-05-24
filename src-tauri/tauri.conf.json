@@ -27,8 +27,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ2MEE0NEFGQURCOUZFM0MKUldROC9ybXRyMFFLUmpsN2FPUTRXaGNZZkxnS0Z2dUc2MzZtaTVMTU5lWjA0NCtPRTNpd0JpcEcK",
       "endpoints": [
-        "https://github.com/510208/lighttp/releases/latest/download/latest.json",
-        "http://127.0.0.1:8080/latest.json"
+        "https://github.com/510208/lighttp/releases/latest/download/latest.json"
       ]
     }
   },
