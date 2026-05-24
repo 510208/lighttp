@@ -15,12 +15,20 @@
         "label": "main",
         "title": "LigHTTP",
         "width": 800,
-        "height": 600,
+        "height": 700,
         "decorations": false
       }
     ],
     "security": {
       "csp": null
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ2MEE0NEFGQURCOUZFM0MKUldROC9ybXRyMFFLUmpsN2FPUTRXaGNZZkxnS0Z2dUc2MzZtaTVMTU5lWjA0NCtPRTNpd0JpcEcK",
+      "endpoints": [
+        "https://github.com/510208/lighttp/releases/latest/download/latest.json"
+      ]
     }
   },
   "bundle": {
@@ -32,6 +40,8 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+
+    "createUpdaterArtifacts": true
   }
 }
