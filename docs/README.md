@@ -99,6 +99,12 @@ LigHTTP have a simple and intuitive user interface that allows you to easily sen
 
 Contributions to LigHTTP are welcome! If you have any ideas for new features, bug fixes, or improvements, please feel free to submit a pull request. You can also open an issue if you find any bugs or have any questions.
 
+Other information can be found in [COUNTRIBUTING.md](https://github.com/510208/lighttp/blob/main/docs/COUNTRIBUTING.md）.
+
+## Credits
+
+All the other project helped LigHTTP is listed on [CREDITS.md](https://github.com/510208/lighttp/blob/main/docs/CREDITS.md), thanks for their countribution!
+
 ## License
 
 LigHTTP is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
