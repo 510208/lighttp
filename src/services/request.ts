@@ -34,7 +34,7 @@ async function sendRequest(): Promise<ResponseState | null> {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
-    // console.log("[handleSend] Response from Rust:", response);
+    console.log("[handleSend] Response from Rust:", response);
 
     const responseDataParsed: ResponseState = {
       status: response.status,
@@ -43,6 +43,8 @@ async function sendRequest(): Promise<ResponseState | null> {
       timeTaken: duration,
       body_type: response.body_type || "text/plain",
       size: new Blob([response.body]).size,
+      bodyBinary: response.bodyBinary as Uint8Array,
+      bodyB64: response.body_binary_b64,
     };
 
     // toast.success(
@@ -67,7 +69,7 @@ async function handleSend() {
       await new Promise((resolve) => setTimeout(resolve, 200)); // 模擬處理時間，讓 loading 狀態更明顯
       // 當 sendRequest resolve 時執行
       if (data) {
-        responseStore.setResponse(data);
+        await responseStore.setResponse(data);
         return `收到結果: ${data.status} (${data.timeTaken != null ? data.timeTaken.toFixed(2) : "NaN"} ms)`;
       }
       return "請求完成";

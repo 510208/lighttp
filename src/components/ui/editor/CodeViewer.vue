@@ -2,6 +2,8 @@
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
 import { prettify } from "htmlfy";
+// Credit: https://github.com/josephabbey/catppuccin-monaco
+import ctpMocha from "@/assets/themes/editor/mocha.json";
 
 type MonacoEditorAlias = any;
 
@@ -56,10 +58,8 @@ function formatJson(code: string): string {
 
 async function formatHtml(code: string): Promise<string> {
   try {
-    const formatted = await prettify(code, {
-      indent: 2,
-      newline: "\n",
-      space: " ",
+    const formatted = prettify(code, {
+      tab_size: 2,
     });
 
     return formatted;
@@ -82,10 +82,12 @@ onMounted(async () => {
     const monaco = await loader.init();
     monacoRef.value = monaco;
 
+    monaco.editor.defineTheme("catppuccinomocha", ctpMocha);
+
     editorInstance.value = monaco.editor.create(editorContainer.value, {
       value: formattedCode.value,
       language: props.language || "json",
-      theme: "vs-dark",
+      theme: "catppuccinomocha",
       automaticLayout: true,
       readOnly: true,
       domReadOnly: true,

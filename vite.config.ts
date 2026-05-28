@@ -33,6 +33,15 @@ export default defineConfig(async () => ({
     },
   },
 
+  build: {
+    target: "es2022",
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2022", // 提升開發階段（Vite 預編譯）的目標
+    },
+  },
+
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

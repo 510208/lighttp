@@ -5,7 +5,7 @@
     class="flex h-8 items-center justify-end gap-2.5 border-none px-2 py-0"
   >
     <p class="text-sm font-medium">{{ name || value }}</p>
-    <p class="text-ctp-text/20 sh_tabs_chinese-name text-[10px] font-light">
+    <p class="text-lh-text/20 sh_tabs_chinese-name text-[10px] font-light">
       {{ chineseName }}
     </p>
   </TabsTrigger>

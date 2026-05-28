@@ -1,6 +1,6 @@
 [package]
 name = "lighttp"
-version = "0.1.0"
+version = "0.4.2"
 description = "A lightweight Postman-like tool written in Rust"
 authors = ["510208"]
 edition = "2021"
@@ -28,4 +28,11 @@ log = "0.4.29"
 tracing-subscriber = "0.3.23"
 tracing = "0.1.44"
 tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+tauri-store = "1.2.2"
+tauri-plugin-pinia = "4.2.0"
+tauri-plugin-process = "2"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
 

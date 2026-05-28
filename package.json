@@ -1,7 +1,7 @@
 {
   "name": "lighttp",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.4.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,11 +18,16 @@
     "@tailwindcss/vite": "^4.2.4",
     "@tanstack/vue-table": "^8.21.3",
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-fs": "~2.5.1",
-    "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-dialog": "~2.7.1",
+    "@tauri-apps/plugin-fs": "~2",
+    "@tauri-apps/plugin-opener": "~2",
+    "@tauri-apps/plugin-process": "~2.3.1",
+    "@tauri-apps/plugin-updater": "~2",
+    "@tauri-store/pinia": "^4.2.0",
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "curlconverter": "^4.12.0",
     "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",
     "monaco-editor": "^0.55.1",
@@ -32,7 +37,10 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4",
     "vue": "^3.5.13",
-    "vue-sonner": "^2.0.9"
+    "vue-i18n": "^11.4.2",
+    "vue-router": "^4.6.4",
+    "vue-sonner": "^2.0.9",
+    "vuehex": "^0.6.5"
   },
   "devDependencies": {
     "@catppuccin/tailwindcss": "^1.0.0",
@@ -45,5 +53,6 @@
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
     "vue-tsc": "^2.1.10"
-  }
+  },
+  "packageManager": "pnpm@11.0.9+sha512.34ce82e6780233cf9cad8685029a8f81d2e06196c5a9bad98879f7424940c6817c4e4524fb7d38b8553ceed48b9758b8ebaf1abd3600c232c4c8cf7366086f38"
 }

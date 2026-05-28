@@ -3,8 +3,8 @@
     class="rounded-lg border p-2"
     :class="
       variant === 'error'
-        ? 'bg-ctp-red-950 border-ctp-red-500'
-        : 'bg-ctp-surface0'
+        ? 'bg-lh-red-950 border-lh-red-500'
+        : 'bg-lh-surface-0'
     "
   >
     <slot />

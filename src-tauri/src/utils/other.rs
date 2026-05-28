@@ -1,4 +1,3 @@
-use log::info;
 use reqwest::header::HeaderMap;
 use std::collections::HashMap;
 

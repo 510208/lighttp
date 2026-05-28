@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import loader from "@monaco-editor/loader";
+
 // Monaco types may not be available in some environments. Use a lightweight local alias
 // to avoid TypeScript errors when the module or its type declarations aren't found.
 type MonacoEditorAlias = any;
@@ -49,9 +50,10 @@ onMounted(async () => {
       editorInstance.value = monaco.editor.create(editorContainer.value, {
         value: code.value,
         language: language.value,
-        theme: "vs-dark",
+        theme: "catppuccinomocha",
         automaticLayout: true,
       });
+
       emit("update:modelValue", code.value);
 
       editorInstance.value.getModel().onDidChangeContent(() => {
@@ -178,7 +180,11 @@ function autoDetectLanguage(fileName: string) {
   <div class="flex flex-col">
     <div class="flex justify-between">
       <div class="flex items-center gap-2 p-2 px-4">
-        <span class="text-sm font-semibold">選擇語言</span>
+        <span class="text-sm font-semibold">
+          {{
+            $t("home.settings_panel.tabs.body.body_original.choose_language")
+          }}
+        </span>
         <Select v-model="language" @update:model-value="changeLanguage">
           <SelectTrigger class="h-8 w-[180px]">
             <SelectValue placeholder="選擇語言" size="sm" />
@@ -197,7 +203,7 @@ function autoDetectLanguage(fileName: string) {
       <div class="flex items-center gap-2 p-2 px-4">
         <Button variant="ghost" @click="handleFileUpload">
           <Upload class="h-4 w-4" />
-          讀取檔案
+          {{ $t("home.settings_panel.tabs.body.body_original.load_from_file") }}
         </Button>
       </div>
     </div>

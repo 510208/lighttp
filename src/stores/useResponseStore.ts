@@ -7,6 +7,8 @@ export interface ResponseState {
   size: number;
   headers: Record<string, string>;
   timeTaken: number | null;
+  bodyBinary: Uint8Array;
+  bodyB64?: string; // 可選的 base64 編碼字串，保留以供前端使用
   body_type: string;
 }
 
@@ -14,8 +16,10 @@ export const useResponseStore = defineStore("response", () => {
   const status = ref<number | null | undefined>(null);
   const body = ref<string>("");
   const headers = ref<Record<string, string>>({});
-
   const timeTaken = ref<number | null>(null);
+  const bodyBinaryB64 = ref<string>(""); // 用於存儲從 Rust 後端接收到的 base64 編碼字串
+  const contentType = ref<string>("text/plain");
+  const hexViewerBuffer = ref<Uint8Array>(new Uint8Array(0));
 
   // 計算body的檔案大小
   const size = ref<number>(0);
@@ -23,11 +27,8 @@ export const useResponseStore = defineStore("response", () => {
     size.value = new Blob([newBody]).size;
   });
 
-  const contentType = ref<string>("text/plain");
-
-  function setResponse(payload: any) {
+  async function setResponse(payload: any) {
     try {
-      // 檢查 payload 是否為物件，如果是字串則嘗試解析
       let responseObj: ResponseState;
       if (typeof payload === "string") {
         responseObj = JSON.parse(payload);
@@ -41,7 +42,19 @@ export const useResponseStore = defineStore("response", () => {
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
       contentType.value = headers.value["Content-Type"] || "text/plain";
+      bodyBinaryB64.value = responseObj.bodyB64 || "";
+      hexViewerBuffer.value = new Uint8Array(responseObj.bodyBinary);
+
       console.log("[setResponse] Response payload type:", contentType.value);
+      console.log("[setResponse] ResponseStore:", {
+        status: status.value,
+        headers: headers.value,
+        body: body.value,
+        timeTaken: timeTaken.value,
+        contentType: contentType.value,
+        bodyBinaryB64: bodyBinaryB64.value,
+        hexViewerBuffer: hexViewerBuffer.value,
+      });
     } catch (e) {
       console.error("[setResponse] Failed to parse response payload:", e);
       status.value = null;
@@ -49,6 +62,7 @@ export const useResponseStore = defineStore("response", () => {
       body.value = "";
       timeTaken.value = null;
       contentType.value = "text/plain";
+      hexViewerBuffer.value = new Uint8Array(0);
     }
   }
 
@@ -62,6 +76,9 @@ export const useResponseStore = defineStore("response", () => {
     body,
     timeTaken,
     size,
+    bodyBinaryB64,
+    contentType,
+    hexViewerBuffer,
 
     setStatus,
     setResponse,

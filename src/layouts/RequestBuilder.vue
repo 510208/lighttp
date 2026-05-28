@@ -8,6 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import TargetInput from "@/components/TargetInput/TargetInput.vue";
-import SettingPanel from "@/components/SettingPanel/SettingPanel.vue";
+import TargetInput from "@/components/Home/TargetInput/TargetInput.vue";
+import SettingPanel from "@/components/Home/SettingPanel/SettingPanel.vue";
 </script>
