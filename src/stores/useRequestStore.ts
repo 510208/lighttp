@@ -142,20 +142,20 @@ export const useRequestStore = defineStore("request", () => {
       ? proxyConfig.value
       : null;
 
-    if (proxyConfig.value.enabled) {
-      // 檢查proxy設定中URL與協定是否為空
-      if (
-        proxyConfig.value.host === "" ||
-        !proxyConfig.value.host ||
-        proxyConfig.value.port === 0 ||
-        !proxyConfig.value.protocol
-      ) {
-        console.error(
-          "Proxy is enabled but host or protocol is missing, the proxy configuration is ",
-          proxyConfig.value,
-        );
-        checkedProxyConfig = null; // 不傳送proxy設定給後端
-      }
+      if (proxyConfig.value.enabled) {
+        const proxyPort = Number(proxyConfig.value.port);
+
+        if (
+          !proxyConfig.value.host.trim() ||
+          !Number.isInteger(proxyPort) ||
+          proxyPort < 1 ||
+          proxyPort > 65535 ||
+          !proxyConfig.value.protocol
+        ) {
+          throw new Error(
+            "Proxy is enabled but host, protocol, or port is invalid.",
+          );
+        }
 
       // 檢查auth設定是否完整
       if (
