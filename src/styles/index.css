@@ -169,8 +169,8 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
 
 /* 自訂捲軸樣式 */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
