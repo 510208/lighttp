@@ -28,7 +28,6 @@ function jsonIsValid(json: string): boolean {
 
 async function convertJsonToSchema(
   jsonString: string,
-  _indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   const store = useSettingsStore();
@@ -65,7 +64,6 @@ async function convertJsonToSchema(
 
 async function convertJsonToTypeScript(
   jsonString: string,
-  _indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
@@ -99,7 +97,6 @@ async function convertJsonToTypeScript(
 
 async function convertJsonToPython(
   jsonString: string,
-  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
@@ -133,7 +130,6 @@ async function convertJsonToPython(
 
 async function convertJsonToRust(
   jsonString: string,
-  indentString: string | number,
   typeName: string = "RootObject",
 ): Promise<string> {
   if (!jsonIsValid(jsonString)) {
