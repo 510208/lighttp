@@ -1,4 +1,5 @@
 use tracing::{debug, error, info};
+use utils::cli::handle_cli_args;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -10,6 +11,12 @@ fn greet(name: &str) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_cli::init())
+        .setup(|app| {
+            // 調用抽離出去的 CLI 處理函式
+            handle_cli_args(app)?;
+
+            Ok(())
+        })
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
