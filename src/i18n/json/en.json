@@ -155,6 +155,7 @@
 
   "settings_panel.define_gen.title": "Definition Generator Settings",
   "settings_panel.define_gen.indent.label": "Default Indent Size",
+  "settings_panel.define_gen.indent.placeholder": "Select Indent Size",
   "settings_panel.define_gen.indent.description": "Set the number of spaces to use for indentation in the generated structure definitions. Default is 2. This setting may be overridden by certain generators.",
   "settings_panel.define_gen.indent.options.spaces": "{count} spaces",
   "settings_panel.define_gen.indent.options.tab": "Tab character"
