@@ -41,13 +41,13 @@
       label-key="settings_panel.define_gen.only_types.label"
       description-key="settings_panel.define_gen.only_types.description"
     >
-      <Switch v-model="settingsStore.quicktypeConfig.onlyTypes" />
+      <Switch v-model="settingsStore.quicktypeConfig.justTypes" />
     </ConfigOptionFrame>
     <ConfigOptionFrame
       label-key="settings_panel.define_gen.all_as_optional.label"
       description-key="settings_panel.define_gen.all_as_optional.description"
     >
-      <Switch v-model="settingsStore.quicktypeConfig.allAsOptional" />
+      <Switch v-model="settingsStore.quicktypeConfig.allPropertiesOptional" />
     </ConfigOptionFrame>
   </div>
 </template>

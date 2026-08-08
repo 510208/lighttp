@@ -50,7 +50,11 @@ async function convertJsonToSchema(
 
     const result = await quicktype({
       inputData,
-      ...store.getQuicktypeConfig("schema"),
+      lang: "schema",
+      allPropertiesOptional: store.quicktypeConfig.allPropertiesOptional,
+      rendererOptions: {
+        "just-types": store.quicktypeConfig.justTypes.toString(),
+      },
     });
 
     return result.lines.join("\n");
@@ -66,6 +70,8 @@ async function convertJsonToTypeScript(
   jsonString: string,
   typeName: string = "RootObject",
 ): Promise<string> {
+  const store = useSettingsStore();
+
   if (!jsonIsValid(jsonString)) {
     throw new Error("Invalid JSON: Please check your input JSON syntax");
   }
@@ -83,7 +89,11 @@ async function convertJsonToTypeScript(
 
     const result = await quicktype({
       inputData,
-      ...useSettingsStore().getQuicktypeConfig("typescript"),
+      lang: "typescript",
+      allPropertiesOptional: store.quicktypeConfig.allPropertiesOptional,
+      rendererOptions: {
+        "just-types": store.quicktypeConfig.justTypes.toString(),
+      },
     });
 
     return result.lines.join("\n");
@@ -99,6 +109,8 @@ async function convertJsonToPython(
   jsonString: string,
   typeName: string = "RootObject",
 ): Promise<string> {
+  const store = useSettingsStore();
+
   if (!jsonIsValid(jsonString)) {
     throw new Error("Invalid JSON: Please check your input JSON syntax");
   }
@@ -114,9 +126,15 @@ async function convertJsonToPython(
     const inputData = new InputData();
     inputData.addInput(jsonInput);
 
+    console.log("Quicktype config:", store.getQuicktypeConfig());
+
     const result = await quicktype({
       inputData,
-      ...useSettingsStore().getQuicktypeConfig("python"),
+      lang: "python",
+      allPropertiesOptional: store.quicktypeConfig.allPropertiesOptional,
+      rendererOptions: {
+        "just-types": store.quicktypeConfig.justTypes.toString(),
+      },
     });
 
     return result.lines.join("\n");
@@ -132,6 +150,8 @@ async function convertJsonToRust(
   jsonString: string,
   typeName: string = "RootObject",
 ): Promise<string> {
+  const store = useSettingsStore();
+
   if (!jsonIsValid(jsonString)) {
     throw new Error("Invalid JSON: Please check your input JSON syntax");
   }
@@ -149,7 +169,11 @@ async function convertJsonToRust(
 
     const result = await quicktype({
       inputData,
-      ...useSettingsStore().getQuicktypeConfig("rust"),
+      lang: "rust",
+      allPropertiesOptional: store.quicktypeConfig.allPropertiesOptional,
+      rendererOptions: {
+        "just-types": store.quicktypeConfig.justTypes.toString(),
+      },
     });
 
     return result.lines.join("\n");

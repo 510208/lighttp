@@ -9,8 +9,8 @@ interface HexViewerConfig {
 
 interface quicktypeConfig {
   indentation: string | number;
-  onlyTypes: boolean;
-  allAsOptional: boolean;
+  justTypes: boolean;
+  allPropertiesOptional: boolean;
 }
 
 interface ColorTheme {
@@ -55,8 +55,8 @@ export const useSettingsStore = defineStore(
     const backgroundImageUrl = ref("");
     const quicktypeConfig = ref({
       indentation: "  ",
-      onlyTypes: false,
-      allAsOptional: false,
+      justTypes: false,
+      allPropertiesOptional: false,
     } as unknown as Ref<quicktypeConfig>);
     const hexViewerConfig = ref({
       enabled: true,
@@ -92,12 +92,9 @@ export const useSettingsStore = defineStore(
       return "  ";
     }
 
-    function getQuicktypeConfig(language: string): any {
+    function getQuicktypeConfig(): any {
       // 在quicktypeConfig後面加上lang:language
-      return {
-        ...quicktypeConfig.value,
-        lang: language,
-      };
+      return quicktypeConfig.value;
     }
 
     function setLanguage(newLang: string) {
