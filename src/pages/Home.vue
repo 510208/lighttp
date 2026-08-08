@@ -14,20 +14,22 @@ import { useSettingsStore } from "@/stores/useSettingsStore";
 import BackgroundImg from "@/components/common/BackgroundImg.vue";
 
 const settingsStore = useSettingsStore();
+
+// 取得 ResizablePanel 元件實體
 const isResponsePanelOpen = ref(true);
 
-const toggleResponsePanel = () => {
-  isResponsePanelOpen.value = !isResponsePanelOpen.value;
-  // 傳回現在的狀態給 StatusBar
-  return isResponsePanelOpen.value;
+// 監聽面板事件更新狀態 (讓 StatusBar 保持同步)
+const handleCollapse = () => {
+  isResponsePanelOpen.value = false;
 };
 
-// 處理左右分割面板的方向，根據螢幕寬度調整排列方式
+const handleExpand = () => {
+  isResponsePanelOpen.value = true;
+};
 
-// 宣告當前方向，預設為垂直 (上下)
+// 處理左右/上下分割面板的方向
 const groupDirection = ref<"vertical" | "horizontal">("vertical");
 
-// 監聽螢幕寬度並切換排列方向
 const checkScreenSize = () => {
   if (window.innerWidth >= 768) {
     groupDirection.value = "horizontal";
@@ -45,12 +47,16 @@ onUnmounted(() => {
   window.removeEventListener("resize", checkScreenSize);
 });
 
-// 計算左版面 (第一個 Panel) 的最小尺寸
+// 計算第一個 Panel 的最小尺寸：保持固定最小比例，避免鎖死第二個 Panel
 const leftPanelMinSize = computed(() => {
   if (groupDirection.value === "horizontal") {
-    return 35; // 水平模式下左版面最小 35%
+    return 35;
   }
-  return isResponsePanelOpen.value ? 40 : 100; // 垂直模式下維持原本的高限制
+  return 30;
+});
+
+const rightPanelCollapsedSize = computed(() => {
+  return groupDirection.value === "horizontal" ? 0 : 4;
 });
 </script>
 
@@ -64,48 +70,54 @@ const leftPanelMinSize = computed(() => {
 
     <main class="min-h-0 flex-1">
       <ResizablePanelGroup :direction="groupDirection" class="h-full w-full">
-        <!-- 左版面 (或上版面) -->
+        <!-- 上 / 左 版面 -->
         <ResizablePanel
-          :default-size="isResponsePanelOpen ? 55 : 100"
+          :default-size="55"
           :min-size="leftPanelMinSize"
           class="min-h-0 min-w-0"
         >
           <RequestBuilder />
         </ResizablePanel>
 
-        <template v-if="isResponsePanelOpen">
-          <!-- 垂直模式 (上下) 與 水平模式 (左右) 的分隔線包覆結構 -->
+        <!-- 
+          分割條手把 (ResizableHandle)：
+          不論垂直或水平，皆直接作為 PanelGroup 的直屬 Child 存在。
+          垂直模式下：設定 h-3 w-full (提供足夠的碰撞與拖曳熱區)
+          水平模式下：設定 h-full w-3
+        -->
+        <ResizableHandle
+          :class="[
+            'hover:bg-lh-text/10 flex items-center justify-center transition-colors',
+            groupDirection === 'vertical'
+              ? 'my-0.5 w-full !cursor-row-resize'
+              : 'mx-0.5 h-full !cursor-col-resize',
+          ]"
+        >
+          <!-- 內部擬態視覺線 (視覺上保持精緻，但不影響外層熱區) -->
           <div
-            v-if="groupDirection === 'vertical'"
-            class="flex h-2 w-full items-center justify-center pt-3"
-          >
-            <div class="w-[calc(100%-2.5rem)]">
-              <ResizableHandle
-                class="bg-lh-text/20 w-[90%] !cursor-row-resize"
-              />
-            </div>
-          </div>
+            :class="[
+              'bg-lh-text/20 rounded-full',
+              groupDirection === 'vertical' ? 'w-[80%]' : 'h-[80%]',
+            ]"
+          />
+        </ResizableHandle>
 
-          <!-- 當為水平模式 (左右) 時：分隔線為全高，並設定左右 mx-0.5 間距 -->
-          <div v-else class="mx-0.5 flex h-full items-center justify-center">
-            <ResizableHandle class="bg-lh-text/20 h-full !cursor-col-resize" />
-          </div>
-
-          <!-- 右版面 (或下版面) -->
-          <ResizablePanel
-            :default-size="45"
-            :min-size="20"
-            class="min-h-0 min-w-0"
-          >
-            <ResponsePanel />
-          </ResizablePanel>
-        </template>
+        <!-- 下 / 右 版面 -->
+        <ResizablePanel
+          ref="responsePanelRef"
+          :default-size="45"
+          :min-size="20"
+          :collapsible="true"
+          :collapsed-size="rightPanelCollapsedSize"
+          @collapse="handleCollapse"
+          @expand="handleExpand"
+          class="min-h-0 min-w-0"
+        >
+          <ResponsePanel />
+        </ResizablePanel>
       </ResizablePanelGroup>
 
-      <StatusBar
-        :response-open="isResponsePanelOpen"
-        @toggle-response-panel="toggleResponsePanel"
-      />
+      <StatusBar :response-open="isResponsePanelOpen" />
     </main>
   </div>
 </template>

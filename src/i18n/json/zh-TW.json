@@ -129,9 +129,6 @@
   "home.status_bar.proxy_status.loading_text": "代理設定不完整",
   "home.status_bar.proxy_status.none": "代理已禁用",
 
-  "home.status_bar.collapse_response_panel.collapse": "收合回應面板",
-  "home.status_bar.collapse_response_panel.expand": "展開回應面板",
-
   "title_bar.dropdown_menu.save": "儲存當前工作",
   "title_bar.dropdown_menu.load": "從檔案載入工作",
   "title_bar.dropdown_menu.settings": "設定",

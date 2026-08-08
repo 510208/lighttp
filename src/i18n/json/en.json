@@ -128,9 +128,6 @@
   "home.status_bar.proxy_status.loading_text": "Proxy Configuration Incomplete",
   "home.status_bar.proxy_status.none": "Proxy Disabled",
 
-  "home.status_bar.collapse_response_panel.collapse": "Collapse RP",
-  "home.status_bar.collapse_response_panel.expand": "Expand RP",
-
   "title_bar.dropdown_menu.save": "Save Current Workspace",
   "title_bar.dropdown_menu.load": "Load Workspace from File",
   "title_bar.dropdown_menu.settings": "Settings",

@@ -24,22 +24,6 @@
 
     <!-- 右側 -->
     <div class="flex h-full items-center gap-0 text-sm">
-      <button
-        type="button"
-        class="hover:bg-lh-surface-0 flex h-full items-center gap-1 px-2 text-xs transition-colors"
-        @click="$emit('toggle-response-panel')"
-      >
-        <ChevronDown
-          :size="16"
-          :class="{ 'rotate-180': !props.responseOpen }"
-        />
-        {{
-          props.responseOpen
-            ? $t("home.status_bar.collapse_response_panel.collapse")
-            : $t("home.status_bar.collapse_response_panel.expand")
-        }}
-      </button>
-
       <StatusBadge status="none"> Lighttp v{{ appVersion }} </StatusBadge>
     </div>
   </div>
@@ -49,7 +33,6 @@
 import StatusBadge from "@/components/Home/StatusBar/StatusBadge.vue";
 import { getVersion } from "@tauri-apps/api/app";
 import {
-  ChevronDown,
   Ellipsis,
   CheckCircle,
   ServerOff,
@@ -205,10 +188,6 @@ watch(
 
 const props = defineProps<{
   responseOpen: boolean;
-}>();
-
-defineEmits<{
-  (e: "toggle-response-panel"): void;
 }>();
 </script>
 
