@@ -48,7 +48,7 @@ onUnmounted(() => {
 // 計算左版面 (第一個 Panel) 的最小尺寸
 const leftPanelMinSize = computed(() => {
   if (groupDirection.value === "horizontal") {
-    return 33; // 水平模式下左版面最小 33%
+    return 35; // 水平模式下左版面最小 35%
   }
   return isResponsePanelOpen.value ? 40 : 100; // 垂直模式下維持原本的高限制
 });
