@@ -1,7 +1,7 @@
 <template>
   <!-- 回應面板 -->
   <div
-    class="bg-lh-surface border-lh-surface-variant flex h-full min-h-0 flex-col gap-0"
+    class="bg-lh-surface border-lh-surface-variant @container flex h-full min-h-0 flex-col gap-0"
     v-if="responseIsNormal === true"
   >
     <div class="mt-4 flex items-center gap-2 px-10">

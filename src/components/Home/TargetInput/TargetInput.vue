@@ -45,9 +45,11 @@ function handleEnter() {
     />
     <Button
       @click="Request.handleSend"
-      class="text-lh-subtext-0 bg-lh-surface-0 hover:bg-lh-surface-2 min-h-12.5 w-24 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all"
+      class="text-lh-subtext-0 bg-lh-surface-0 hover:bg-lh-surface-2 min-h-12.5 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all @sm:w-24"
     >
-      {{ $t("home.target_input.send_button.text") }}
+      <span class="hidden @sm:block">{{
+        $t("home.target_input.send_button.text")
+      }}</span>
       <SendHorizontal />
     </Button>
   </div>
