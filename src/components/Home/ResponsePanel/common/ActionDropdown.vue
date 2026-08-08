@@ -161,10 +161,7 @@ async function generateJsonSchema() {
     return;
   }
   try {
-    const jsonSchema = await convertJsonToSchema(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
+    const jsonSchema = await convertJsonToSchema(responseStore.body);
     console.log("Generated JSON Schema:", jsonSchema);
 
     generatedSchema.value = jsonSchema;
@@ -189,10 +186,7 @@ async function generateTypeScriptType() {
     return;
   }
   try {
-    const typeScriptDef = await convertJsonToTypeScript(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
+    const typeScriptDef = await convertJsonToTypeScript(responseStore.body);
     console.log("Generated TypeScript Definitions:", typeScriptDef);
 
     generatedSchema.value = typeScriptDef;
@@ -213,10 +207,7 @@ async function generatePythonType() {
     return;
   }
   try {
-    const pythonDef = await convertJsonToPython(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
+    const pythonDef = await convertJsonToPython(responseStore.body);
     console.log("Generated Python Definitions:", pythonDef);
 
     generatedSchema.value = pythonDef;
@@ -237,10 +228,7 @@ async function generateRustType() {
     return;
   }
   try {
-    const rustDef = await convertJsonToRust(
-      responseStore.body,
-      settingsStore.defaultIndentSize,
-    );
+    const rustDef = await convertJsonToRust(responseStore.body);
     console.log("Generated Rust Definitions:", rustDef);
 
     generatedSchema.value = rustDef;
