@@ -13,6 +13,26 @@ import {
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import BackgroundImg from "@/components/common/BackgroundImg.vue";
 
+// #region 從CLI取得路徑並載入工作區
+import { getMatches } from "@tauri-apps/plugin-cli";
+import { openLghttpFile } from "@/lib/fileHandler";
+
+onMounted(async () => {
+  try {
+    // 取得 CLI 傳入的參數
+    const matches = await getMatches();
+    const filePath = matches.args.file?.value as string;
+
+    if (filePath) {
+      await openLghttpFile(filePath);
+    }
+  } catch (error) {
+    console.error("[LigHTTP CLI] 取得 CLI 參數失敗:", error);
+  }
+});
+// #endregion
+
+// #region 介面效果
 const settingsStore = useSettingsStore();
 
 // 取得 ResizablePanel 元件實體
@@ -58,6 +78,7 @@ const leftPanelMinSize = computed(() => {
 const rightPanelCollapsedSize = computed(() => {
   return groupDirection.value === "horizontal" ? 0 : 4;
 });
+// #endregion
 </script>
 
 <template>

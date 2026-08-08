@@ -9,7 +9,7 @@ pub fn handle_cli_args(app: &mut App) -> Result<(), Box<dyn std::error::Error>> 
         Ok(m) => m,
         Err(_) => {
             println!("LigHTTP is a GUI application, please open it directly");
-            process::exit(0);
+            process::exit(1);
         }
     };
 
@@ -23,8 +23,11 @@ pub fn handle_cli_args(app: &mut App) -> Result<(), Box<dyn std::error::Error>> 
                     // 這裡可以將路徑存入 Tauri State 供前端讀取，或在此進行事前處理
                     return Ok(());
                 } else {
-                    println!("LigHTTP is a GUI application, please open it directly");
-                    process::exit(0);
+                    println!(
+                        "指定的檔案不存在或不是合法的 .lghttp.json 檔案: {}",
+                        file_path
+                    );
+                    process::exit(1);
                 }
             }
         }
@@ -33,7 +36,7 @@ pub fn handle_cli_args(app: &mut App) -> Result<(), Box<dyn std::error::Error>> 
     // 若有傳入其他未定義的指令/參數
     // if !matches.args.is_empty() {
     //     println!("LigHTTP is a GUI application, please open it directly");
-    //     process::exit(0);
+    //     process::exit(1);
     // }
 
     Ok(())
