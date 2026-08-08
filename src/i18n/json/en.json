@@ -159,5 +159,9 @@
   "settings_panel.define_gen.indent.placeholder": "Select Indent Size",
   "settings_panel.define_gen.indent.description": "Set the number of spaces to use for indentation in the generated structure definitions. Default is 2. This setting may be overridden by certain generators.",
   "settings_panel.define_gen.indent.options.spaces": "{count} spaces",
-  "settings_panel.define_gen.indent.options.tab": "Tab character"
+  "settings_panel.define_gen.indent.options.tab": "Tab character",
+  "settings_panel.define_gen.only_types.label": "Generate Type Definitions Only",
+  "settings_panel.define_gen.only_types.description": "When enabled, the generator will only produce type definitions without the parsing functions. This is useful for scenarios that require pure type information.",
+  "settings_panel.define_gen.all_as_optional.label": "All Properties as Optional",
+  "settings_panel.define_gen.all_as_optional.description": "When enabled, the generator will set all properties as optional. This is useful for scenarios that involve handling potentially missing data."
 }
