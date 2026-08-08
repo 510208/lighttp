@@ -126,6 +126,9 @@ importers:
       vite:
         specifier: ^6.0.3
         version: 6.4.2(@types/node@25.6.0)(jiti@2.6.1)(lightningcss@1.32.0)(yaml@2.8.4)
+      vue-i18n-extract:
+        specifier: ^2.0.7
+        version: 2.0.7
       vue-tsc:
         specifier: ^2.1.10
         version: 2.2.12(typescript@5.6.3)
@@ -835,6 +838,9 @@ packages:
   argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
 
+  argparse@2.0.1:
+    resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+
   aria-hidden@1.2.6:
     resolution: {integrity: sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==}
     engines: {node: '>=10'}
@@ -860,6 +866,10 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
+  cac@6.7.14:
+    resolution: {integrity: sha512-b6Ilus+c3RrdDk+JhLKUAQfzzgLEPy6wcXqS7f/xe1EETvsDP6GORG7SFuOs6cID5YkqchW/LXZbX5bc8j7ZcQ==}
+    engines: {node: '>=8'}
+
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
 
@@ -869,6 +879,10 @@ packages:
 
   collection-utils@1.0.1:
     resolution: {integrity: sha512-LA2YTIlR7biSpXkKYwwuzGjwL5rjWEZVOSnvdUc7gObvWe4WkjxOpfrdhoP7Hs09YWDVfg0Mal9BpAqLfVEzQg==}
+
+  commander@6.2.1:
+    resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
+    engines: {node: '>= 6'}
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -899,6 +913,10 @@ packages:
 
   dompurify@3.2.7:
     resolution: {integrity: sha512-WhL/YuveyGXJaerVlMYGWhvQswa7myDG17P7Vu65EWC05o8vfeNbvNf4d/BOvH99+ZW+LlQsc1GDKMa1vNK6dw==}
+
+  dot-object@2.1.5:
+    resolution: {integrity: sha512-xHF8EP4XH/Ba9fvAF2LDd5O3IITVolerVV6xvkxoM8zlGEiCUrggpAnHyOoKJKCrhvPcGATFAUwIujj7bRG5UA==}
+    hasBin: true
 
   enhanced-resolve@5.21.0:
     resolution: {integrity: sha512-otxSQPw4lkOZWkHpB3zaEQs6gWYEsmX4xQF68ElXC/TWvGxGMSGOvoNbaLXm6/cS/fSfHtsEdw90y20PCd+sCA==}
@@ -948,6 +966,11 @@ packages:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
+  glob@8.1.0:
+    resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
+    engines: {node: '>=12'}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
@@ -974,6 +997,10 @@ packages:
   is-url@1.2.4:
     resolution: {integrity: sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==}
 
+  is-valid-glob@1.0.0:
+    resolution: {integrity: sha512-AhiROmoEFDSsjx8hW+5sGwgKVIORcXnrlAx/R0ZSeaPw70Vw0CqkGBBhHGL58Uox2eXnU1AnvXJl1XlyedO5bA==}
+    engines: {node: '>=0.10.0'}
+
   is-what@5.5.0:
     resolution: {integrity: sha512-oG7cgbmg5kLYae2N5IVd3jm2s+vldjxJzK1pcu9LfpGuQ93MQSzo0okvRna+7y5ifrD+20FE8FvjusyGaz14fw==}
     engines: {node: '>=18'}
@@ -984,6 +1011,10 @@ packages:
 
   js-base64@3.7.8:
     resolution: {integrity: sha512-hNngCeKxIUQiEUN3GPJOkz4wF/YvdUdbNL9hsBcMQTkKzboD7T/q3OYOuuPZLUE6dBxSGpwhk5mwuDud7JVAow==}
+
+  js-yaml@4.3.1:
+    resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
+    hasBin: true
 
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
@@ -1085,6 +1116,10 @@ packages:
 
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
+
+  minimatch@5.1.9:
+    resolution: {integrity: sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw==}
+    engines: {node: '>=10'}
 
   minimatch@9.0.9:
     resolution: {integrity: sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==}
@@ -1382,6 +1417,10 @@ packages:
     peerDependenciesMeta:
       '@vue/composition-api':
         optional: true
+
+  vue-i18n-extract@2.0.7:
+    resolution: {integrity: sha512-i1NW5R58S720iQ1BEk+6ILo3hT6UA8mtYNNolSH4rt9345qvXdvA6GHy2+jHozdDAKHwlu9VvS/+vIMKs1UYQw==}
+    hasBin: true
 
   vue-i18n@11.4.2:
     resolution: {integrity: sha512-sADDeKXqAGsPX6tK3t3y2ZiMpbVWN12tG+MhTiJ06rVoh58eGtM4wFyw3uWGbVkXByVp9Ne/AP+nSSzI+J9OAQ==}
@@ -2014,6 +2053,8 @@ snapshots:
     dependencies:
       sprintf-js: 1.0.3
 
+  argparse@2.0.1: {}
+
   aria-hidden@1.2.6:
     dependencies:
       tslib: 2.8.1
@@ -2040,6 +2081,8 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
+  cac@6.7.14: {}
+
   class-variance-authority@0.7.1:
     dependencies:
       clsx: 2.1.1
@@ -2047,6 +2090,8 @@ snapshots:
   clsx@2.1.1: {}
 
   collection-utils@1.0.1: {}
+
+  commander@6.2.1: {}
 
   concat-map@0.0.1: {}
 
@@ -2080,6 +2125,11 @@ snapshots:
   dompurify@3.2.7:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
+
+  dot-object@2.1.5:
+    dependencies:
+      commander: 6.2.1
+      glob: 7.2.3
 
   enhanced-resolve@5.21.0:
     dependencies:
@@ -2143,6 +2193,14 @@ snapshots:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
+  glob@8.1.0:
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 5.1.9
+      once: 1.4.0
+
   graceful-fs@4.2.11: {}
 
   he@1.2.0: {}
@@ -2162,11 +2220,17 @@ snapshots:
 
   is-url@1.2.4: {}
 
+  is-valid-glob@1.0.0: {}
+
   is-what@5.5.0: {}
 
   jiti@2.6.1: {}
 
   js-base64@3.7.8: {}
+
+  js-yaml@4.3.1:
+    dependencies:
+      argparse: 2.0.1
 
   jsesc@3.1.0: {}
 
@@ -2236,6 +2300,10 @@ snapshots:
   minimatch@3.1.5:
     dependencies:
       brace-expansion: 1.1.14
+
+  minimatch@5.1.9:
+    dependencies:
+      brace-expansion: 2.1.0
 
   minimatch@9.0.9:
     dependencies:
@@ -2464,6 +2532,14 @@ snapshots:
   vue-demi@0.14.10(vue@3.5.33(typescript@5.6.3)):
     dependencies:
       vue: 3.5.33(typescript@5.6.3)
+
+  vue-i18n-extract@2.0.7:
+    dependencies:
+      cac: 6.7.14
+      dot-object: 2.1.5
+      glob: 8.1.0
+      is-valid-glob: 1.0.0
+      js-yaml: 4.3.1
 
   vue-i18n@11.4.2(vue@3.5.33(typescript@5.6.3)):
     dependencies:
