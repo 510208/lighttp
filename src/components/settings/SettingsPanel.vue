@@ -5,7 +5,7 @@
       <slot name="settings" />
     </DialogTrigger>
     <DialogContent
-      class="h-[calc(100%-4rem)] max-h-[600px] min-h-[60vh] w-[60vw] min-w-fit p-0 sm:max-w-[1000px]"
+      class="h-[calc(100%-4rem)] max-h-[600px] min-h-[60vh] w-[85vw] min-w-fit p-0 sm:max-w-[1000px]"
     >
       <Tabs class="flex h-full flex-row">
         <TabsList
