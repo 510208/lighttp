@@ -37,6 +37,18 @@
         </SelectContent>
       </Select>
     </ConfigOptionFrame>
+    <ConfigOptionFrame
+      label-key="settings_panel.define_gen.only_types.label"
+      description-key="settings_panel.define_gen.only_types.description"
+    >
+      <Switch v-model="settingsStore.quicktypeConfig.onlyTypes" />
+    </ConfigOptionFrame>
+    <ConfigOptionFrame
+      label-key="settings_panel.define_gen.all_as_optional.label"
+      description-key="settings_panel.define_gen.all_as_optional.description"
+    >
+      <Switch v-model="settingsStore.quicktypeConfig.allAsOptional" />
+    </ConfigOptionFrame>
   </div>
 </template>
 
@@ -51,6 +63,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 const settingsStore = useSettingsStore();
 </script>
