@@ -34,7 +34,7 @@ const statusClasses = {
   ready: "!text-lh-text border-lh-overlay-1/30",
 };
 const generalClass =
-  "text-xs flex items-center flex gap-1 text-mono px-2 py-1 rounded-[10px] border";
+  "text-xs flex items-center flex gap-1 text-mono px-2 py-1 rounded-[10px] border flex-nowrap text-nowrap";
 const statusColorsWithGeneral = Object.fromEntries(
   Object.entries(statusColors).map(([key, value]) => [
     key,

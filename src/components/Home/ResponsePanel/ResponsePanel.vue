@@ -5,7 +5,7 @@
     v-if="responseIsNormal === true"
   >
     <div class="mt-4 flex items-center gap-2 px-10">
-      <h2 class="text-lh-overlay-2 mr-4 text-sm font-bold">
+      <h2 class="text-lh-overlay-2 mr-4 text-sm font-bold text-nowrap">
         {{ $t("home.response_panel.title") }}
       </h2>
       <PanelBadge :variant="responseStatus" :icon="Dot">
