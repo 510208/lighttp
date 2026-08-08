@@ -245,7 +245,7 @@ async function generateRustType() {
 function generateCurlCommand(symbol: string) {
   const curlCommand = getCurlCommand(
     requestStore,
-    settingsStore.defaultIndentSize,
+    settingsStore.getQuicktypeIndentString(),
     symbol,
   );
   generatedSchema.value = curlCommand;
