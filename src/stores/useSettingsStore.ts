@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, Ref, ref } from "vue";
+import { Ref, ref } from "vue";
 import { changeLang } from "@/i18n";
 
 interface HexViewerConfig {
@@ -71,13 +71,6 @@ export const useSettingsStore = defineStore(
       css: null,
     } as unknown as Ref<ColorTheme>);
 
-    /**
-     * @deprecated Use `quicktypeConfig.value.indentation` instead.
-     */
-    const defaultIndentSize = computed(() => {
-      return quicktypeConfig.value.indentation;
-    });
-
     function setQuicktypeConfig(newConfig: quicktypeConfig) {
       quicktypeConfig.value = newConfig;
     }
@@ -128,11 +121,6 @@ export const useSettingsStore = defineStore(
       setQuicktypeConfig,
       getQuicktypeIndentString,
       getQuicktypeConfig,
-
-      /**
-       * @deprecated Use `quicktypeConfig.value.indentation` instead.
-       */
-      defaultIndentSize,
 
       hexViewerConfig,
 

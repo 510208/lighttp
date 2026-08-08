@@ -8,7 +8,7 @@
       label-key="settings_panel.define_gen.indent.label"
       description-key="settings_panel.define_gen.indent.description"
     >
-      <Select v-model="settingsStore.defaultIndentSize">
+      <Select v-model="settingsStore.quicktypeConfig.indentation">
         <SelectTrigger class="w-32">
           <SelectValue
             :placeholder="$t('settings_panel.define_gen.indent.placeholder')"
@@ -16,17 +16,17 @@
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="tab">
+            <SelectItem :value="'\t'">
               {{ $t("settings_panel.define_gen.indent.options.tab") }}
             </SelectItem>
-            <SelectItem value="2">
+            <SelectItem :value="'  '">
               {{
                 $t("settings_panel.define_gen.indent.options.spaces", {
                   count: 2,
                 })
               }}
             </SelectItem>
-            <SelectItem value="4">
+            <SelectItem :value="'    '">
               {{
                 $t("settings_panel.define_gen.indent.options.spaces", {
                   count: 4,
