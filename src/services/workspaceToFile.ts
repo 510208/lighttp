@@ -1,6 +1,7 @@
+import { openLghttpFile } from "@/lib/fileHandler";
 import { useRequestStore } from "@/stores/useRequestStore";
 import { save, open } from "@tauri-apps/plugin-dialog";
-import { writeTextFile, readTextFile } from "@tauri-apps/plugin-fs";
+import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { toast } from "vue-sonner";
 
 async function saveWorkspaceToFile(): Promise<void> {
@@ -29,8 +30,16 @@ async function loadWorkspaceFromFile(): Promise<void> {
   const filePath = await open({
     filters: [
       {
-        name: "LigHTTP Workspace JSON (*.json)",
+        name: "LigHTTP Workspace JSON (*.lghttp.json)",
+        extensions: ["lghttp.json"],
+      },
+      {
+        name: "JSON Files (*.json)",
         extensions: ["json"],
+      },
+      {
+        name: "All Files (*.*)",
+        extensions: ["*"],
       },
     ],
   });
@@ -39,9 +48,7 @@ async function loadWorkspaceFromFile(): Promise<void> {
     return;
   }
 
-  const dataString = await readTextFile(filePath);
-  const data = JSON.parse(dataString);
-  useRequestStore().loadRequestData(data);
+  await openLghttpFile(filePath as string);
 
   toast.success("工作已成功載入");
 }
