@@ -1,10 +1,16 @@
 import { defineStore } from "pinia";
-import { Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { changeLang } from "@/i18n";
 
 interface HexViewerConfig {
   enabled: boolean;
   theme: string;
+}
+
+interface quicktypeConfig {
+  indentation: string | number;
+  onlyTypes: boolean;
+  allAsOptional: boolean;
 }
 
 interface ColorTheme {
@@ -47,7 +53,11 @@ export const useSettingsStore = defineStore(
   () => {
     const language = ref("zh-TW");
     const backgroundImageUrl = ref("");
-    const defaultIndentSize = ref(2) as Ref<number | string>;
+    const quicktypeConfig = ref({
+      indentation: "  ",
+      onlyTypes: false,
+      allAsOptional: false,
+    } as unknown as Ref<quicktypeConfig>);
     const hexViewerConfig = ref({
       enabled: true,
       theme: "terminal",
@@ -60,6 +70,42 @@ export const useSettingsStore = defineStore(
 
       css: null,
     } as unknown as Ref<ColorTheme>);
+
+    /**
+     * @deprecated Use `quicktypeConfig.value.indentation` instead.
+     */
+    const defaultIndentSize = computed(() => {
+      return quicktypeConfig.value.indentation;
+    });
+
+    function setQuicktypeConfig(newConfig: quicktypeConfig) {
+      quicktypeConfig.value = newConfig;
+    }
+
+    function getQuicktypeIndentString(): string {
+      // 如果 defaultIndentSize 是字串形式的數字，則重複空白字元；如果是字串，則直接使用該字串作為縮排
+      if (typeof quicktypeConfig.value.indentation === "number") {
+        return " ".repeat(quicktypeConfig.value.indentation);
+      } else if (typeof quicktypeConfig.value.indentation === "string") {
+        // 嘗試將字串轉換為數字，如果成功則重複空白字元；如果失敗則直接使用該字串作為縮排
+        const indentSize = parseInt(quicktypeConfig.value.indentation, 10);
+        if (!isNaN(indentSize)) {
+          return " ".repeat(indentSize);
+        } else if (quicktypeConfig.value.indentation === "tab") {
+          return "\t";
+        }
+        return quicktypeConfig.value.indentation;
+      }
+      return "  ";
+    }
+
+    function getQuicktypeConfig(language: string): any {
+      // 在quicktypeConfig後面加上lang:language
+      return {
+        ...quicktypeConfig.value,
+        lang: language,
+      };
+    }
 
     function setLanguage(newLang: string) {
       language.value = newLang;
@@ -78,6 +124,14 @@ export const useSettingsStore = defineStore(
       backgroundImageUrl,
       setBackgroundImageUrl,
 
+      quicktypeConfig,
+      setQuicktypeConfig,
+      getQuicktypeIndentString,
+      getQuicktypeConfig,
+
+      /**
+       * @deprecated Use `quicktypeConfig.value.indentation` instead.
+       */
       defaultIndentSize,
 
       hexViewerConfig,
