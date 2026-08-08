@@ -30,6 +30,18 @@ const headerTemplates: HeaderTemplate[] = [
       "屬於回應標頭（Response Header），指定哪些網域可以存取該資源。在處理前端跨域問題時，此欄位的配置至關重要。",
   },
   {
+    key: "Access-Control-Allow-Methods",
+    value: "GET, POST, PUT, DELETE, OPTIONS",
+    description:
+      "在 CORS 預檢請求（Preflight Request）的回應中使用，明確告知允許的 HTTP 方法。",
+  },
+  {
+    key: "Access-Control-Allow-Headers",
+    value: "Content-Type, Authorization, X-Requested-With",
+    description:
+      "在 CORS 預檢請求的回應中使用，明確告知跨來源請求中允許攜帶的自訂標頭名稱。",
+  },
+  {
     key: "Authorization",
     value: "Bearer <token>",
     description:
@@ -54,10 +66,23 @@ const headerTemplates: HeaderTemplate[] = [
       "表示請求或回應主體的大小（以位元組為單位）。伺服器利用此資訊判斷封包是否接收完整。",
   },
   {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; script-src 'self' https://trustedscripts.example.com",
+    description:
+      "內容安全策略（CSP），用於限制瀏覽器載入與執行資源（指令碼、樣式表、圖片等）的來源，防範 XSS 等攻擊。",
+  },
+  {
     key: "Content-Type",
     value: "application/json",
     description:
       "告訴伺服器請求主體的媒體類型，常見的值包括 application/json（表示請求主體是 JSON 格式）、application/x-www-form-urlencoded（表示請求主體是 URL 編碼格式）等。\n根據請求內容的格式選擇適當的 Content-Type，可以確保伺服器正確解析請求數據。",
+  },
+  {
+    key: "Content-Encoding",
+    value: "gzip",
+    description:
+      "指示實際傳輸的訊息主體所採用的壓縮演算法，用戶端接收後須依此演算法進行解壓縮處理。",
   },
   {
     key: "Cookie",
@@ -66,10 +91,27 @@ const headerTemplates: HeaderTemplate[] = [
       "由用戶端傳送至伺服器的狀態資訊，通常包含 Session ID 或使用者偏好。伺服器透過此欄位辨識不同請求是否來自同一個瀏覽器。",
   },
   {
+    key: "Cf-Ray",
+    value: "6a1b2c3d4e5f6789-AMS",
+    description: "Cloudflare 的請求識別碼，用於追蹤和診斷網路流量。",
+  },
+  {
+    key: "Date",
+    value: "Wed, 21 Oct 2025 07:28:00 GMT",
+    description:
+      "指示伺服器生成回應的日期與時間，通常使用 GMT（格林威治標準時間）格式。",
+  },
+  {
     key: "DNT",
     value: "1",
     description:
       "全稱為 'Do Not Track'。告知伺服器使用者不希望被追蹤其瀏覽行為。雖然並非所有伺服器都會遵守，但這是保護隱私的重要機制。",
+  },
+  {
+    key: "ETag",
+    value: '"33a643711d5de76da43d000732290382"',
+    description:
+      "特定版本資源的特定標示符（雜湊值或版本號），用於比對資源是否發生過變更，實現條件式請求。",
   },
   {
     key: "Expect",
@@ -96,6 +138,17 @@ const headerTemplates: HeaderTemplate[] = [
       "條件式請求標頭。配合伺服器的 ETag 使用，若資源未變更，伺服器將回傳 304 Not Modified，能大幅節省頻寬與載入時間。",
   },
   {
+    key: "Last-Modified",
+    value: "Wed, 21 Oct 2025 07:28:00 GMT",
+    description: "指示伺服器端該資源最後一次被修訂的日期與時間，精度通常至秒。",
+  },
+  {
+    key: "Location",
+    value: "https://example.com/login",
+    description:
+      "在重導向回應（如 301 或 302 狀態碼）或資源建立回應（201 Created）中指出新的目標 URL。",
+  },
+  {
     key: "Origin",
     value: "https://example.com",
     description:
@@ -114,6 +167,18 @@ const headerTemplates: HeaderTemplate[] = [
       "包含當前請求來源頁面的絕對路徑。常用於日誌分析、快取優化或防盜鏈設定。請注意，此單字在 HTTP 規範中拼寫為少一個 'r' 的錯誤格式（非 Referrer）。",
   },
   {
+    key: "Server",
+    value: "nginx/1.24.0",
+    description: "包含處理請求並產生回應之軟體伺服器的相關資訊。",
+  },
+  {
+    key: "Set-Cookie",
+    value:
+      "session_id=3a8f9c1b; Secure; HttpOnly; SameSite=Strict; Max-Age=3600",
+    description:
+      "由伺服器發送給用戶端，用於在用戶端瀏覽器儲存 Cookie 資料，並可指定過期時間與安全性屬性。",
+  },
+  {
     key: "Sec-Fetch-Mode",
     value: "cors",
     description:
@@ -125,6 +190,7 @@ const headerTemplates: HeaderTemplate[] = [
     description:
       "簡稱 HSTS。告知瀏覽器在指定時間內只能透過 HTTPS 存取該網站，能有效防止中間人攻擊（MITM）與 SSL 剝離攻擊。",
   },
+
   {
     key: "Upgrade-Insecure-Requests",
     value: "1",
@@ -136,6 +202,30 @@ const headerTemplates: HeaderTemplate[] = [
     value: "LigHTTP/1.0.0",
     description:
       "標識發出請求的瀏覽器類型、作業系統等，常被爬蟲用於模擬真人瀏覽。\n如果需要模擬特定瀏覽器，可以將此值設置為該瀏覽器的 User-Agent 字串。",
+  },
+  {
+    key: "Vary",
+    value: "Accept-Encoding, User-Agent",
+    description:
+      "告訴快取系統（Cache）在回應時需要考慮哪些請求標頭的差異，以決定是否使用快取的版本。這有助於提高快取命中率，並確保不同條件下的請求能獲得正確的回應。",
+  },
+  {
+    key: "WWW-Authenticate",
+    value: 'Bearer realm="Access to the staging site", error="invalid_token"',
+    description:
+      "當伺服器回傳 401 Unauthorized 狀態碼時使用，定義存取該資源時所需的驗證機制與參數。",
+  },
+  {
+    key: "WWW-Authenticate",
+    value: 'Bearer realm="Access to the staging site", error="invalid_token"',
+    description:
+      "當伺服器回傳 401 Unauthorized 狀態碼時使用，定義存取該資源時所需的驗證機制與參數。",
+  },
+  {
+    key: "X-Frame-Options",
+    value: "DENY",
+    description:
+      "指示瀏覽器是否允許頁面於 frame、iframe、embed 或 object 標籤中渲染，用以防禦點擊劫持（Clickjacking）攻擊。",
   },
   {
     key: "X-Forwarded-For",
