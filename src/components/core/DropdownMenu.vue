@@ -9,10 +9,12 @@
       <DropdownMenuItem @click="FileHelpers.saveWorkspaceToFile()">
         <Save />
         {{ $t("title_bar.dropdown_menu.save") }}
+        <DropdownMenuShortcut>Ctrl+S</DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuItem @click="FileHelpers.loadWorkspaceFromFile()">
         <FolderOpen />
         {{ $t("title_bar.dropdown_menu.load") }}
+        <DropdownMenuShortcut>Ctrl+O</DropdownMenuShortcut>
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
@@ -39,6 +41,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
