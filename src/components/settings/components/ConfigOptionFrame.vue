@@ -1,6 +1,8 @@
 <template>
-  <div class="flex flex-col items-center gap-2 space-x-4 sm:flex-row">
-    <div class="flex flex-col gap-1">
+  <div
+    class="flex flex-col items-center justify-between gap-2 space-x-4 sm:flex-row"
+  >
+    <div class="flex w-[calc(100%-6rem)] flex-col gap-1">
       <div class="flex gap-1">
         <Label class="w-32 text-sm">
           {{ $t(props.labelKey) }}

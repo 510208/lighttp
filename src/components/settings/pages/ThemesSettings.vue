@@ -17,13 +17,19 @@
       label-key="settings_panel.themes.background_image_opacity.label"
       description-key="settings_panel.themes.background_image_opacity.description"
     >
-      <Slider v-model="opacitySlider" :min="0" :max="1" :step="0.01" />
+      <Slider
+        v-model="opacitySlider"
+        :min="0"
+        :max="1"
+        :step="0.01"
+        class="w-70"
+      />
     </ConfigOptionFrame>
     <ConfigOptionFrame
       label-key="settings_panel.themes.background_image_blur.label"
       description-key="settings_panel.themes.background_image_blur.description"
     >
-      <Slider v-model="blurSlider" :min="0" :max="30" :step="1" />
+      <Slider v-model="blurSlider" :min="0" :max="30" :step="1" class="w-70" />
     </ConfigOptionFrame>
     <Separator />
     <ConfigOptionFrame
