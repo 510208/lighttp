@@ -1,6 +1,11 @@
 <template>
   <div :class="cn(statusColorsWithGeneral[status], className)">
-    <component :is="icon" v-if="icon" :size="16" class="shrink-0" />
+    <component
+      :is="icon"
+      v-if="icon"
+      :size="16"
+      :class="cn('shrink-0', iconClass)"
+    />
     <slot />
   </div>
 </template>
@@ -20,6 +25,7 @@ interface Props {
     | "none";
   class?: string;
   icon?: any; // 可選的圖標屬性，類型為任何（通常是Lucide圖標組件）
+  iconClass?: string; // 可選的圖標樣式屬性，類型為字符串
 }
 
 const statusColors = {

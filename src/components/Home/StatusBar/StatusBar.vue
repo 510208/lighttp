@@ -7,6 +7,7 @@
       <StatusBadge
         :status="leftSideStatus.statProp"
         :icon="leftSideStatus.icon"
+        :iconClass="leftSideStatus.iconClass"
       >
         {{ leftSideStatus.content }}
       </StatusBadge>
@@ -38,7 +39,7 @@ import {
   ServerOff,
   PcCase,
   Loader,
-  Plug,
+  LoaderCircle,
   Timer,
   Globe,
   GlobeOff,
@@ -59,6 +60,7 @@ const requestTime = ref<number | null>(null);
 const leftSideStatus = ref({
   statProp: "ready", // 預設為 ready
   icon: Ellipsis,
+  iconClass: undefined,
   content: t("home.status_bar.left_side_status.ready"), // 預設顯示 Ready
 } as {
   statProp:
@@ -71,6 +73,7 @@ const leftSideStatus = ref({
     | "loadingText"
     | "none";
   icon?: any; // 圖標為lucide圖標組件
+  iconClass?: string;
   content: string;
 });
 const proxyStatus = ref({
@@ -108,12 +111,14 @@ watch(
         "home.status_bar.left_side_status.ready",
       );
       leftSideStatus.value.icon = Ellipsis;
+      leftSideStatus.value.iconClass = undefined;
     } else if (newStatus === undefined) {
       leftSideStatus.value.statProp = "loading";
       leftSideStatus.value.content = t(
         "home.status_bar.left_side_status.loading",
       );
-      leftSideStatus.value.icon = Plug;
+      leftSideStatus.value.icon = LoaderCircle;
+      leftSideStatus.value.iconClass = "animate-spin";
     } else if (newStatus >= 200 && newStatus < 300) {
       leftSideStatus.value.statProp = "success";
       leftSideStatus.value.content = t(
@@ -121,6 +126,7 @@ watch(
         { status: newStatus },
       );
       leftSideStatus.value.icon = CheckCircle;
+      leftSideStatus.value.iconClass = undefined;
     } else if (newStatus >= 400 && newStatus < 500) {
       leftSideStatus.value.statProp = "error";
       leftSideStatus.value.content = t(
@@ -128,6 +134,7 @@ watch(
         { status: newStatus },
       );
       leftSideStatus.value.icon = PcCase;
+      leftSideStatus.value.iconClass = undefined;
     } else if (newStatus >= 500 && newStatus < 600) {
       leftSideStatus.value.statProp = "error";
       leftSideStatus.value.content = t(
@@ -135,11 +142,13 @@ watch(
         { status: newStatus },
       );
       leftSideStatus.value.icon = ServerOff;
+      leftSideStatus.value.iconClass = undefined;
     } else {
       // 其他狀態顯示 None
       leftSideStatus.value.statProp = "none";
       leftSideStatus.value.content = t("home.status_bar.left_side_status.none");
       leftSideStatus.value.icon = Loader;
+      leftSideStatus.value.iconClass = "animate-spin";
     }
     //#endregion
   },
