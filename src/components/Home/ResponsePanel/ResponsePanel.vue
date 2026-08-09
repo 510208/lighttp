@@ -4,7 +4,7 @@
     class="bg-lh-surface border-lh-surface-variant @container flex h-full min-h-0 flex-col gap-0"
     v-if="responseIsNormal === true"
   >
-    <div class="mt-4 flex items-center gap-2 px-10">
+    <div class="mt-4 flex items-center gap-2 px-10 md:px-6">
       <h2 class="text-lh-overlay-2 mr-4 text-sm font-bold text-nowrap">
         {{ $t("home.response_panel.title") }}
       </h2>
@@ -35,7 +35,7 @@
       </PanelBadge>
     </div>
     <Tabs default-value="body" class="flex min-h-0 flex-1 flex-col">
-      <TabsList class="mt-2 gap-5 bg-transparent p-4 px-10">
+      <TabsList class="mt-2 gap-5 bg-transparent px-10 md:p-0 md:px-4">
         <TabsOptions
           value="body"
           name="Body"
