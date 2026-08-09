@@ -31,7 +31,7 @@
       ]
     },
     "cli": {
-      "description": "LigHTTP API Client CLI",
+      "description": "LigHTTP, an API Client's CLI",
       "args": [
         {
           "name": "file",
@@ -52,6 +52,13 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+
+    "windows": {
+      "nsis": {
+        "languages": ["English", "TradChinese"],
+        "displayLanguageSelector": true
+      }
+    },
 
     "createUpdaterArtifacts": true
   }
