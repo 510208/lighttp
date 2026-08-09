@@ -12,10 +12,30 @@ import {
 } from "@/components/ui/resizable";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import BackgroundImg from "@/components/common/BackgroundImg.vue";
+import { register, unregisterAll } from "@tauri-apps/plugin-global-shortcut";
+
+// #region 註冊快速鍵
+// 註冊快捷鍵
+onMounted(() => {
+  unregisterAll(); // 先取消所有已註冊的快捷鍵，避免重複註冊
+  0;
+  register("CommandOrCtrl+O", () => {
+    FileHelpers.loadWorkspaceFromFile();
+  });
+  register("CommandOrCtrl+S", () => {
+    FileHelpers.saveWorkspaceToFile();
+  });
+});
+
+onUnmounted(() => {
+  unregisterAll();
+});
+// #endregion
 
 // #region 從CLI取得路徑並載入工作區
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { openLghttpFile } from "@/lib/fileHandler";
+import { FileHelpers } from "@/services";
 
 onMounted(async () => {
   try {
