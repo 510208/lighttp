@@ -148,4 +148,9 @@ export const useSettingsStore = defineStore(
 
 export type SettingsStore = ReturnType<typeof useSettingsStore>;
 export { loadColorTheme };
-export type { HexViewerConfig, ColorTheme };
+export type {
+  HexViewerConfig,
+  ColorTheme,
+  quicktypeConfig,
+  BackgroundImageConfig,
+};
