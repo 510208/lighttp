@@ -31,7 +31,9 @@
     >
       <Slider v-model="blurSlider" :min="0" :max="30" :step="1" class="w-70" />
     </ConfigOptionFrame>
+
     <Separator />
+
     <ConfigOptionFrame
       label-key="settings_panel.themes.binary_editor_theme.label"
       description-key="settings_panel.themes.binary_editor_theme.description"

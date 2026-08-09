@@ -27,6 +27,15 @@
         </SelectContent>
       </Select>
     </ConfigOptionFrame>
+
+    <Separator />
+
+    <ConfigOptionFrame
+      label-key="settings_panel.general.check_update_when_open.label"
+      description-key="settings_panel.general.check_update_when_open.description"
+    >
+      <Switch v-model="settingsStore.autoUpdate" />
+    </ConfigOptionFrame>
   </div>
 </template>
 
@@ -39,10 +48,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { languages } from "@/i18n";
 import { computed } from "vue";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import ConfigOptionFrame from "@/components/settings/components/ConfigOptionFrame.vue";
+import Separator from "@/components/ui/separator/Separator.vue";
 
 const settingsStore = useSettingsStore();
 

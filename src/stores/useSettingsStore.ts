@@ -79,6 +79,7 @@ export const useSettingsStore = defineStore(
 
       css: null,
     } as unknown as Ref<ColorTheme>);
+    const autoUpdate = ref(true);
 
     function setQuicktypeConfig(newConfig: quicktypeConfig) {
       quicktypeConfig.value = newConfig;
@@ -119,6 +120,8 @@ export const useSettingsStore = defineStore(
     return {
       language,
       setLanguage,
+
+      autoUpdate,
 
       backgroundImageUrl,
       setBackgroundImageUrl,
