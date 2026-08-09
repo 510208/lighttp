@@ -194,10 +194,6 @@ watch(
   },
   { deep: true },
 );
-
-const props = defineProps<{
-  responseOpen: boolean;
-}>();
 </script>
 
 <style scoped></style>
