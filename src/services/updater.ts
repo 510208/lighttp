@@ -20,7 +20,7 @@ async function checkForUpdates() {
     const versionWithoutPrefix = update.version.startsWith("v")
       ? update.version.slice(1)
       : update.version;
-    const url = `https://github.com/510208/lighttp/releases/tag/v${versionWithoutPrefix}`;
+    const url = `https://github.com/510208/lighttp/releases/tag/app-v${versionWithoutPrefix}`;
 
     const updateInfo: UpdateInfo = {
       needsUpdate: true,
