@@ -56,7 +56,8 @@
     "windows": {
       "nsis": {
         "languages": ["English", "TradChinese"],
-        "displayLanguageSelector": true
+        "displayLanguageSelector": true,
+        "installerHooks": "./installer_hooks.nsh"
       }
     },
 
@@ -66,7 +67,8 @@
         "name": "JSON File via LigHTTP",
         "description": "Open JSON configuration with LigHTTP",
         "mimeType": "application/json",
-        "role": "Editor"
+        "role": "Viewer",
+        "rank": "Alternate"
       }
     ],
 
