@@ -13,6 +13,18 @@
         v-model="settingsStore.backgroundImageUrl"
       />
     </ConfigOptionFrame>
+    <ConfigOptionFrame
+      label-key="settings_panel.themes.background_image_opacity.label"
+      description-key="settings_panel.themes.background_image_opacity.description"
+    >
+      <Slider v-model="opacitySlider" :min="0" :max="1" :step="0.01" />
+    </ConfigOptionFrame>
+    <ConfigOptionFrame
+      label-key="settings_panel.themes.background_image_blur.label"
+      description-key="settings_panel.themes.background_image_blur.description"
+    >
+      <Slider v-model="blurSlider" :min="0" :max="100" :step="1" />
+    </ConfigOptionFrame>
     <Separator />
     <ConfigOptionFrame
       label-key="settings_panel.themes.binary_editor_theme.label"
@@ -54,6 +66,28 @@ import {
   SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { computed } from "vue";
 
 const settingsStore = useSettingsStore();
+
+// 透明度
+const opacitySlider = computed({
+  get: () => [settingsStore.backgroundImageConfig.opacity],
+  set: (val: number[]) => {
+    if (val && val.length > 0) {
+      settingsStore.backgroundImageConfig.opacity = val[0];
+    }
+  },
+});
+
+// 模糊
+const blurSlider = computed({
+  get: () => [settingsStore.backgroundImageConfig.blur],
+  set: (val: number[]) => {
+    if (val && val.length > 0) {
+      settingsStore.backgroundImageConfig.blur = val[0];
+    }
+  },
+});
 </script>

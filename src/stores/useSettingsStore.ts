@@ -13,6 +13,11 @@ interface quicktypeConfig {
   allPropertiesOptional: boolean;
 }
 
+interface BackgroundImageConfig {
+  opacity: number;
+  blur: number;
+}
+
 interface ColorTheme {
   name: string;
   description: string;
@@ -62,6 +67,10 @@ export const useSettingsStore = defineStore(
       enabled: true,
       theme: "terminal",
     } as unknown as Ref<HexViewerConfig>);
+    const backgroundImageConfig = ref({
+      opacity: 0.2,
+      blur: 0,
+    } as unknown as Ref<BackgroundImageConfig>);
     const colorTheme = ref({
       name: "Mocha Theme",
       description: "The default Catppuccin Mocha theme for LigHTTP.",
@@ -113,6 +122,7 @@ export const useSettingsStore = defineStore(
 
       backgroundImageUrl,
       setBackgroundImageUrl,
+      backgroundImageConfig,
 
       quicktypeConfig,
       setQuicktypeConfig,
