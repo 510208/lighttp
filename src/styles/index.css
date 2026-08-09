@@ -104,7 +104,7 @@
   --secondary-foreground: var(--catppuccin-color-text);
 
   --muted: var(--catppuccin-color-surface2);
-  --muted-foreground: var(--catppuccin-color-text);
+  --muted-foreground: var(--catppuccin-color-subtext0);
 
   --accent: var(--catppuccin-color-surface1);
   --accent-foreground: var(--catppuccin-color-blue-foreground);

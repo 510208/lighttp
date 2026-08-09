@@ -57,4 +57,8 @@ const props = defineProps<ToasterProps>();
     transition: all 0.2s ease-in-out;
   }
 }
+
+[data-sonner-toast][data-styled="true"] [data-description] {
+  color: var(--muted-foreground) !important;
+}
 </style>
