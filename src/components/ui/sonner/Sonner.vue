@@ -38,9 +38,7 @@ const props = defineProps<ToasterProps>();
       <OctagonXIcon class="size-4" />
     </template>
     <template #loading-icon>
-      <div>
-        <Loader2Icon class="size-4 animate-spin" />
-      </div>
+      <Loader2Icon class="size-4 animate-spin" />
     </template>
     <template #close-icon>
       <XIcon class="text-lh-subtext-0 size-4" />
