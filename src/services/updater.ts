@@ -23,22 +23,38 @@ async function checkForUpdates() {
       : update.version;
     const url = `https://github.com/510208/lighttp/releases/tag/app-v${versionWithoutPrefix}`;
 
+    // 向GitHub取得release最新版本的更新日誌，而非使用updater提供的更新日誌，因為updater提供的更新日誌可能不完整
+    const releaseNotes = await fetch(
+      `https://api.github.com/repos/510208/lighttp/releases/tags/app-v${versionWithoutPrefix}`,
+    )
+      .then((res) => res.json())
+      .then((data) => data.body as string)
+      .catch(() => undefined);
+
     const updateInfo: UpdateInfo = {
       needsUpdate: true,
       currentVersion: update.currentVersion,
       version: update.version,
       date: update.date,
-      body: update.body,
+      body: releaseNotes ? releaseNotes : update.body,
       rawJson: update.rawJson,
       url: url,
     };
 
+    let descriptionToShow =
+      updateInfo.body?.slice(0, 50) ||
+      i18n.global.t("updater.no_release_notes");
+
+    if (updateInfo.body && updateInfo.body.length > 50) {
+      descriptionToShow += "...";
+    }
+
     toast.info(
       i18n.global.t("updater.update_available.message", {
-        version: update.version,
+        version: updateInfo.version,
       }),
       {
-        description: update.body || i18n.global.t("updater.no_release_notes"),
+        description: descriptionToShow,
         action: {
           label: i18n.global.t("updater.view_on_github"),
           onClick: () => {
