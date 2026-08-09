@@ -6,9 +6,11 @@ import { Request } from "@/services";
 import { SendHorizontal } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
 import hotkeys from "hotkeys-js";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { cn } from "@/lib/utils";
 
 const requestStore = useRequestStore();
+const inputColorClass = ref("border-lh-surface-0");
 
 function handleUrlBlur() {
   const url = requestStore.url.trim();
@@ -27,8 +29,22 @@ function handleUrlBlur() {
 }
 
 function handleEnter() {
+  // 檢查輸入框是否為空，如果是，則將輸入框邊線設為紅色，並顯示提示訊息
+  if (!requestStore.url.trim()) {
+    inputColorClass.value = "border-red-500";
+    // 3秒後將邊線顏色恢復為原本的顏色
+    handleTextboxTimeout();
+    return;
+  }
   handleUrlBlur(); // 先確保 URL 補全
   Request.handleSend();
+}
+
+async function handleTextboxTimeout() {
+  // 等待3秒
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  inputColorClass.value = ""; // 顏色清空
 }
 
 onMounted(() => {
@@ -49,11 +65,24 @@ onMounted(() => {
 onUnmounted(() => {
   hotkeys.unbind();
 });
+
+// 監聽輸入框，當輸入框改變時，將邊線顏色恢復為原本的顏色
+watch(
+  () => requestStore.url,
+  () => {
+    inputColorClass.value = "border-lh-surface-0"; // 恢復原本的顏色\
+  },
+);
 </script>
 
 <template>
   <div
-    class="bg-lh-base border-lh-surface-0 focus-within:border-lh-surface-2 flex flex-1 items-stretch overflow-hidden rounded-lg border transition-colors duration-200"
+    :class="
+      cn(
+        'bg-lh-base border-lh-surface-0 focus-within:border-lh-surface-2 flex flex-1 items-stretch overflow-hidden rounded-lg border transition-colors duration-200',
+        inputColorClass,
+      )
+    "
   >
     <MethodSelect />
     <input
@@ -65,7 +94,7 @@ onUnmounted(() => {
       @blur="handleUrlBlur"
     />
     <Button
-      @click="Request.handleSend"
+      @click="handleEnter"
       class="text-lh-subtext-0 bg-lh-surface-0 hover:bg-lh-surface-2 min-h-12.5 cursor-pointer rounded-none px-6 py-2 text-base font-bold transition-all @sm:w-24"
     >
       <span class="hidden @sm:block">{{
