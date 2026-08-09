@@ -8,6 +8,7 @@ use utils::cli::handle_cli_args;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_cli::init())
         .setup(|app| {
             // 調用抽離出去的 CLI 處理函式
