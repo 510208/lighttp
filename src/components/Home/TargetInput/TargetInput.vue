@@ -5,6 +5,8 @@ import { Request } from "@/services";
 
 import { SendHorizontal } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
+import hotkeys from "hotkeys-js";
+import { onMounted, onUnmounted } from "vue";
 
 const requestStore = useRequestStore();
 
@@ -28,6 +30,25 @@ function handleEnter() {
   handleUrlBlur(); // 先確保 URL 補全
   Request.handleSend();
 }
+
+onMounted(() => {
+  hotkeys("ctrl+enter", (event) => {
+    event.preventDefault();
+    handleEnter();
+  });
+
+  hotkeys("ctrl+g", (event) => {
+    // 聚焦到 URL 輸入框
+    event.preventDefault();
+    const inputElement =
+      document.querySelector<HTMLInputElement>('input[type="text"]');
+    inputElement?.focus();
+  });
+});
+
+onUnmounted(() => {
+  hotkeys.unbind();
+});
 </script>
 
 <template>
