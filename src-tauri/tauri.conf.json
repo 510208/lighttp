@@ -60,6 +60,16 @@
       }
     },
 
+    "fileAssociations": [
+      {
+        "ext": ["json"],
+        "name": "JSON File via LigHTTP",
+        "description": "Open JSON configuration with LigHTTP",
+        "mimeType": "application/json",
+        "role": "Editor"
+      }
+    ],
+
     "createUpdaterArtifacts": true
   }
 }
