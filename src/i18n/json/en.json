@@ -167,6 +167,7 @@
   "settings_panel.update.up_to_date": "You are using the latest version!",
   "settings_panel.update.new_version_available": "A new version is available! {version}",
   "settings_panel.update.no_release_notes": "No release notes available. Please visit the GitHub page for details ( {url} )",
+  "settings_panel.update.view_release_notes": "View Release Notes",
   "settings_panel.update.recheck_button.label": "Recheck",
   "settings_panel.update.update_button.label": "Update Now",
 

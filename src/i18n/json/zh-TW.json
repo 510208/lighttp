@@ -167,6 +167,7 @@
   "settings_panel.update.up_to_date": "已是最新版本！",
   "settings_panel.update.new_version_available": "有新版本可用！{version}",
   "settings_panel.update.no_release_notes": "沒有更新說明，詳細資訊可前往 GitHub 頁面查看（{url}）",
+  "settings_panel.update.view_release_notes": "查看更新說明",
   "settings_panel.update.recheck_button.label": "重新檢查",
   "settings_panel.update.update_button.label": "立即更新",
 
