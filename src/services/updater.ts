@@ -2,6 +2,7 @@ import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { toast } from "vue-sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { i18n } from "@/i18n";
 
 interface UpdateInfo {
   needsUpdate: boolean;
@@ -32,15 +33,20 @@ async function checkForUpdates() {
       url: url,
     };
 
-    toast.info(`Update available: ${update.version}`, {
-      description: update.body || "No release notes available.",
-      action: {
-        label: "View on GitHub",
-        onClick: () => {
-          openUrl(url);
+    toast.info(
+      i18n.global.t("updater.update_available.message", {
+        version: update.version,
+      }),
+      {
+        description: update.body || i18n.global.t("updater.no_release_notes"),
+        action: {
+          label: i18n.global.t("updater.view_on_github"),
+          onClick: () => {
+            openUrl(url);
+          },
         },
       },
-    });
+    );
     console.log("[updater] Update available:", updateInfo);
 
     return updateInfo;
@@ -85,7 +91,7 @@ async function runUpdate() {
       await relaunch();
     }
   } catch (error) {
-    toast.error("Failed to update. Please try again later.");
+    toast.error(i18n.global.t("updater.update_failed"));
     console.error("Failed to update:", error);
   }
 }
