@@ -144,6 +144,8 @@
   "settings_panel.general.language.label": "介面語言",
   "settings_panel.general.language.description": "選擇欲在界面中使用的語言",
   "settings_panel.general.language.placeholder": "選擇語言",
+  "settings_panel.general.check_update_when_open.label": "啟動時檢查更新",
+  "settings_panel.general.check_update_when_open.description": "啟用後，應用程式啟動時將會自動檢查是否有新版本。",
 
   "settings_panel.themes.title": "主題設定",
   "settings_panel.themes.theme_selection.label": "背景圖片網址",
@@ -177,5 +179,10 @@
   "settings_panel.define_gen.only_types.label": "僅生成型別定義",
   "settings_panel.define_gen.only_types.description": "啟用此選項後，生成器將僅生成型別定義，而不包含解析用的函式。這對於需要純粹型別資訊的情境非常有用。",
   "settings_panel.define_gen.all_as_optional.label": "所有屬性皆為可選",
-  "settings_panel.define_gen.all_as_optional.description": "啟用此選項後，生成器將把所有屬性設置為可選。這對於需要處理可能缺失資料的情境非常有用。"
+  "settings_panel.define_gen.all_as_optional.description": "啟用此選項後，生成器將把所有屬性設置為可選。這對於需要處理可能缺失資料的情境非常有用。",
+
+  "updater.update_available.message": "有新版本可用：{version}",
+  "updater.no_release_notes": "沒有更新說明，詳細資訊可前往 GitHub 頁面查看",
+  "updater.view_on_github": "在 GitHub 上查看",
+  "updater.update_failed": "更新失敗，請稍後再試。"
 }

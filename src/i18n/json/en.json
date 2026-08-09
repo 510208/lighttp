@@ -144,6 +144,8 @@
   "settings_panel.general.language.label": "Interface Language",
   "settings_panel.general.language.description": "Select the language to be used in the interface.",
   "settings_panel.general.language.placeholder": "Select Language",
+  "settings_panel.general.check_update_when_open.label": "Check for Updates on Startup",
+  "settings_panel.general.check_update_when_open.description": "When enabled, the application will automatically check for new versions when it starts up.",
 
   "settings_panel.themes.title": "Theme Settings",
   "settings_panel.themes.theme_selection.label": "Background Image URL",
@@ -177,5 +179,10 @@
   "settings_panel.define_gen.only_types.label": "Generate Type Definitions Only",
   "settings_panel.define_gen.only_types.description": "When enabled, the generator will only produce type definitions without the parsing functions. This is useful for scenarios that require pure type information.",
   "settings_panel.define_gen.all_as_optional.label": "All Properties as Optional",
-  "settings_panel.define_gen.all_as_optional.description": "When enabled, the generator will set all properties as optional. This is useful for scenarios that involve handling potentially missing data."
+  "settings_panel.define_gen.all_as_optional.description": "When enabled, the generator will set all properties as optional. This is useful for scenarios that involve handling potentially missing data.",
+
+  "updater.update_available.message": "There is a newer version: {version}",
+  "updater.no_release_notes": "No release notes available. Please visit the GitHub page for details ( {url} )",
+  "updater.view_on_github": "View on GitHub",
+  "updater.update_failed": "Update failed. Please try again later."
 }
