@@ -82,7 +82,10 @@ const rightPanelCollapsedSize = computed(() => {
 </script>
 
 <template>
-  <BackgroundImg :backgroundImageUrl="settingsStore.backgroundImageUrl" />
+  <BackgroundImg
+    :backgroundImageUrl="settingsStore.backgroundImageUrl"
+    :backgroundImageConfig="settingsStore.backgroundImageConfig"
+  />
 
   <div
     class="relative isolate z-10 flex h-screen w-screen flex-col bg-transparent"

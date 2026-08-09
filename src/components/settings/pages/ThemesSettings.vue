@@ -23,7 +23,7 @@
       label-key="settings_panel.themes.background_image_blur.label"
       description-key="settings_panel.themes.background_image_blur.description"
     >
-      <Slider v-model="blurSlider" :min="0" :max="100" :step="1" />
+      <Slider v-model="blurSlider" :min="0" :max="30" :step="1" />
     </ConfigOptionFrame>
     <Separator />
     <ConfigOptionFrame
