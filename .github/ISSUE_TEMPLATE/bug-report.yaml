@@ -56,7 +56,7 @@ body:
       - label: "I have attached the complete error logs (Logs) or steps to reproduce."
         required: true
       - label: "If possible, I am willing to provide relevant development assistance, such as Pull Request (optional)"
-          required: false
+        required: false
     validations:
       required: false
   - type: "textarea"
