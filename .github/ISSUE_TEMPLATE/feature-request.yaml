@@ -1,0 +1,100 @@
+name: Feature Request
+description: Suggestions for feature
+title: '[Feature]: '
+labels: ['feature', 'triage']
+
+body:
+  - type: "markdown"
+    attributes:
+      value: "Thanks for taking the time to fill out this bug report!\n\nIf possible, please provide a description in English or Traditional Chinese so that developers (like me) can more easily understand your ideas.\n\nIf you can use Figma or other drawing software, you can also draw your ideas and tell us.\n\nBefore making a request, you can first read the commit record or update the latest version of LigHTTP to determine whether these features have been proposed or added."
+  - type: "textarea"
+    attributes:
+      label: "Any difficulties?"
+      description: "Sometimes requests are made because of difficulties. If this is the case for you, please tell us what difficulties you encountered."
+      value: "1. \n2. \n3. \n\nMore: "
+    validations:
+      required: false
+  - type: "textarea"
+    attributes:
+      label: "Would it be better if this were the case?"
+      description: "Do you have any good solution? If so, please feel free to mention it here. Of course, don't force others to do anything."
+      placeholder: "For example: I hope LigHTTP can change the file type to XXX. It would be beneficial to me if the interface of LigHTTP has more XXX."
+    validations:
+      required: true
+  - type: "textarea"
+    attributes:
+      label: "Any other similar implementations for reference?"
+      description: "If there is any other software that provides similar functionality, please let us know. This way we can more easily map out your ideas."
+      placeholder: "For example: Postman’s XXX function, OOO software’s XXX interface, XXX mode, etc."
+    validations:
+      required: true
+  - type: "textarea"
+    attributes:
+      label: "Do you have any way to implement it?"
+      description: "If you have already thought about what you can do, please tell us in words or drawings. If you have found relevant information, please also let us know."
+      placeholder: "You can attach Figma designs or hand-drawn manuscripts, but please make sure the content is understandable"
+    validations:
+      required: true
+  - type: "textarea"
+    attributes:
+      label: "Are there any other abnormalities?"
+      description: "If this is a fix request for some kind of bug, please notify here."
+      placeholder: "For example: it showed XXX warning message and then automatically exited"
+    validations:
+      required: false
+  - type: "textarea"
+    attributes:
+      label: "Is there any relevant framework or documentation?"
+      description: "If you've come across any frameworks or documentation that might be useful, please provide links to them here. Of course, they have to be public"
+      placeholder: "For example: XXX on crate.io, XXX on NPM, XXX software, XXX command line tool or the conversation record of your discussion with AI"
+    validations:
+      required: false
+  - type: "checkboxes"
+    attributes:
+      label: "Check it out!"
+      description: "Please confirm whether there is a solution first. Some problems actually do not need to be sent as an issue."
+      options:
+      - label: "I've checked the entire Issue list and there are no duplicates of mine."
+        required: true
+      - label: "I checked Google or any search engine and I thought this should be possible programmatically"
+        required: true
+      - label: "I know these requests may or may not be fulfilled"
+        required: true
+      - label: "This feature request focuses on a \"single clear pain point\" rather than multiple unrelated features"
+        required: true
+      - label: "This feature is not only useful to me personally, but also potentially useful to many other users of this project."
+        required: true
+      - label: "If possible, I am willing to provide relevant development assistance, such as Pull Request (optional)"
+        required: false
+    validations:
+      required: false
+  - type: "textarea"
+    attributes:
+      label: "Additional Information?"
+      description: "If you have additional information to provide, please say so directly here. Pictures or videos are also acceptable. Anyone with a way to help locate the problem is welcome."
+      placeholder: "For example: Wrong screenshot, Information about your target"
+    validations:
+      required: false
+  - type: "checkboxes"
+    attributes:
+      label: "Which category does this belong to?"
+      description: "Please read your request again and try to analyze which part this request is most relevant to."
+      options:
+      - label: "Frontend/GUI (TypeScript)"
+        required: false
+      - label: "Utility functions (Rust)"
+        required: false
+      - label: "HTTP request function (Rust)"
+        required: false
+      - label: "Response parsing functionality (TypeScript/Rust)"
+        required: false
+      - label: "Rendering of responses (TypeScript)"
+        required: false
+      - label: "Personalization (TypeScript/HTML/CSS, etc.)"
+        required: false
+      - label: "Documentations (Markdown / plain text, etc.)"
+        required: false
+      - label: "Other"
+        required: false
+    validations:
+      required: true
