@@ -6,7 +6,7 @@ labels: ['feature', 'triage']
 body:
   - type: "markdown"
     attributes:
-      value: "Thanks for taking the time to fill out this bug report!\n\nIf possible, please provide a description in English or Traditional Chinese so that developers (like me) can more easily understand your ideas.\n\nIf you can use Figma or other drawing software, you can also draw your ideas and tell us.\n\nBefore making a request, you can first read the commit record or update the latest version of LigHTTP to determine whether these features have been proposed or added."
+      value: "Thanks for taking the time to fill out this feature request!\n\nIf possible, please provide a description in English or Traditional Chinese so that developers (like me) can more easily understand your ideas.\n\nIf you can use Figma or other drawing software, you can also draw your ideas and tell us.\n\nBefore making a request, you can first read the commit record or update the latest version of LigHTTP to determine whether these features have been proposed or added."
   - type: "textarea"
     attributes:
       label: "Any difficulties?"
