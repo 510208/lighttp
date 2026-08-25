@@ -1,0 +1,68 @@
+name: Bug Report
+description: File a bug report
+title: '[Bug]: '
+labels: ['bug', 'triage']
+projects: ['octo-org/1', 'octo-org/44']
+assignees:
+  - octocat
+body:
+- type: "markdown"
+  attributes:
+    value: "Thanks for taking the time to fill out this bug report!\n\nIf possible, please provide a description in English or Traditional Chinese so that developers (like me) can more easily understand your ideas.\n\nIt would be better to include some pictures or screenshots when appropriate, if you cannot describe the situation you are encountering in words.\n\nPlease confirm whether you have tested it on the latest version. If not, it is recommended that you update LigHTTP to the latest version."
+- type: "textarea"
+  attributes:
+    label: "What did you do?"
+    description: "Don't worry about what you did to cause this problem. This is not a self-examination. Feel free to speak up about anything you think might be causing the problem, and the more information you provide, the easier it will be to get answers and fixes."
+    value: "1. \n2. \n3. \n\nMore: "
+  validations:
+    required: false
+- type: "textarea"
+  attributes:
+    label: "What did you originally want to do?"
+    description: "What did you expect to happen while doing this?"
+    placeholder: "For example: I hope that LigHTTP should be able to send requests to the XXX website, and I hope that LigHTTP should apply the XXX settings I provide."
+  validations:
+    required: true
+- type: "textarea"
+  attributes:
+    label: "But what happened?"
+    description: "What does LigHTTP do that is contrary to your expectations?"
+    placeholder: "For example: LigHTTP is sent to the OOO website instead of my original XXX website. After reopening, LigHTTP does not apply my XXX settings and crashes."
+  validations:
+    required: true
+- type: "textarea"
+  attributes:
+    label: "What about your environment?"
+    description: "Please tell me your system information, including but not limited to operating system version, LigHTTP version number, whether any changes have been made, etc."
+    value: "Operating system:\nLigHTTP version:\nOther software that may be affected:\nNetwork environment:\nMore information:"
+  validations:
+    required: true
+- type: "textarea"
+  attributes:
+    label: "Are there any other abnormalities?"
+    description: "If LigHTTP not only does not do what you want, but also encounters strange problems, please let us know."
+    placeholder: "For example: it showed XXX warning message and then automatically exited"
+  validations:
+    required: false
+- type: "checkboxes"
+  attributes:
+    label: "Check it out!"
+    description: "Please confirm whether there is a solution first. Some problems actually do not need to be sent as an issue."
+    options:
+    - label: "I've checked the entire Issue list and there are no duplicates of mine."
+      required: true
+    - label: "I have searched online for relevant information myself, but still can’t find the solution."
+      required: true
+    - label: "I have tested and confirmed that this issue still exists in the latest version."
+      required: true
+    - label: "I have attached the complete error logs (Logs) or steps to reproduce."
+      required: true
+  validations:
+    required: false
+- type: "textarea"
+  attributes:
+    label: "Additional Information?"
+    description: "If you have additional information to provide, please say so directly here. Pictures or videos are also acceptable. Anyone with a way to help locate the problem is welcome."
+    placeholder: "For example: Wrong screenshot, Information about your target"
+  validations:
+    required: false
