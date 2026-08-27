@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, XCircle, Info, CheckCircle2 } from "lucide-vue-next";
+import { useI18n } from "vue-i18n";
 
-// 1. 定義與先前一致的型態
+const { t } = useI18n();
+
 export type DialogType = "info" | "success" | "warning" | "error";
 export type DialogButtons =
   | "ok"
@@ -35,7 +37,7 @@ interface ButtonConfig {
   variant: "default" | "destructive" | "outline" | "secondary" | "ghost";
 }
 
-// 2. 定義 Props
+// 預設值改為靜態常數（如空字串）避免編譯報錯
 const props = withDefaults(
   defineProps<{
     type?: DialogType;
@@ -43,22 +45,26 @@ const props = withDefaults(
     title?: string;
     description?: string;
     customLabels?: Partial<Record<DialogResult, string>>;
-    // 這個 callback 用來將使用者的選擇回傳給建立視窗的 Promise
     onResolve: (result: DialogResult) => void;
   }>(),
   {
     type: "info",
     buttons: "ok-cancel",
-    title: "提示",
+    title: "", // 改為空字串，避開提升限制
     description: "",
     customLabels: () => ({}),
   },
 );
 
+// 若外部有傳入就用傳入的，否則採用 i18n 預設值
+const displayTitle = computed(() => {
+  return props.title || t("pop_dialog.title.default");
+});
+
 // 控制彈出視窗顯示狀態
 const isOpen = ref(true);
 
-// 3. 根據 type 計算圖示與主按鈕樣式
+// 根據 type 計算圖示與主按鈕樣式
 const iconMeta = computed(() => {
   switch (props.type) {
     case "success":
@@ -89,19 +95,19 @@ const iconMeta = computed(() => {
   }
 });
 
-// 預設繁體中文本
-const defaultLabels: Record<DialogResult, string> = {
-  ok: "確定",
-  cancel: "取消",
-  yes: "是",
-  no: "否",
-  retry: "重試",
-  abort: "中止",
-  ignore: "略過",
-};
+// 將 i18n 翻譯字典放入 computed 中，每次渲染時動態取得
+const defaultLabels = computed<Record<DialogResult, string>>(() => ({
+  ok: t("pop_dialog.label.ok"),
+  cancel: t("pop_dialog.label.cancel"),
+  yes: t("pop_dialog.label.yes"),
+  no: t("pop_dialog.label.no"),
+  retry: t("pop_dialog.label.retry"),
+  abort: t("pop_dialog.label.abort"),
+  ignore: t("pop_dialog.label.ignore"),
+}));
 
 const getLabel = (key: DialogResult) =>
-  props.customLabels[key] || defaultLabels[key];
+  props.customLabels[key] || defaultLabels.value[key];
 
 // 4. 動態計算要顯示的按鈕清單
 const btnConfigs = computed<ButtonConfig[]>(() => {
@@ -166,7 +172,7 @@ const btnConfigs = computed<ButtonConfig[]>(() => {
   return configs;
 });
 
-// 5. 處理使用者點擊按鈕或關閉事件
+// 處理使用者點擊按鈕或關閉事件
 function handleAction(result: DialogResult) {
   isOpen.value = false;
   props.onResolve(result);
@@ -174,7 +180,6 @@ function handleAction(result: DialogResult) {
 
 function handleOpenUpdate(val: boolean) {
   if (!val) {
-    // 當使用者按下 ESC 或點擊外部關閉時，預設回傳最後一個按鈕（通常是取消/否）
     const fallback = btnConfigs.value[0]?.result || "cancel";
     props.onResolve(fallback);
   }
@@ -182,18 +187,18 @@ function handleOpenUpdate(val: boolean) {
 </script>
 
 <template>
-  <!-- 完美繼承 shadcn-vue 的動畫與外觀 -->
   <AlertDialog :open="isOpen" @update:open="handleOpenUpdate">
     <AlertDialogContent>
       <AlertDialogHeader>
         <AlertDialogTitle class="flex items-center gap-2 text-lg font-semibold">
-          <!-- 動態圖示組件 -->
           <component
             :is="iconMeta.icon"
             :class="['h-5 w-5 shrink-0', iconMeta.color]"
           />
-          <span>{{ title }}</span>
+          <!-- 使用動態計算的 displayTitle -->
+          <span>{{ displayTitle }}</span>
         </AlertDialogTitle>
+        <!-- 保留前一節課製的 \n 換行支援 -->
         <AlertDialogDescription
           class="text-muted-foreground whitespace-pre-line"
         >
@@ -202,7 +207,6 @@ function handleOpenUpdate(val: boolean) {
       </AlertDialogHeader>
 
       <AlertDialogFooter class="flex flex-row justify-end gap-2">
-        <!-- 遍歷渲染按鈕 -->
         <Button
           v-for="btn in btnConfigs"
           :key="btn.result"
