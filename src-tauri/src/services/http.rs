@@ -34,7 +34,14 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
                     let detailed_error = e;
                     error!("[execute_request] 代理連線測試出錯: {}", detailed_error);
 
-                    if detailed_error.contains("proxy authorization required") {
+                    // 將錯誤轉為小寫後進行多重關鍵字與 407 狀態碼比對
+                    let err_lowercase = detailed_error.to_lowercase();
+                    let is_proxy_auth_error = err_lowercase
+                        .contains("proxy authorization required")
+                        || err_lowercase.contains("proxy authentication required")
+                        || err_lowercase.contains("407");
+
+                    if is_proxy_auth_error {
                         return build_error_response(
                             403,
                             format!("登入憑證錯誤、未提供或代理認證失敗: {}", detailed_error),
