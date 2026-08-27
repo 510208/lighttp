@@ -1,5 +1,5 @@
 {
   "identifier": "pinia",
-  "windows": ["main"],
+  "windows": ["main", "about"],
   "permissions": ["pinia:default", "core:event:default"]
 }
