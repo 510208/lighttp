@@ -2,7 +2,11 @@
   <div class="absolute right-6 bottom-10">
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <Button variant="outline" size="icon-sm">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          class="bg-background/80 hover:bg-background/65! rounded-full border backdrop-blur-2xl"
+        >
           <EllipsisVertical />
         </Button>
       </DropdownMenuTrigger>
