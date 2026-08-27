@@ -27,9 +27,31 @@ async function checkForUpdates() {
     const releaseNotes = await fetch(
       `https://api.github.com/repos/510208/lighttp/releases/tags/app-v${versionWithoutPrefix}`,
     )
-      .then((res) => res.json())
-      .then((data) => data.body as string)
-      .catch(() => undefined);
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch release notes: HTTP ${res.status}`);
+        }
+        const data: unknown = await res.json();
+
+        // 確保data型態
+        if (
+          typeof data === "object" &&
+          data !== null &&
+          "body" in data &&
+          typeof data.body === "string"
+        ) {
+          return data.body;
+        }
+
+        return undefined;
+      })
+      .catch((err) => {
+        console.warn(
+          "[updater] Fetch release notes failed, fallback to default body:",
+          err,
+        );
+        return undefined;
+      });
 
     const updateInfo: UpdateInfo = {
       needsUpdate: true,
