@@ -1,88 +1,298 @@
 <template>
-  <main class="items-left flex h-full flex-col px-8 pt-20">
-    <div class="flex items-center justify-center">
-      <img :src="logo" alt="Logo" class="h-16 w-fit" />
+  <main class="items-left flex h-full flex-col gap-5 px-15 py-10">
+    <div class="flex items-center justify-between">
+      <img :src="logo" alt="Logo" class="h-12 w-fit" />
+      <div class="flex h-full flex-col justify-between p-0">
+        <p class="text-lh-subtext-1 text-right text-sm">
+          將 HTTP 請求做到簡單，使調用 API 更輕鬆
+        </p>
+        <p class="text-lh-subtext-1 text-right font-bold">v{{ appVersion }}</p>
+      </div>
     </div>
-    <Separator class="my-6" />
-    <div class="flex flex-col items-center gap-2">
-      <h1 class="font-space text-3xl font-bold">LigHTTP</h1>
-      <small class="text-lh-subtext-1">v{{ appVersion }}</small>
-      <p class="text-lh-subtext-1">將 HTTP 請求做到簡單，使調用 API 更輕鬆</p>
+
+    <Separator class="my-2" />
+
+    <div>
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">更新日誌</h2>
+        <Button variant="ghost" size="sm" @click="openReleaseNotes">
+          <ArrowRight class="h-4 w-4" />
+          {{ $t("about.release_notes.view_release_notes") }}
+        </Button>
+      </div>
+      <div
+        class="bg-lh-surface-0 mt-2.5 h-40 overflow-y-scroll rounded-md border p-2"
+      >
+        <VueMarkdown
+          class="changelog-container overflow-y-scroll"
+          :options="{ html: true }"
+          :plugins="plugins"
+          :source="releaseNotes"
+        />
+      </div>
     </div>
-    <div
-      class="absolute right-0 bottom-0 left-0 flex flex-col items-center gap-4 p-4"
-    >
-      <p>特別感謝以下協助者們：</p>
-      <ul class="text-lh-subtext-1 min-w-40 list-disc">
-        <li class="flex items-center gap-2">
-          <a
-            href="https://510208.github.io/"
-            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
-            target="_blank"
-          >
-            <img
-              src="https://gravatar.com/avatar/f7598bd8d4aba38d7219341f81a162fc842376b3b556b1995cbb97271d9e2915?v=1753291388000"
-              alt="SamHacker Avatar"
-              class="h-5 w-5 rounded-full"
-            />
-            <p>SamHacker</p>
-          </a>
-          - 也就是我，開發者本人 :D
-        </li>
-        <li class="flex items-center gap-2">
-          <a
-            href="https://zhenyuan.dev/"
-            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
-            target="_blank"
-          >
-            <img
-              src="https://gravatar.com/avatar/07f375105a68074c6b90379762cd1443"
-              alt="Zhenyuan Avatar"
-              class="h-5 w-5 rounded-full"
-            />
-            <p>Zhenyuan</p>
-          </a>
-          - 協助測試 Mac OS 版本
-        </li>
-        <li class="flex items-center gap-2">
-          <a
-            href="https://github.com/owoDennis911"
-            class="flex w-fit items-center gap-1 font-bold text-white hover:underline"
-            target="_blank"
-          >
-            <img
-              src="https://github.com/owoDennis911.png"
-              alt="Dennis911 Avatar"
-              class="h-5 w-5 rounded-full"
-            />
-            <p>Dennis911</p>
-          </a>
-          - 提供開發過程的建議
-        </li>
-      </ul>
-      <Button @click="closeWindow" class="w-full">關閉</Button>
+
+    <div class="flex w-full items-end justify-between gap-2">
+      <div>
+        <div class="flex items-center justify-between gap-2">
+          <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">貢獻者</h2>
+        </div>
+        <div class="flex items-center gap-4">
+          <TooltipProvider :delayDuration="0" disableHoverableContent>
+            <div class="flex -space-x-2">
+              <Tooltip
+                v-for="(contributor, index) in displayContributors"
+                :key="contributor.name"
+              >
+                <TooltipTrigger as-child>
+                  <Avatar
+                    class="ring-background cursor-pointer ring-2 transition-transform hover:brightness-125"
+                    @click="openUrl(contributor.github_url)"
+                    :style="{ zIndex: displayContributors.length - index }"
+                  >
+                    <AvatarImage
+                      :src="contributor.avatar_url"
+                      :alt="`@${contributor.name}`"
+                    />
+                    <AvatarFallback>
+                      {{ contributor.name.charAt(0).toUpperCase() }}
+                    </AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{{ contributor.name }}</p>
+                </TooltipContent>
+              </Tooltip>
+              <Avatar
+                v-if="countributorAvatars.length > 5"
+                class="ring-background ring-2 transition-transform hover:brightness-125"
+                :style="{ zIndex: 0 }"
+              >
+                <AvatarFallback>
+                  +{{ countributorAvatars.length - 5 }}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </TooltipProvider>
+
+          <Button variant="ghost" size="sm" @click="openContributors">
+            <ArrowRight class="h-4 w-4" />
+            {{ $t("about.contributors.view_contributors") }}
+          </Button>
+        </div>
+      </div>
+      <Button
+        variant="default"
+        @click="closeWindow"
+        class="flex items-center justify-center gap-1"
+      >
+        <X class="mr-2 h-4 w-4" />
+        {{ $t("about.close_button.label") }}
+      </Button>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import logo from "@/assets/lighttp_logo_wordmark.svg";
-import Button from "@/components/ui/button/Button.vue";
-import Separator from "@/components/ui/separator/Separator.vue";
 import { getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
 import { Window } from "@tauri-apps/api/window";
+import { GitHubInfo, Updater } from "@/services";
+
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ArrowRight, X } from "@lucide/vue";
+
+import VueMarkdown from "vue-markdown-render";
+import taskLists from "markdown-it-task-lists";
+import MarkdownItGitHubAlerts from "markdown-it-github-alerts"; // For > [!NOTE] styles
+
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { useI18n } from "vue-i18n";
+import { computed } from "vue";
+
+interface Contributor {
+  name: string;
+  avatar_url: string;
+  github_url: string;
+}
+
+const plugins = [taskLists, MarkdownItGitHubAlerts];
 
 const appVersion = ref("");
+const releaseNotes = ref("");
+const countributorAvatars = ref([] as Contributor[]);
+
+const { t } = useI18n();
 
 onMounted(async () => {
   appVersion.value = await getVersion();
+  releaseNotes.value =
+    (await Updater.fetchReleaseNotes(appVersion.value)) ||
+    t("settings_panel.update.no_release_notes", {
+      url: `https://github.com/510208/lighttp/releases/tag/app-v${appVersion.value}`,
+    });
+
+  const contributors = await GitHubInfo.fetchContributors();
+  countributorAvatars.value = contributors.map((contributor: any) => ({
+    name: contributor.login,
+    avatar_url: contributor.avatar_url,
+    github_url: contributor.html_url,
+  }));
+});
+
+const displayContributors = computed(() => {
+  // 打亂貢獻者陣列的順序，並取五個人做渲染，如果超過五個人，則顯示 +N 的方式
+  if (countributorAvatars.value.length > 5) {
+    const shuffled = [...countributorAvatars.value].sort(
+      () => 0.5 - Math.random(),
+    );
+    return shuffled.slice(0, 5);
+  }
+
+  return countributorAvatars.value;
 });
 
 function closeWindow() {
   const appWindow = Window.getCurrent();
   appWindow.close();
 }
+
+function openReleaseNotes() {
+  openUrl(
+    `https://github.com/510208/lighttp/releases/tag/app-v${appVersion.value}`,
+  );
+}
+
+function openContributors() {
+  openUrl(`https://github.com/510208/lighttp/graphs/contributors`);
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+/* 深度選擇器：針對 VueMarkdown 動態產生的 DOM 子元素 */
+.changelog-container :deep(h2) {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #21262d;
+}
+
+.changelog-container :deep(h2:first-child) {
+  margin-top: 0;
+}
+
+/* 超連結 */
+.changelog-container :deep(a) {
+  color: #58a6ff;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.changelog-container :deep(a:hover) {
+  color: #79c0ff;
+  text-decoration: underline;
+}
+
+/* GitHub Markdown Alert (Important) */
+.changelog-container :deep(.markdown-alert.important) {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  background-color: rgba(137, 87, 229, 0.1);
+  border-left: 4px solid #8957e5;
+  border-radius: 0.4rem;
+  color: #d2a8ff;
+}
+
+.changelog-container :deep(.markdown-alert-icon) {
+  fill: #8957e5;
+  vertical-align: text-bottom;
+  margin-right: 0.35rem;
+  display: inline-block;
+}
+
+.changelog-container :deep(.markdown-alert span) {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.changelog-container :deep(.markdown-alert p) {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #c9d1d9;
+}
+
+.changelog-container :deep(.markdown-alert a) {
+  color: #d2a8ff;
+  text-decoration: underline;
+}
+
+/* 清單與 Task List */
+.changelog-container :deep(ul.contains-task-list) {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+
+.changelog-container :deep(.task-list-item) {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* 客製化已勾選 Checkbox */
+.changelog-container :deep(.task-list-item-checkbox) {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.6rem;
+  margin-top: 0.2rem;
+  border-radius: 4px;
+  background-color: #238636;
+  border: 1px solid #238636;
+  position: relative;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.changelog-container :deep(.task-list-item-checkbox:checked::after) {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 強調文字與標籤 */
+.changelog-container :deep(strong) {
+  color: #f0f6fc;
+  font-weight: 600;
+}
+
+/* 分隔線 */
+.changelog-container :deep(hr) {
+  height: 1px;
+  background-color: #30363d;
+  border: none;
+  margin: 1.25rem 0;
+}
+</style>
