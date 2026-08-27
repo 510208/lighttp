@@ -5,13 +5,19 @@ use crate::utils::proxy::{check_proxy, handle_proxy};
 use base64::{engine::general_purpose, Engine as _};
 use reqwest::{Client, Method};
 use std::collections::HashMap;
+use std::time::Duration;
+use tokio::time::timeout;
 use tracing::{debug, error, info};
+
+const DEFAULT_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 
 pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     info!("[execute_request] 收到請求: {:?}", payload);
 
     // DONE: 建立一個Client實例
-    let mut client_builder = Client::builder();
+    let mut client_builder = Client::builder()
+        .timeout(DEFAULT_REQUEST_TIMEOUT)
+        .connect_timeout(Duration::from_secs(10));
 
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
@@ -118,16 +124,28 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
 
     // DONE: 送請求
     // info!("[execute_request] request_builder: {:?}", request_builder);
-    let response = request_builder.send().await;
+    let response = timeout(DEFAULT_REQUEST_TIMEOUT, request_builder.send()).await;
 
     // DONE: 檢查請求是否成功
     match response {
-        Ok(response) => parse_success_response(response).await,
-        Err(e) => {
+        Ok(Ok(response_obj)) => parse_success_response(response_obj).await,
+        Ok(Err(e)) => {
             let detailed_error = get_deep_error(&e); // 這裡會拿到更深層的資訊
-
             error!("[execute_request] 請求發送失敗: {}", detailed_error);
             build_error_response(500, detailed_error)
+        }
+        Err(_) => {
+            error!(
+                "[execute_request] 請求執行超時（超過 {} 秒）",
+                DEFAULT_REQUEST_TIMEOUT.as_secs()
+            );
+            build_error_response(
+                504,
+                format!(
+                    "請求連線或回應超時（已超過 {} 秒）",
+                    DEFAULT_REQUEST_TIMEOUT.as_secs()
+                ),
+            )
         }
     }
 }
