@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
 
 #[derive(Deserialize, Debug)]
 pub struct Header {
@@ -95,7 +96,7 @@ pub struct ProxyConfig {
 //       headers: headers.value.filter((h) => h.enabled),
 //       auth: auth.value,}
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 pub struct RequestPayload {
     pub url: String,
     pub method: String,
@@ -107,6 +108,32 @@ pub struct RequestPayload {
     pub auth: AuthStore,
     pub body: Option<BodyContent>,
     pub proxy: Option<ProxyConfig>,
+}
+
+impl fmt::Debug for RequestPayload {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let auth_type = match &self.auth {
+            AuthStore::None(_) => "None",
+            AuthStore::Basic(_) => "Basic",
+            AuthStore::Bearer(_) => "Bearer",
+        };
+
+        // 提取 Option<BodyContent> 的資訊
+        let body_type = self
+            .body
+            .as_ref()
+            .map(|b| b.body_type.as_str())
+            .unwrap_or("None");
+        let body_size = self.body.as_ref().map(|b| b.content.len()).unwrap_or(0);
+
+        f.debug_struct("RequestPayload")
+            .field("method", &self.method)
+            .field("url", &self.url)
+            .field("auth_type", &auth_type)
+            .field("body_type", &body_type)
+            .field("body_size", &body_size)
+            .finish()
+    }
 }
 
 // ------

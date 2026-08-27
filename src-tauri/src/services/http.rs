@@ -15,7 +15,7 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
 
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
-        info!("[execute_request] 檢查代理設定: {:?}", proxy_config);
+        // info!("[execute_request] 檢查代理設定: {:?}", proxy_config);
 
         // 檢查是否需要先測試代理連線
         if proxy_config.check_before_send {
@@ -117,7 +117,7 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     }
 
     // DONE: 送請求
-    info!("[execute_request] request_builder: {:?}", request_builder);
+    // info!("[execute_request] request_builder: {:?}", request_builder);
     let response = request_builder.send().await;
 
     // DONE: 檢查請求是否成功
