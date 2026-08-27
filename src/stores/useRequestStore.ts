@@ -145,7 +145,7 @@ export const useRequestStore = defineStore("request", () => {
     proxyConfig.value = config;
   }
 
-  // 匯出給後端的 JSON 資料，明確指定回傳型別為 Zod 的 WorkspaceData
+  // 匯出JSON資料
   function getRequestData(): WorkspaceData {
     let checkedProxyConfig: ProxyConfigData | null = proxyConfig.value.enabled
       ? {
