@@ -9,9 +9,13 @@ import type { AuthStore, AuthStoreForBackend } from "./authType.d";
 import type { ProxyConfig } from "./proxyConfig.d";
 import { getVersion } from "@tauri-apps/api/app";
 
-const defaultUA = await getVersion().then((version) => {
-  return `LigHTTP/${version}`;
-});
+// 引入 Zod Schema 與型別
+import {
+  WorkspaceSchema,
+  type WorkspaceData,
+  // type KeyValuePairData,
+  type ProxyConfigData,
+} from "@/schemas/workspace";
 
 export const useRequestStore = defineStore("request", () => {
   const method = ref("GET");
@@ -30,9 +34,23 @@ export const useRequestStore = defineStore("request", () => {
       id: crypto.randomUUID(),
       enabled: true,
       key: "User-Agent",
-      value: defaultUA,
+      value: "LigHTTP/0.5.0", // 預設值，由 async 初始化替換
     },
   ]);
+
+  // 系統 User-Agent 初始化
+  async function initUserAgent() {
+    try {
+      const version = await getVersion();
+      const uaIndex = headers.value.findIndex((h) => h.key === "User-Agent");
+      if (uaIndex !== -1) {
+        headers.value[uaIndex].value = `LigHTTP/${version}`;
+      }
+    } catch {
+      // 靜默處理非 Tauri 環境下的初始化失敗
+    }
+  }
+  initUserAgent();
 
   // 認證資料
   const auth = ref<AuthStore>({
@@ -44,8 +62,7 @@ export const useRequestStore = defineStore("request", () => {
     auth.value = newAuth;
   }
 
-  // Header
-  //   定義同步邏輯
+  // URL 與 Params 同步邏輯
   const syncUrlFromParams = () => {
     try {
       const urlObj = new URL(url.value);
@@ -54,31 +71,26 @@ export const useRequestStore = defineStore("request", () => {
         if (p.enabled && p.key) urlObj.searchParams.append(p.key, p.value);
       });
       url.value = urlObj.toString();
-    } catch {}
+    } catch {
+      // 格式錯誤忽略
+    }
   };
 
-  // 參數
   const paramManager = useTableManager(params, syncUrlFromParams);
+  const headerManager = useTableManager(headers);
 
-  // Header
-  const headerManager = useTableManager(headers); // Header 變動通常不需改 URL
-
-  //  - 監聽 URL 變動 (解析 Params)
-  watch(url, (newUrl, _oldUrl) => {
-    // 關鍵：如果 URL 的變化是由於表格內部 updateUrlFromParams 觸發的，就跳過
-    // 這裡可以檢查新的 URL 解析出的 Query 是否跟目前的 params 一致
+  // 監聽 URL 變動
+  watch(url, (newUrl) => {
     try {
       const urlObj = new URL(newUrl);
       const searchParams = urlObj.searchParams;
 
-      // 將 URL 的參數轉為字串比較，簡單判斷是否真的有外部變動
       const currentParamsStr = params.value
         .filter((p) => p.enabled)
         .map((p) => `${p.key}=${p.value}`)
         .join("&");
       const newParamsStr = searchParams.toString();
 
-      // 如果內部的 params 跟 URL 已經同步了，就不要重新賦值，避免觸發重新渲染
       if (currentParamsStr === newParamsStr && params.value.length > 0) {
         return;
       }
@@ -96,12 +108,11 @@ export const useRequestStore = defineStore("request", () => {
       });
 
       params.value = [...disabledItems, ...newItems];
-    } catch (e) {
-      // 格式錯誤不處理
+    } catch {
+      // 格式錯誤忽略
     }
   });
 
-  // 將auth.type改為auth.auth_type，否則在Rust端無法正確解析
   function renameAuthType(original: AuthStore): AuthStoreForBackend {
     return {
       auth_type: original.type,
@@ -134,46 +145,53 @@ export const useRequestStore = defineStore("request", () => {
     proxyConfig.value = config;
   }
 
-  // ------
-
-  // 將所儲存的內容組合成json的方法
-  function getRequestData() {
-    let checkedProxyConfig: ProxyConfig | null = proxyConfig.value.enabled
-      ? proxyConfig.value
+  // 匯出給後端的 JSON 資料，明確指定回傳型別為 Zod 的 WorkspaceData
+  function getRequestData(): WorkspaceData {
+    let checkedProxyConfig: ProxyConfigData | null = proxyConfig.value.enabled
+      ? {
+          enabled: proxyConfig.value.enabled,
+          checkBeforeSend: proxyConfig.value.checkBeforeSend,
+          protocol: proxyConfig.value.protocol,
+          host: proxyConfig.value.host,
+          port: proxyConfig.value.port,
+          auth: proxyConfig.value.auth
+            ? {
+                username: proxyConfig.value.auth.username,
+                password: proxyConfig.value.auth.password,
+              }
+            : null,
+        }
       : null;
 
-      if (proxyConfig.value.enabled) {
-        const proxyPort = Number(proxyConfig.value.port);
+    if (proxyConfig.value.enabled) {
+      const proxyPort = Number(proxyConfig.value.port);
 
-        if (
-          !proxyConfig.value.host.trim() ||
-          !Number.isInteger(proxyPort) ||
-          proxyPort < 1 ||
-          proxyPort > 65535 ||
-          !proxyConfig.value.protocol
-        ) {
-          throw new Error(
-            "Proxy is enabled but host, protocol, or port is invalid.",
-          );
-        }
+      if (
+        !proxyConfig.value.host.trim() ||
+        !Number.isInteger(proxyPort) ||
+        proxyPort < 1 ||
+        proxyPort > 65535 ||
+        !proxyConfig.value.protocol
+      ) {
+        throw new Error(
+          "Proxy is enabled but host, protocol, or port is invalid.",
+        );
+      }
 
-      // 檢查auth設定是否完整
       if (
         proxyConfig.value.auth &&
         (!proxyConfig.value.auth.username || !proxyConfig.value.auth.password)
       ) {
         console.error(
-          "Proxy auth is enabled but username or password is missing, the proxy auth configuration is ",
-          proxyConfig.value.auth,
+          "Proxy auth is enabled but username or password is missing.",
         );
-        checkedProxyConfig = {
-          ...proxyConfig.value,
-          auth: undefined, // 不傳送auth設定給後端
-        };
+        if (checkedProxyConfig) {
+          checkedProxyConfig.auth = null;
+        }
       }
     }
 
-    return {
+    return WorkspaceSchema.parse({
       url: url.value,
       method: method.value,
       params: params.value.filter((p) => p.enabled),
@@ -184,31 +202,49 @@ export const useRequestStore = defineStore("request", () => {
         content: bodyContent.value,
       },
       proxy: checkedProxyConfig,
-    };
+    });
   }
 
-  // 從JSON或其他來源載入資料的方法
-  function loadRequestData(data: ReturnType<typeof getRequestData>) {
+  // 接收經由 Zod 驗證完畢的 WorkspaceData 進行狀態更新
+  function loadRequestData(data: WorkspaceData) {
     url.value = data.url;
     method.value = data.method;
-    params.value = data.params.map((p) => ({ ...p, enabled: true }));
-    headers.value = data.headers.map((h) => ({ ...h, enabled: true }));
+
+    params.value = data.params.map((p: any) => ({
+      id: p.id || crypto.randomUUID(),
+      enabled: p.enabled,
+      key: p.key,
+      value: p.value,
+    }));
+
+    headers.value = data.headers.map((h: any) => ({
+      id: h.id || crypto.randomUUID(),
+      enabled: h.enabled,
+      key: h.key,
+      value: h.value,
+    }));
+
     auth.value = {
       type: data.auth.auth_type,
       content: data.auth.content,
     };
+
     bodyType.value = data.body.type;
     bodyContent.value = data.body.content;
 
-    if (data.proxy) {
-      // console.log("Loading proxy configuration: ", data.proxy);
+    if (data.proxy && data.proxy.enabled) {
       proxyConfig.value = {
         enabled: true,
         checkBeforeSend: data.proxy.checkBeforeSend,
-        protocol: data.proxy.protocol,
+        protocol: data.proxy.protocol as "http" | "https" | "socks4" | "socks5",
         host: data.proxy.host,
         port: data.proxy.port,
-        auth: data.proxy.auth,
+        auth: data.proxy.auth
+          ? {
+              username: data.proxy.auth.username,
+              password: data.proxy.auth.password,
+            }
+          : undefined,
       };
     } else {
       proxyConfig.value = {
@@ -219,7 +255,6 @@ export const useRequestStore = defineStore("request", () => {
         port: 0,
       };
     }
-    // console.log("Proxy configuration after loading: ", proxyConfig.value);
   }
 
   return {
@@ -229,7 +264,6 @@ export const useRequestStore = defineStore("request", () => {
     auth,
     headers,
 
-    // 網址參數
     addParam: () => paramManager.addExample("param"),
     addParamFromPair: (key: string, value: string) =>
       paramManager.add(key, value),
@@ -237,7 +271,6 @@ export const useRequestStore = defineStore("request", () => {
     toggleParam: paramManager.toggle,
     updateParam: paramManager.update,
 
-    // Header
     addHeader: () => headerManager.addExample("header", ""),
     addHeaderFromPair: (key: string, value: string) =>
       headerManager.add(key, value),
@@ -245,23 +278,21 @@ export const useRequestStore = defineStore("request", () => {
     toggleHeader: headerManager.toggle,
     updateHeader: headerManager.update,
 
-    // 認證
     setAuth,
 
-    // Body
     bodyType,
     bodyContent,
     setBodyType,
     setBodyContent,
 
-    // Proxy
     proxyConfig,
     setProxyConfig,
 
-    // 傳送給後端的資訊
     getRequestData,
     loadRequestData,
   };
 });
 
-export type RequestStoreData = ReturnType<typeof useRequestStore>;
+// 導出 Store 實例與資料型別
+export type RequestStoreInstance = ReturnType<typeof useRequestStore>;
+export type { WorkspaceData };
