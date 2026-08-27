@@ -51,7 +51,11 @@
         </template>
 
         <template v-else>
-          <iframe :src="mediaUrl" class="h-full w-full rounded"></iframe>
+          <iframe
+            :srcdoc="responseStore.body"
+            sandbox="allow-forms allow-modals"
+            class="h-full w-full rounded"
+          ></iframe>
         </template>
       </div>
     </div>
