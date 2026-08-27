@@ -185,5 +185,14 @@
   "updater.update_available.message": "There is a newer version: {version}",
   "updater.no_release_notes": "No release notes available. Please visit the GitHub page for details ( {url} )",
   "updater.view_on_github": "View on GitHub",
-  "updater.update_failed": "Update failed. Please try again later."
+  "updater.update_failed": "Update failed. Please try again later.",
+
+  "pop_dialog.title.default": "Notification",
+  "pop_dialog.label.ok": "OK",
+  "pop_dialog.label.cancel": "Cancel",
+  "pop_dialog.label.yes": "Yes",
+  "pop_dialog.label.no": "No",
+  "pop_dialog.label.retry": "Retry",
+  "pop_dialog.label.abort": "Abort",
+  "pop_dialog.label.ignore": "Ignore"
 }

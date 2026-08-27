@@ -185,5 +185,14 @@
   "updater.update_available.message": "有新版本可用：{version}",
   "updater.no_release_notes": "沒有更新說明，詳細資訊可前往 GitHub 頁面查看",
   "updater.view_on_github": "在 GitHub 上查看",
-  "updater.update_failed": "更新失敗，請稍後再試。"
+  "updater.update_failed": "更新失敗，請稍後再試。",
+
+  "pop_dialog.title.default": "提示",
+  "pop_dialog.label.ok": "確定",
+  "pop_dialog.label.cancel": "取消",
+  "pop_dialog.label.yes": "是",
+  "pop_dialog.label.no": "否",
+  "pop_dialog.label.retry": "重試",
+  "pop_dialog.label.abort": "中止",
+  "pop_dialog.label.ignore": "忽略"
 }
