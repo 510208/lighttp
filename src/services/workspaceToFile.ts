@@ -4,6 +4,7 @@ import { save, open } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { toast } from "vue-sonner";
 import { Dialog } from "@/services";
+import { i18n } from "@/i18n";
 
 async function saveWorkspaceToFile(): Promise<void> {
   let data = useRequestStore().getRequestData();
@@ -26,9 +27,8 @@ async function saveWorkspaceToFile(): Promise<void> {
   if (hasProxy) {
     const userChoice = await Dialog.popDialog({
       type: "warning",
-      title: "Proxy 設定警告",
-      description:
-        "您有一些請求設定了 Proxy。請注意，保存這些設定可能會導致安全風險。您確定要繼續保存嗎？\n\n如果您需要保存 Proxy 設定，請選擇「是」。如果您不想保存 Proxy 設定，請選擇「否」。如果您想取消存檔操作，請選擇「取消」。",
+      title: i18n.global.t("pop_dialog.proxy_saving_warning.title"),
+      description: i18n.global.t("pop_dialog.proxy_saving_warning.description"),
       buttons: "yes-no-cancel",
     });
 

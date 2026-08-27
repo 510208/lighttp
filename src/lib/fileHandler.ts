@@ -1,6 +1,7 @@
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { useRequestStore } from "@/stores/useRequestStore";
 import { Dialog } from "@/services";
+import { i18n } from "@/i18n";
 
 export async function openLghttpFile(filePath: string) {
   try {
@@ -16,9 +17,10 @@ export async function openLghttpFile(filePath: string) {
     if (requestData.proxy) {
       const userChoice = await Dialog.popDialog({
         type: "warning",
-        title: "安全性警告",
-        description:
-          "檔案中包含內建的Proxy設定，倘若攻擊者帶有惡意，則這些設定可能會造成中間人攻擊 (MitM)。\n請只在您信任這個檔案的來源並確定其內容時選擇保留。\n\n如果您信任這個Proxy設定，請單按「是」來載入這些設定，否則請按「否」來忽略這些Proxy設定。若您不確定，請按「取消」來中止載入。\n按下「否」後，其他設定仍會保留，LigHTTP只會忽略Proxy相關的設定。",
+        title: i18n.global.t("pop_dialog.proxy_loading_warning.title"),
+        description: i18n.global.t(
+          "pop_dialog.proxy_loading_warning.description",
+        ),
         buttons: "yes-no-cancel",
       });
       if (userChoice === "no") {

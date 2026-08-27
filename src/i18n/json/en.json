@@ -194,5 +194,10 @@
   "pop_dialog.label.no": "No",
   "pop_dialog.label.retry": "Retry",
   "pop_dialog.label.abort": "Abort",
-  "pop_dialog.label.ignore": "Ignore"
+  "pop_dialog.label.ignore": "Ignore",
+
+  "pop_dialog.proxy_saving_warning.title": "Security Warning",
+  "pop_dialog.proxy_saving_warning.description": "You have some requests that have proxy settings configured. Please note that saving these settings may pose a security risk. Are you sure you want to continue saving?\n\nIf you need to save the proxy settings, select 'Yes'. If you do not want to save the proxy settings, select 'No'. If you want to cancel the saving operation, select 'Cancel'.",
+  "pop_dialog.proxy_loading_warning.title": "Security Warning",
+  "pop_dialog.proxy_loading_warning.description": "The file contains built-in proxy settings that could potentially lead to a man-in-the-middle (MitM) attack if an attacker is malicious.\nPlease only choose to save if you trust the source of this file and are certain of its contents.\n\nIf you trust these proxy settings, click 'Yes' to load them; otherwise, click 'No' to ignore them. If you are unsure, click 'Cancel' to stop loading.\nPressing 'No' will retain other settings; LigHTTP will only ignore proxy-related settings."
 }

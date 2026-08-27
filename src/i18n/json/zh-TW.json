@@ -194,5 +194,10 @@
   "pop_dialog.label.no": "否",
   "pop_dialog.label.retry": "重試",
   "pop_dialog.label.abort": "中止",
-  "pop_dialog.label.ignore": "忽略"
+  "pop_dialog.label.ignore": "忽略",
+
+  "pop_dialog.proxy_saving_warning.title": "安全性警告",
+  "pop_dialog.proxy_saving_warning.description": "您有一些請求設定了 Proxy。請注意，保存這些設定可能會導致安全風險。您確定要繼續保存嗎？\n\n如果您需要保存 Proxy 設定，請選擇「是」。如果您不想保存 Proxy 設定，請選擇「否」。如果您想取消存檔操作，請選擇「取消」。",
+  "pop_dialog.proxy_loading_warning.title": "安全性警告",
+  "pop_dialog.proxy_loading_warning.description": "檔案中包含內建的Proxy設定，倘若攻擊者帶有惡意，則這些設定可能會造成中間人攻擊 (MitM)。\n請只在您信任這個檔案的來源並確定其內容時選擇保留。\n\n如果您信任這個Proxy設定，請單按「是」來載入這些設定，否則請按「否」來忽略這些Proxy設定。若您不確定，請按「取消」來中止載入。\n按下「否」後，其他設定仍會保留，LigHTTP只會忽略Proxy相關的設定。"
 }
