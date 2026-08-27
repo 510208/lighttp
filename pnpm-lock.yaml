@@ -113,8 +113,8 @@ importers:
         specifier: ^2.0.9
         version: 2.0.9
       vuehex:
-        specifier: ^0.6.5
-        version: 0.6.5(vue@3.5.33(typescript@5.6.3))
+        specifier: ^0.7.0
+        version: 0.7.0(vue@3.5.33(typescript@5.6.3))
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -1862,8 +1862,8 @@ packages:
       typescript:
         optional: true
 
-  vuehex@0.6.5:
-    resolution: {integrity: sha512-6gXwzr+MrXD2PdR1ZkPUfmud/VHKd08dKvCnT86WNW/oLJuue96X7V7+xZWips8dRXh3oA8N9F1TFw8UzX9L8A==}
+  vuehex@0.7.0:
+    resolution: {integrity: sha512-T3f1Hje+4/wyTsN2zIXyvFM8LBjgLOgftzhSJPGWIgyULYBstQ/JGCFd5o2EBic8uqfTBQTZLng8uzQXoHllgA==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -3394,7 +3394,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  vuehex@0.6.5(vue@3.5.33(typescript@5.6.3)):
+  vuehex@0.7.0(vue@3.5.33(typescript@5.6.3)):
     dependencies:
       vue: 3.5.33(typescript@5.6.3)
 
