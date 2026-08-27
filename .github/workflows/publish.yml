@@ -64,7 +64,7 @@ jobs:
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
 
       - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@af5442b6a1bc7bd3d6f5aa3e87b59a6a12f90569 # v1.71.0
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
