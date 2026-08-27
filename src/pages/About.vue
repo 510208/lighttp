@@ -4,7 +4,7 @@
       <img :src="logo" alt="Logo" class="h-12 w-fit" />
       <div class="flex h-full flex-col justify-between p-0">
         <p class="text-lh-subtext-1 text-right text-sm">
-          將 HTTP 請求做到簡單，使調用 API 更輕鬆
+          Make HTTP requests simple, API calls easier
         </p>
         <p class="text-lh-subtext-1 text-right font-bold">v{{ appVersion }}</p>
       </div>
@@ -14,10 +14,12 @@
 
     <div>
       <div class="flex items-center justify-between gap-2">
-        <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">更新日誌</h2>
+        <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">
+          Release Notes
+        </h2>
         <Button variant="ghost" size="sm" @click="openReleaseNotes">
           <ArrowRight class="h-4 w-4" />
-          {{ $t("about.release_notes.view_release_notes") }}
+          Read More
         </Button>
       </div>
       <div
@@ -35,7 +37,9 @@
     <div class="flex w-full items-end justify-between gap-2">
       <div>
         <div class="flex items-center justify-between gap-2">
-          <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">貢獻者</h2>
+          <h2 class="text-lh-text-1 text-lh-text text-lg font-bold">
+            Contributors
+          </h2>
         </div>
         <div class="flex items-center gap-4">
           <TooltipProvider :delayDuration="0" disableHoverableContent>
@@ -77,7 +81,7 @@
 
           <Button variant="ghost" size="sm" @click="openContributors">
             <ArrowRight class="h-4 w-4" />
-            {{ $t("about.contributors.view_contributors") }}
+            All Contributors
           </Button>
         </div>
       </div>
@@ -87,7 +91,7 @@
         class="flex items-center justify-center gap-1"
       >
         <X class="mr-2 h-4 w-4" />
-        {{ $t("about.close_button.label") }}
+        Close
       </Button>
     </div>
   </main>
