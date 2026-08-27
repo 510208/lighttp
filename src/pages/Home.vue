@@ -16,6 +16,7 @@ import BackgroundImg from "@/components/common/BackgroundImg.vue";
 // #region 從CLI取得路徑並載入工作區
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { openLghttpFile } from "@/lib/fileHandler";
+import { Dialog } from "@/services";
 
 onMounted(async () => {
   try {
@@ -77,6 +78,36 @@ const leftPanelMinSize = computed(() => {
 
 const rightPanelCollapsedSize = computed(() => {
   return groupDirection.value === "horizontal" ? 0 : 4;
+});
+// #endregion
+
+// #region 檢查啟動時Rust CLI端的狀態
+import { invoke } from "@tauri-apps/api/core";
+import { toast } from "vue-sonner";
+
+interface CliData {
+  filePath: string | null;
+  fileContent: string | null;
+  errorMessage: string | null;
+}
+
+onMounted(async () => {
+  try {
+    const cliState = await invoke<CliData>("get_cli_state");
+
+    if (cliState.errorMessage) {
+      Dialog.popDialog({
+        title: "Error",
+        description: cliState.errorMessage,
+        type: "error",
+      });
+    } else if (cliState.fileContent) {
+      await openLghttpFile(cliState.filePath!);
+      toast.success(`已開啟 ${cliState.filePath}`);
+    }
+  } catch (err) {
+    console.error("Failed to fetch CLI state:", err);
+  }
 });
 // #endregion
 </script>

@@ -4,7 +4,7 @@ use std::path::Path;
 use std::sync::Mutex;
 use tauri::{App, Manager};
 use tauri_plugin_cli::CliExt;
-use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
+use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
 
 #[derive(Debug, Clone, Serialize, Default)]
 #[serde(rename_all = "camelCase")] // 前端 JS/TS 轉為 camelCase 風格
@@ -42,17 +42,8 @@ pub fn handle_cli_args(app: &mut App) -> Result<(), Box<dyn std::error::Error>> 
             state.error_message = Some(format!("Specified file does not exist: {}", file_path));
         }
 
-        app.dialog()
-            .message(format!(
-                "Error: Specified file does not exist: {}",
-                file_path
-            ))
-            .kind(MessageDialogKind::Error)
-            .title("Warning")
-            .show(|_| {});
-
         // 傳送錯誤訊息給前端，讓前端跳出對話框，這個問題不應該造成整個介面退出
-        return Err(format!("Specified file does not exist: {}", file_path).into());
+        return Ok(());
     }
 
     let canonical_path = match path.canonicalize() {
