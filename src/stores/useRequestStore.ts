@@ -294,5 +294,5 @@ export const useRequestStore = defineStore("request", () => {
 });
 
 // 導出 Store 實例與資料型別
-export type RequestStoreInstance = ReturnType<typeof useRequestStore>;
+export type RequestStoreData = ReturnType<typeof useRequestStore>;
 export type { WorkspaceData };
