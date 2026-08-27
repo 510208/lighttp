@@ -27,6 +27,17 @@ export const useResponseStore = defineStore("response", () => {
     size.value = new Blob([newBody]).size;
   });
 
+  function getHeaderCaseInsensitive(
+    targetKey: string,
+    headersMap: Record<string, string[]>,
+  ): string[] | undefined {
+    const lowerKey = targetKey.toLowerCase();
+    const foundKey = Object.keys(headersMap).find(
+      (key) => key.toLowerCase() === lowerKey,
+    );
+    return foundKey ? headersMap[foundKey] : undefined;
+  }
+
   async function setResponse(payload: any) {
     try {
       let responseObj: ResponseState;
@@ -41,7 +52,13 @@ export const useResponseStore = defineStore("response", () => {
       headers.value = responseObj.headers;
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
-      contentType.value = headers.value["Content-Type"]?.[0] || "text/plain";
+
+      const foundContentType = getHeaderCaseInsensitive(
+        "content-type",
+        headers.value,
+      );
+      contentType.value = foundContentType?.[0] || "text/plain";
+
       bodyBinaryB64.value = responseObj.bodyB64 || "";
       hexViewerBuffer.value = new Uint8Array(responseObj.bodyBinary);
 
