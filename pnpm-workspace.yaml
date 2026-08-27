@@ -6,3 +6,4 @@ allowBuilds:
 
 overrides:
   dompurify: "^3.4.14"
+  postcss: "^8.5.12"
