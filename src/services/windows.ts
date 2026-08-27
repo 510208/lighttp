@@ -3,7 +3,7 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 function openAboutWindow() {
   const aboutWindow = new WebviewWindow("about", {
     url: "/about", // 或是您的路由路徑
-    title: "關於應用程式",
+    title: "About",
     width: 600,
     height: 500,
     resizable: false,
