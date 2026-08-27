@@ -7,7 +7,6 @@ import { Dialog } from "@/services";
 
 async function saveWorkspaceToFile(): Promise<void> {
   let data = useRequestStore().getRequestData();
-  const dataString = JSON.stringify(data, null, 2);
 
   const filePath = await save({
     filters: [
@@ -39,16 +38,12 @@ async function saveWorkspaceToFile(): Promise<void> {
     }
 
     if (userChoice === "no") {
-      // 移除 Proxy 設定並設為預設值
-      data.proxy = {
-        enabled: false,
-        checkBeforeSend: false,
-        protocol: "http",
-        host: "",
-        port: 0,
-      };
+      // 移除 Proxy 設定
+      data.proxy = null;
     }
   }
+
+  const dataString = JSON.stringify(data, null, 2);
 
   await writeTextFile(`${filePath}`, dataString);
 
