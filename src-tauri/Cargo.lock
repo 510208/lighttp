@@ -2329,6 +2329,7 @@ name = "lighttp"
 version = "0.5.0"
 dependencies = [
  "base64 0.22.1",
+ "futures-util",
  "log",
  "reqwest",
  "serde",
