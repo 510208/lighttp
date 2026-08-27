@@ -17,7 +17,6 @@
 
         <p class="text-lh-overlay-2 text-sm">
           {{ $t("home.response_panel.body_panel.media_hidden_warning") }}<br />
-
           {{ $t("home.response_panel.body_panel.media_hidden_hint") }}
         </p>
 
@@ -77,8 +76,37 @@ const mediaUrl = ref<string>("");
 const responseStore = useResponseStore();
 const URL = globalThis.URL;
 
-// 監控 responseStore.header中的 Content-Type，根據不同的類型設置 responseLanguage
+// 監控 responseStore.headers 中的 Content-Type，根據不同的類型設置 responseLanguage
 const responseLanguage = ref<string>("json");
+
+/**
+ * 通用安全取值函式：從 Headers 物件中尋找特定 Key（不區分大小寫），並統一回傳字串陣列
+ */
+function getHeaderValues(
+  headers: Record<string, string | string[]> | undefined,
+  targetKey: string,
+): string[] {
+  if (!headers || typeof headers !== "object") return [];
+
+  const foundEntry = Object.entries(headers).find(
+    ([key]) => key.toLowerCase() === targetKey.toLowerCase(),
+  );
+
+  if (!foundEntry) return [];
+
+  const val = foundEntry[1];
+  if (Array.isArray(val)) return val;
+  if (typeof val === "string") return [val];
+  return [];
+}
+
+/**
+ * 取得主要的 Content-Type 字串（取第一個值）
+ */
+function getPrimaryContentType(): string {
+  const values = getHeaderValues(responseStore.headers, "content-type");
+  return values[0]?.toLowerCase() || "";
+}
 
 watch(
   () => responseStore.headers,
@@ -88,13 +116,9 @@ watch(
       return;
     }
 
-    // 由於 HTTP headers 不區分大小寫，需要遍歷查找
-    const contentTypeValue = Object.entries(newHeaders).find(
-      ([key]) => key.toLowerCase() === "content-type",
-    )?.[1];
+    const contentType = getPrimaryContentType();
 
-    if (contentTypeValue) {
-      const contentType = contentTypeValue.toLowerCase();
+    if (contentType) {
       forceShowMedia.value = false; // 每次 headers 更新時重置強制顯示媒體的狀態
 
       if (contentType.includes("application/json")) {
@@ -118,10 +142,7 @@ watch(
 );
 
 function getMediaType(): "image" | "video" | "audio" | "other" {
-  const contentType =
-    Object.entries(responseStore.headers)
-      .find(([key]) => key.toLowerCase() === "content-type")?.[1]
-      ?.toLowerCase() || "";
+  const contentType = getPrimaryContentType();
 
   if (contentType.includes("image/")) return "image";
   if (contentType.includes("video/")) return "video";
@@ -153,10 +174,7 @@ watch(
 
     // 只有在使用者點擊「強制顯示」且有資料時才執行
     if (show && newBody) {
-      const contentType =
-        Object.entries(responseStore.headers).find(
-          ([key]) => key.toLowerCase() === "content-type",
-        )?.[1] || "application/octet-stream";
+      const contentType = getPrimaryContentType() || "application/octet-stream";
 
       try {
         // 將 Base64 還原為二進位數據
@@ -183,18 +201,24 @@ watch(
 );
 
 function bodyIsMedia(): boolean {
-  // 判斷 Content-Type 是否為常見的媒體類型（如圖片、影音等）
-  const contentTypeValue = Object.entries(responseStore.headers).find(
-    ([key]) => key.toLowerCase() === "content-type",
-  )?.[1];
-  const isMedia =
-    contentTypeValue?.includes("image/") ||
-    contentTypeValue?.includes("video/") ||
-    contentTypeValue?.includes("audio/");
+  // 取得 Content-Type 的所有設定值進行檢查
+  const contentTypeValues = getHeaderValues(
+    responseStore.headers,
+    "content-type",
+  );
 
-  console.log("[Content-Type]:", contentTypeValue);
+  const isMedia = contentTypeValues.some((val) => {
+    const lower = val.toLowerCase();
+    return (
+      lower.includes("image/") ||
+      lower.includes("video/") ||
+      lower.includes("audio/")
+    );
+  });
+
+  console.log("[Content-Type Values]:", contentTypeValues);
   console.log("[Is Media]:", isMedia);
-  return isMedia || false;
+  return isMedia;
 }
 
 onUnmounted(() => {

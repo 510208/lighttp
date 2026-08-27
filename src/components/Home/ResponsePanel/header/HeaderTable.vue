@@ -13,59 +13,67 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <!-- 列出所有標頭 -->
-          <TableRow
-            v-for="(value, key) in responseStore.headers"
-            :key="key"
-            class="border-lh-surface-1"
-          >
-            <TableCell class="break-words">
-              <HoverCard v-if="getHeaderTemplate(key)" class="inline-block">
-                <HoverCardTrigger
-                  class="border-lh-text-subtle cursor-help border-b border-dotted"
+          <!-- 外層走訪所有 Header Key 與對應的值（可能是字串或陣列） -->
+          <template v-for="(values, key) in responseStore.headers" :key="key">
+            <!-- 內層走訪展平後的純字串值，重複 Key 會拆解為獨立的表格列 -->
+            <TableRow
+              v-for="(value, index) in normalizeHeaderValues(values)"
+              :key="`${key}-${index}`"
+              class="border-lh-surface-1"
+            >
+              <TableCell class="break-words">
+                <HoverCard
+                  v-if="getHeaderTemplate(String(key))"
+                  class="inline-block"
                 >
-                  {{ parseHeaderKey(key) }}
-                </HoverCardTrigger>
-                <HoverCardContent class="w-auto max-w-sm" align="start">
-                  <div class="space-y-2">
-                    <p class="text-sm font-semibold">
-                      {{ parseHeaderKey(key) }}
-                    </p>
-                    <p class="text-lh-text-subtle text-sm whitespace-pre-wrap">
-                      {{ getHeaderTemplate(key)?.description }}
-                    </p>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-              <span v-else>{{ parseHeaderKey(key) }}</span>
-            </TableCell>
-
-            <TableCell class="flex items-center gap-1 font-mono">
-              {{ breakLongValue(value) }}
-              <HoverCard v-if="value.length > 40" class="inline-block">
-                <HoverCardTrigger
-                  class="text-lh-text-subtle ml-2 text-sm"
-                  @click="copyToClipboard(value)"
-                >
-                  <div class="bg-lh-surface-1 rounded border px-1">
-                    <Ellipsis :size="16" />
-                  </div>
-                </HoverCardTrigger>
-                <HoverCardContent class="w-auto max-w-xs">
-                  <pre
-                    class="font-mono break-words whitespace-pre-wrap text-white"
-                    >{{ value }}</pre
+                  <HoverCardTrigger
+                    class="border-lh-text-subtle cursor-help border-b border-dotted"
                   >
-                  <Separator class="my-2" />
-                  <p class="text-lh-text-subtle text-sm">
-                    {{ $t("home.response_panel.header_table.copy_hint") }}
-                  </p>
-                </HoverCardContent>
-              </HoverCard>
-              <!-- 顯示最後一個字 -->
-              {{ value.length > 41 ? value.slice(-1) : "" }}
-            </TableCell>
-          </TableRow>
+                    {{ parseHeaderKey(String(key)) }}
+                  </HoverCardTrigger>
+                  <HoverCardContent class="w-auto max-w-sm" align="start">
+                    <div class="space-y-2">
+                      <p class="text-sm font-semibold">
+                        {{ parseHeaderKey(String(key)) }}
+                      </p>
+                      <p
+                        class="text-lh-text-subtle text-sm whitespace-pre-wrap"
+                      >
+                        {{ getHeaderTemplate(String(key))?.description }}
+                      </p>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+                <span v-else>{{ parseHeaderKey(String(key)) }}</span>
+              </TableCell>
+
+              <TableCell class="flex items-center gap-1 font-mono">
+                {{ breakLongValue(value) }}
+                <HoverCard v-if="value.length > 40" class="inline-block">
+                  <HoverCardTrigger
+                    class="text-lh-text-subtle ml-2 text-sm"
+                    @click="copyToClipboard(value)"
+                  >
+                    <div class="bg-lh-surface-1 rounded border px-1">
+                      <Ellipsis :size="16" />
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent class="w-auto max-w-xs">
+                    <pre
+                      class="font-mono break-words whitespace-pre-wrap text-white"
+                      >{{ value }}</pre
+                    >
+                    <Separator class="my-2" />
+                    <p class="text-lh-text-subtle text-sm">
+                      {{ $t("home.response_panel.header_table.copy_hint") }}
+                    </p>
+                  </HoverCardContent>
+                </HoverCard>
+                <!-- 顯示最後一個字 -->
+                {{ value.length > 41 ? value.slice(-1) : "" }}
+              </TableCell>
+            </TableRow>
+          </template>
         </TableBody>
       </Table>
     </div>
@@ -99,6 +107,15 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const responseStore = useResponseStore();
+
+/**
+ * 將 string | string[] 統一正規化為 string[]
+ */
+function normalizeHeaderValues(value: string | string[]): string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") return [value];
+  return [];
+}
 
 function parseHeaderKey(key: string): string {
   return key

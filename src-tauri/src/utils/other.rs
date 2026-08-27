@@ -17,16 +17,20 @@ pub fn get_deep_error(e: &reqwest::Error) -> String {
 }
 
 // 將 HeaderMap 轉換為 HashMap<String, String>，以便前端使用
-pub fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, String> {
-    header_map
-        .iter()
-        .map(|(k, v)| {
-            (
-                k.as_str().to_string(),
-                v.to_str().unwrap_or_default().to_string(),
-            )
-        })
-        .collect()
+pub fn to_hashmap(header_map: &HeaderMap) -> HashMap<String, Vec<String>> {
+    let mut map: HashMap<String, Vec<String>> = HashMap::new();
+
+    for (k, v) in header_map {
+        let key = k.as_str().to_string();
+
+        // 使用 String::from_utf8_lossy 處理非 UTF-8 二進位標頭，避免字串靜默變空
+        let value = String::from_utf8_lossy(v.as_bytes()).into_owned();
+
+        // 支援重複 Key（如多個 Set-Cookie），以 Vec 累積所有數值
+        map.entry(key).or_default().push(value);
+    }
+
+    map
 }
 
 pub fn get_content_type(headers: &HeaderMap) -> String {

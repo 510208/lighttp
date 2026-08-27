@@ -5,7 +5,7 @@ export interface ResponseState {
   status: number | null | undefined; // null 表示還未發出請求，undefined 表示正在等待回應
   body: string;
   size: number;
-  headers: Record<string, string>;
+  headers: Record<string, string[]>;
   timeTaken: number | null;
   bodyBinary: Uint8Array;
   bodyB64?: string; // 可選的 base64 編碼字串，保留以供前端使用
@@ -15,7 +15,7 @@ export interface ResponseState {
 export const useResponseStore = defineStore("response", () => {
   const status = ref<number | null | undefined>(null);
   const body = ref<string>("");
-  const headers = ref<Record<string, string>>({});
+  const headers = ref<Record<string, string[]>>({});
   const timeTaken = ref<number | null>(null);
   const bodyBinaryB64 = ref<string>(""); // 用於存儲從 Rust 後端接收到的 base64 編碼字串
   const contentType = ref<string>("text/plain");
@@ -41,7 +41,7 @@ export const useResponseStore = defineStore("response", () => {
       headers.value = responseObj.headers;
       body.value = responseObj.body;
       timeTaken.value = responseObj.timeTaken;
-      contentType.value = headers.value["Content-Type"] || "text/plain";
+      contentType.value = headers.value["Content-Type"]?.[0] || "text/plain";
       bodyBinaryB64.value = responseObj.bodyB64 || "";
       hexViewerBuffer.value = new Uint8Array(responseObj.bodyBinary);
 

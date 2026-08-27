@@ -140,13 +140,10 @@ impl fmt::Debug for RequestPayload {
 
 #[derive(Serialize, Debug)]
 pub struct ResponsePayload {
-    pub status: u16,       // HTTP 狀態碼 (例如 200, 404)
-    pub body_type: String, // 回應主體的類型 (例如 "text", "json", "binary")
-    pub body: String,      // 回應的主體內容
-
-    #[serde(rename = "bodyBinary")]
-    pub body_binary: Vec<u8>, // 如果 body_type 是 "binary"，則這裡會有 base64 編碼的二進位資料
-    pub body_binary_b64: Option<String>, // 原始的 base64 編碼字串，保留以供前端使用
-
-    pub headers: HashMap<String, String>, // 回應標頭
+    pub status: u16,                           // HTTP 狀態碼
+    pub headers: HashMap<String, Vec<String>>, // HTTP 標頭，支援重複 Key
+    pub body_type: String, // 內容類型（MIME type），例如 "text/html"、"application/json"、"image/png" 等
+    pub body: String,      // 文字內容，若是二進位資料則為 base64 編碼後的字串
+    pub body_binary: Vec<u8>, // 原始二進位資料，若是文字內容則為 UTF-8 編碼的 bytes
+    pub body_binary_b64: Option<String>, // 若是二進位資料則為 base64 編碼後的字串，若是文字內容則為 None
 }
