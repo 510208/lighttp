@@ -17,12 +17,16 @@
     "core:webview:allow-create-webview-window",
     "dialog:default",
     {
-      "identifier": "fs:allow-write-text-file",
-      "allow": [{ "path": "**" }]
+      "identifier": "fs:allow-read-text-file",
+      "allow": [{ "path": "$APPCONFIG/**" }, { "path": "$APPDATA/**" }]
     },
     {
-      "identifier": "fs:allow-read-text-file",
-      "allow": [{ "path": "**" }]
+      "identifier": "fs:allow-write-text-file",
+      "allow": [{ "path": "$APPCONFIG/**" }, { "path": "$APPDATA/**" }]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$APPCONFIG/**" }, { "path": "$APPDATA/**" }]
     },
     { "identifier": "fs:allow-app-write-recursive" }
   ]
