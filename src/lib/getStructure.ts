@@ -4,17 +4,8 @@ import {
   jsonInputForTargetLanguage,
   QuickTypeError,
 } from "quicktype-core";
-import { type RequestStoreData } from "@/stores/useRequestStore";
-import { BasicAuthContent } from "@/stores/authType";
 import { useSettingsStore } from "@/stores/useSettingsStore";
-
-// 監聽 settingsStore 中的 defaultIndentSize 設定，並變動 indentString 裡的空白長度
-function getIndentString(defaultIndentSize: number | string): string {
-  const store = useSettingsStore();
-  return (
-    store.getQuicktypeIndentString() || defaultIndentSize.toString() || "  "
-  );
-}
+import { getCurlCommand } from "./getCurl";
 
 function jsonIsValid(json: string): boolean {
   try {
@@ -183,56 +174,6 @@ async function convertJsonToRust(
     }
     throw error;
   }
-}
-
-function getCurlCommand(
-  store: RequestStoreData,
-  indentString: string | number,
-  breakLineSymbol: string = "\\",
-): string {
-  // 1. 改用陣列收集每一行的指令片段
-  const parts: string[] = [];
-
-  // 基礎 URL
-  parts.push(`curl -X ${store.method.toUpperCase()} "${store.url}"`);
-
-  // Headers
-  store.headers.forEach((header) => {
-    if (header.enabled) {
-      parts.push(
-        `${getIndentString(indentString)}-H "${header.key}: ${header.value}"`,
-      );
-    }
-  });
-
-  // Auth
-  if (store.auth.type === "basic" && store.auth.content) {
-    const authContent = store.auth.content as BasicAuthContent;
-    parts.push(
-      `${getIndentString(indentString)}-u "${authContent.username}:${authContent.password}"`,
-    );
-  } else if (store.auth.type === "bearer token" && store.auth.content) {
-    const token = (store.auth.content as { token: string }).token;
-    parts.push(
-      `${getIndentString(indentString)}-H "Authorization: Bearer ${token}"`,
-    );
-  }
-
-  // Body
-  if (store.bodyContent && store.bodyType !== "None") {
-    // 提示：若 body 內含單引號 '，在 bash 中直接用單引號包裹會出錯，建議維持轉義或處理
-    const escapedBody = store.bodyContent;
-    parts.push(`${getIndentString(indentString)}-d '${escapedBody}'`);
-  }
-
-  // Proxy
-  if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
-    const proxyUrlAuthPart = `${store.proxyConfig.auth ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@` : ""}`;
-    const proxyUrl = `${store.proxyConfig.protocol}://${proxyUrlAuthPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
-    parts.push(`${getIndentString(indentString)}-x "${proxyUrl}"`);
-  }
-
-  return parts.join(` ${breakLineSymbol}\n`);
 }
 
 export {
