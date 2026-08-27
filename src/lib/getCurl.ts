@@ -39,12 +39,14 @@ export function getCurlCommand(
   parts.push(`curl -X ${safeMethod} ${safeUrl}`);
 
   // Headers
-  store.headers.forEach((header) => {
-    if (header.enabled && header.key) {
-      const headerString = `${header.key}: ${header.value}`;
-      parts.push(`${indent}-H ${escapeShellArg(headerString)}`);
-    }
-  });
+  store.headers.forEach(
+    (header: { enabled: boolean; key: string; value: string }) => {
+      if (header.enabled && header.key) {
+        const headerString = `${header.key}: ${header.value}`;
+        parts.push(`${indent}-H ${escapeShellArg(headerString)}`);
+      }
+    },
+  );
 
   // Auth
   if (store.auth.type === "basic" && store.auth.content) {
