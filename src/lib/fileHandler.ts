@@ -3,7 +3,7 @@ import { useRequestStore } from "@/stores/useRequestStore";
 import { Dialog } from "@/services";
 import { i18n } from "@/i18n";
 
-export async function openLghttpFile(filePath: string) {
+export async function openLghttpFile(filePath: string): Promise<boolean> {
   try {
     console.log("[LigHTTP CLI] 正在讀取檔案:", filePath);
 
@@ -28,7 +28,7 @@ export async function openLghttpFile(filePath: string) {
       }
       if (userChoice === "cancel") {
         console.log("[LigHTTP CLI] 使用者取消了載入檔案");
-        return;
+        return false;
       }
     }
 
@@ -37,7 +37,9 @@ export async function openLghttpFile(filePath: string) {
     requestStore.loadRequestData(requestData);
 
     console.log("[LigHTTP CLI] 成功載入檔案資料至 Store");
+    return true;
   } catch (error) {
     console.error("[LigHTTP CLI] 解析或載入檔案失敗:", error);
+    return false;
   }
 }

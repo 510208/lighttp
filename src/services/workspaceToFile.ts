@@ -72,7 +72,11 @@ async function loadWorkspaceFromFile(): Promise<void> {
     return;
   }
 
-  await openLghttpFile(filePath as string);
+  const success = await openLghttpFile(filePath as string);
+  if (!success) {
+    toast.error("載入檔案失敗");
+    return;
+  }
 
   toast.success("工作已成功載入");
 }
