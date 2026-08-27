@@ -108,9 +108,9 @@ const latestInfo = ref(null) as Ref<null | string | UpdateInfo>;
 
 import VueMarkdown from "vue-markdown-render";
 import taskLists from "markdown-it-task-lists";
-import { alertPlugin } from "markdown-it-github-alert"; // For > [!NOTE] styles
+import MarkdownItGitHubAlerts from "markdown-it-github-alerts"; // For > [!NOTE] styles
 
-const plugins = [taskLists, alertPlugin];
+const plugins = [taskLists, MarkdownItGitHubAlerts];
 
 function checkUpdates() {
   latestInfo.value = null; // 重置狀態以顯示檢查中
