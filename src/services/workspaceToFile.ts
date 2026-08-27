@@ -24,6 +24,7 @@ async function saveWorkspaceToFile(): Promise<void> {
 
   // 檢查是否有Proxy設定，如果有，提示用戶是否要保存
   const hasProxy = data.proxy && Object.keys(data.proxy).length > 0;
+  const hasAuth = data.auth && Object.keys(data.auth).length > 0;
   if (hasProxy) {
     const userChoice = await Dialog.popDialog({
       type: "warning",
@@ -46,8 +47,12 @@ async function saveWorkspaceToFile(): Promise<void> {
   const dataString = JSON.stringify(data, null, 2);
 
   await writeTextFile(`${filePath}`, dataString);
-
-  toast.success("工作已成功儲存");
+  const toastContent =
+    "工作已成功儲存" +
+    (hasAuth
+      ? "，您已保存認證資訊。如需分享給他人，請注意保護您的隱私資訊"
+      : "");
+  toast.success(toastContent);
 }
 
 async function loadWorkspaceFromFile(): Promise<void> {
