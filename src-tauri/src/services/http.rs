@@ -3,6 +3,7 @@ use crate::utils::auth::handle_auth;
 use crate::utils::other::{get_content_type, get_deep_error, to_hashmap};
 use crate::utils::proxy::{check_proxy, handle_proxy};
 use base64::{engine::general_purpose, Engine as _};
+use futures_util::StreamExt;
 use reqwest::{Client, Method};
 use std::collections::HashMap;
 use std::time::Duration;
@@ -10,6 +11,7 @@ use tokio::time::timeout;
 use tracing::{debug, error, info};
 
 const DEFAULT_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
+const MAX_RESPONSE_SIZE: usize = 10 * 1024 * 1024;
 
 pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     info!("[execute_request] 收到請求: {:?}", payload);
@@ -152,37 +154,68 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
 
 // 處理成功的結果
 async fn parse_success_response(response: reqwest::Response) -> ResponsePayload {
+    // 1. 先取出所有需要從 response 讀取的純數據（唯讀/複製）
     let status = response.status().as_u16();
-    let headers = response.headers().clone();
-    let content_type = get_content_type(&headers);
+    let content_length = response.content_length();
+    let headers_map = to_hashmap(response.headers()); // 直接將 headers 轉為 HashMap，不再保留 &HeaderMap
+    let content_type = get_content_type(response.headers());
 
-    // 讀取原始回應內容為二進位位元組，避免 Response 被提前消耗
-    let body_bytes = response.bytes().await.unwrap_or_default();
+    // 2. 預先檢查 Content-Length
+    if let Some(length) = content_length {
+        if length > MAX_RESPONSE_SIZE as u64 {
+            return build_error_response(
+                413,
+                format!(
+                    "回應內容過大（超過上限 {} MB）",
+                    MAX_RESPONSE_SIZE / (1024 * 1024)
+                ),
+            );
+        }
+    }
 
-    // 將原始二進位內容進行 Base64 編碼
+    // 3. 【最後一步】轉移 response 所有權給 bytes_stream()
+    // 此行之後「絕不能」再出現任何 `response.xxx` 的程式碼
+    let mut stream = response.bytes_stream();
+    let mut body_bytes = Vec::new();
+
+    while let Some(chunk_result) = stream.next().await {
+        let chunk = match chunk_result {
+            Ok(c) => c,
+            Err(e) => return build_error_response(500, format!("讀取回應內容失敗: {}", e)),
+        };
+
+        if body_bytes.len() + chunk.len() > MAX_RESPONSE_SIZE as usize {
+            return build_error_response(
+                413,
+                format!(
+                    "回應內容超出允許上限（{} MB）",
+                    MAX_RESPONSE_SIZE / (1024 * 1024)
+                ),
+            );
+        }
+
+        body_bytes.extend_from_slice(&chunk);
+    }
+
+    // 4. 使用最前面已經擷取好的變數（headers_map, content_type）建構 ResponsePayload
+    let is_media = is_media_content_type(&content_type);
     let base64_encoded = general_purpose::STANDARD.encode(&body_bytes);
 
-    if is_media_content_type(&content_type) {
-        ResponsePayload {
-            status,
-            headers: to_hashmap(&headers),
-            body_type: content_type,
-            body: base64_encoded.clone(),
-            body_binary: body_bytes.to_vec(),
-            body_binary_b64: Some(base64_encoded),
-        }
+    let (text_body, b64_field) = if is_media {
+        (base64_encoded, None)
     } else {
-        // 將二進位位元組轉換為 UTF-8 字串，若轉換失敗則回傳空字串
-        let text_body = String::from_utf8(body_bytes.to_vec()).unwrap_or_default();
+        let text = String::from_utf8(body_bytes.clone())
+            .unwrap_or_else(|_| "[非 UTF-8 二進位文字，請切換至二進位檢視]".to_string());
+        (text, None)
+    };
 
-        ResponsePayload {
-            status,
-            headers: to_hashmap(&headers),
-            body_type: content_type,
-            body: text_body,
-            body_binary: body_bytes.to_vec(), // 非媒體類型仍然返回二進位資料
-            body_binary_b64: Some(base64_encoded),
-        }
+    ResponsePayload {
+        status,
+        headers: headers_map, // 直接使用第 1 步預先轉好的 HashMap
+        body_type: content_type,
+        body: text_body,
+        body_binary: body_bytes,
+        body_binary_b64: b64_field,
     }
 }
 
