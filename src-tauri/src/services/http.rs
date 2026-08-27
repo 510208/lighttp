@@ -105,9 +105,17 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     }
 
     // DONE: 添加認證處理 (根據 payload.auth 的內容)
-    if let Some(auth_header) = handle_auth(&payload.auth).await {
-        // Some(auth_header) 表示有有效的認證資訊
-        request_builder = request_builder.header(reqwest::header::AUTHORIZATION, auth_header);
+    match handle_auth(&payload.auth).await {
+        Ok(Some(auth_header)) => {
+            request_builder = request_builder.header(reqwest::header::AUTHORIZATION, auth_header);
+        }
+        Ok(None) => {
+            // 未設定 Auth，正常忽略
+        }
+        Err(err_msg) => {
+            // 捕捉非法字元錯誤，中斷請求並將錯誤回傳給 Vue 前端
+            return build_error_response(400, format!("Auth Header Error: {}", err_msg));
+        }
     }
 
     // DONE: 處理正文內容
@@ -141,7 +149,7 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
         Ok(Err(e)) => {
             let detailed_error = get_deep_error(&e); // 這裡會拿到更深層的資訊
             error!("[execute_request] 請求發送失敗: {}", detailed_error);
-            build_error_response(500, detailed_error)
+            return build_error_response(500, detailed_error);
         }
         Err(_) => {
             error!(
