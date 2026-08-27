@@ -30,7 +30,6 @@
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "curlconverter": "^4.12.0",
     "hotkeys-js": "^4.0.4",
     "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",

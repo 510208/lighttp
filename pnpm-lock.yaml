@@ -65,9 +65,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      curlconverter:
-        specifier: ^4.12.0
-        version: 4.12.0
       hotkeys-js:
         specifier: ^4.0.4
         version: 4.0.4
@@ -1045,9 +1042,6 @@ packages:
     resolution: {integrity: sha512-BJ8/l4R5LRE7hW9WdSuGYrLSHi2ynxeFpDFbH0K/CgNeY/tyhk+vO6TYxXC5r5CpUhNVX310xzPsN/H9lCdfOA==}
     engines: {node: '>=14'}
 
-  argparse@1.0.10:
-    resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
-
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
@@ -1129,10 +1123,6 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
-
-  curlconverter@4.12.0:
-    resolution: {integrity: sha512-NcwPKJgu9DkCH4gQsnjnXuUtPrhLhoNwvIYTTS5rRrsCC/X2flUswtgmeCyV9ePGszXzFReXk5y/CdBxrsAQ8Q==}
-    hasBin: true
 
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
@@ -1405,9 +1395,6 @@ packages:
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
-  lossless-json@4.3.0:
-    resolution: {integrity: sha512-ToxOC+SsduRmdSuoLZLYAr5zy1Qu7l5XhmPWM3zefCZ5IcrzW/h108qbJUKfOlDlhvhjUK84+8PSVX0kxnit0g==}
-
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
@@ -1471,10 +1458,6 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  node-addon-api@8.7.0:
-    resolution: {integrity: sha512-9MdFxmkKaOYVTV+XVRG8ArDwwQ77XIgIPyKASB1k3JPq3M8fGQQQE3YpMOrKm6g//Ktx8ivZr8xo1Qmtqub+GA==}
-    engines: {node: ^18 || ^20 || >= 21}
-
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -1483,10 +1466,6 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
-
-  node-gyp-build@4.8.4:
-    resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==}
-    hasBin: true
 
   node-releases@2.0.53:
     resolution: {integrity: sha512-D9UOmYG3UH1V+ENW56t5QXBwJw1YEY18ruVeus89Rw+SyIgjPkCO84bRzO3uNIYosJbNwiabWVn48o3uJLjxFQ==}
@@ -1667,9 +1646,6 @@ packages:
     resolution: {integrity: sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ==}
     engines: {node: '>=0.10.0'}
 
-  sprintf-js@1.0.3:
-    resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
-
   state-local@1.0.7:
     resolution: {integrity: sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==}
 
@@ -1703,17 +1679,6 @@ packages:
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-
-  tree-sitter-bash@0.23.3:
-    resolution: {integrity: sha512-36cg/GQ2YmIbeiBeqeuh4fBJ6i4kgVouDaqTxqih5ysPag+zHufyIaxMOFeM8CeplwAK/Luj1o5XHqgdAfoCZg==}
-    peerDependencies:
-      tree-sitter: ^0.21.1
-    peerDependenciesMeta:
-      tree-sitter:
-        optional: true
-
-  tree-sitter@0.21.1:
-    resolution: {integrity: sha512-7dxoA6kYvtgWw80265MyqJlkRl4yawIjO7S5MigytjELkX43fV2WsAXzsNfO7sBpPPCF5Gp0+XzHk0DwLCq3xQ==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -1889,9 +1854,6 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
-  web-tree-sitter@0.24.7:
-    resolution: {integrity: sha512-CdC/TqVFbXqR+C51v38hv6wOPatKEUGxa39scAeFSm98wIhZxAYonhRQPSMmfZ2w7JDI0zQDdzdmgtNk06/krQ==}
-
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -1914,10 +1876,6 @@ packages:
   yaml@2.8.4:
     resolution: {integrity: sha512-ml/JPOj9fOQK8RNnWojA67GbZ0ApXAUlN2UQclwv2eVgTgn7O9gg9o7paZWKMp4g0H3nTLtS9LVzhkpOFIKzog==}
     engines: {node: '>= 14.6'}
-    hasBin: true
-
-  yamljs@0.3.0:
-    resolution: {integrity: sha512-C/FsVVhht4iPQYXOInoxUM/1ELSf9EsgKH34FofQOp6hwCPrW4vG4w5++TED3xRUo8gD7l0P1J1dLlDYzODsTQ==}
     hasBin: true
 
 snapshots:
@@ -2731,10 +2689,6 @@ snapshots:
 
   ansis@4.3.1: {}
 
-  argparse@1.0.10:
-    dependencies:
-      sprintf-js: 1.0.3
-
   argparse@2.0.1: {}
 
   aria-hidden@1.2.6:
@@ -2808,15 +2762,6 @@ snapshots:
       - encoding
 
   csstype@3.2.3: {}
-
-  curlconverter@4.12.0:
-    dependencies:
-      jsesc: 3.1.0
-      lossless-json: 4.3.0
-      tree-sitter: 0.21.1
-      tree-sitter-bash: 0.23.3(tree-sitter@0.21.1)
-      web-tree-sitter: 0.24.7
-      yamljs: 0.3.0
 
   de-indent@1.0.2: {}
 
@@ -3034,8 +2979,6 @@ snapshots:
 
   lodash@4.18.1: {}
 
-  lossless-json@4.3.0: {}
-
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -3094,13 +3037,9 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  node-addon-api@8.7.0: {}
-
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
-
-  node-gyp-build@4.8.4: {}
 
   node-releases@2.0.53: {}
 
@@ -3258,8 +3197,6 @@ snapshots:
 
   speakingurl@14.0.1: {}
 
-  sprintf-js@1.0.3: {}
-
   state-local@1.0.7: {}
 
   string_decoder@1.3.0:
@@ -3286,18 +3223,6 @@ snapshots:
   totalist@3.0.1: {}
 
   tr46@0.0.3: {}
-
-  tree-sitter-bash@0.23.3(tree-sitter@0.21.1):
-    dependencies:
-      node-addon-api: 8.7.0
-      node-gyp-build: 4.8.4
-    optionalDependencies:
-      tree-sitter: 0.21.1
-
-  tree-sitter@0.21.1:
-    dependencies:
-      node-addon-api: 8.7.0
-      node-gyp-build: 4.8.4
 
   tslib@2.8.1: {}
 
@@ -3453,8 +3378,6 @@ snapshots:
     dependencies:
       vue: 3.5.33(typescript@5.6.3)
 
-  web-tree-sitter@0.24.7: {}
-
   webidl-conversions@3.0.1: {}
 
   whatwg-url@5.0.0:
@@ -3474,8 +3397,3 @@ snapshots:
   yallist@3.1.1: {}
 
   yaml@2.8.4: {}
-
-  yamljs@0.3.0:
-    dependencies:
-      argparse: 1.0.10
-      glob: 7.2.3
