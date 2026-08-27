@@ -97,6 +97,38 @@ async function checkForUpdates() {
   } as UpdateInfo;
 }
 
+async function fetchReleaseNotes(version: string): Promise<string | undefined> {
+  const versionWithoutPrefix = version.startsWith("v")
+    ? version.slice(1)
+    : version;
+  const url = `https://api.github.com/repos/510208/lighttp/releases/tags/app-v${versionWithoutPrefix}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch release notes: HTTP ${response.status}`);
+    }
+    const data: unknown = await response.json();
+
+    // 確保data型態
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      typeof (data as { body: unknown }).body === "string"
+    ) {
+      return (data as { body: string }).body;
+    }
+
+    return undefined;
+  } catch (err) {
+    console.warn(
+      "[updater] Fetch release notes failed, fallback to default body:",
+      err,
+    );
+    return undefined;
+  }
+}
+
 async function runUpdate() {
   try {
     const update = await check();
@@ -134,5 +166,5 @@ async function runUpdate() {
   }
 }
 
-export { checkForUpdates, runUpdate };
+export { checkForUpdates, runUpdate, fetchReleaseNotes };
 export type { UpdateInfo };
