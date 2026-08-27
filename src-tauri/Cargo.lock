@@ -2344,6 +2344,7 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-updater",
  "tauri-store",
+ "thiserror 2.0.20",
  "tokio",
  "tracing",
  "tracing-subscriber",
