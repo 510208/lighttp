@@ -139,6 +139,7 @@ impl fmt::Debug for RequestPayload {
 // ------
 
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct ResponsePayload {
     pub status: u16,                           // HTTP 狀態碼
     pub headers: HashMap<String, Vec<String>>, // HTTP 標頭，支援重複 Key
