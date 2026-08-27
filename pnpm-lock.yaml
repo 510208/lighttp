@@ -115,6 +115,9 @@ importers:
       vuehex:
         specifier: ^0.6.5
         version: 0.6.5(vue@3.5.33(typescript@5.6.3))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@catppuccin/tailwindcss':
         specifier: ^1.0.0
@@ -1888,6 +1891,9 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@babel/code-frame@7.29.7':
@@ -3411,3 +3417,5 @@ snapshots:
   yallist@3.1.1: {}
 
   yaml@2.8.4: {}
+
+  zod@4.4.3: {}
