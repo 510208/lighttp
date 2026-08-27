@@ -34,7 +34,7 @@
     "hotkeys-js": "^4.0.4",
     "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",
-    "markdown-it-github-alert": "^1.0.6",
+    "markdown-it-github-alerts": "^1.0.1",
     "markdown-it-task-lists": "^2.1.1",
     "monaco-editor": "^0.55.1",
     "pinia": "^3.0.4",

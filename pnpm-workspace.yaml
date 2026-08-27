@@ -3,3 +3,6 @@ allowBuilds:
   tree-sitter: true
   tree-sitter-bash: true
   vue-demi: true
+
+overrides:
+  dompurify: "^3.4.14"
