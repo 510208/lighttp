@@ -20,7 +20,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net ipc: http://ipc.localhost; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://gravatar.com https://github.com https://*.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://api.github.com https://cdn.jsdelivr.net ipc: http://ipc.localhost"
     }
   },
   "plugins": {
