@@ -47,7 +47,7 @@
     "vue-markdown-render": "^2.3.1",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9",
-    "vuehex": "^0.6.5",
+    "vuehex": "^0.7.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
