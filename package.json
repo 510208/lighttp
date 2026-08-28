@@ -18,7 +18,7 @@
     "@fontsource-variable/space-grotesk": "^5.2.10",
     "@lucide/vue": "^1.11.0",
     "@monaco-editor/loader": "^1.7.0",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/vite": "^4.3.3",
     "@tanstack/vue-table": "^8.21.3",
     "@tauri-apps/plugin-cli": "~2.4.1",
     "@tauri-apps/plugin-dialog": "~2.7.1",
