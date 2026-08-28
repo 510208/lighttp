@@ -83,8 +83,8 @@ importers:
         specifier: ^0.55.1
         version: 0.55.1
       pinia:
-        specifier: ^3.0.4
-        version: 3.0.4(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3))
+        specifier: ^4.0.3
+        version: 4.0.3(@vue/devtools-api@7.7.9)(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3))
       quicktype-core:
         specifier: ^23.2.6
         version: 23.2.6
@@ -1661,15 +1661,6 @@ packages:
   picomatch@4.0.7:
     resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
-
-  pinia@3.0.4:
-    resolution: {integrity: sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==}
-    peerDependencies:
-      typescript: '>=4.5.0'
-      vue: ^3.5.11
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   pinia@4.0.3:
     resolution: {integrity: sha512-XMQqpvjgG7LMqVhhFUzKLT4KEbsYbfZZ0CZU9PgdFm1O2VKBmIkykL8+SfNhOaT7sR0wT6BEgKT0YNDYWgmVRA==}
@@ -3327,13 +3318,6 @@ snapshots:
   picocolors@1.1.1: {}
 
   picomatch@4.0.7: {}
-
-  pinia@3.0.4(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3)):
-    dependencies:
-      '@vue/devtools-api': 7.7.9
-      vue: 3.5.41(typescript@5.6.3)
-    optionalDependencies:
-      typescript: 5.6.3
 
   pinia@4.0.3(@vue/devtools-api@7.7.9)(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3)):
     dependencies:
