@@ -1,7 +1,29 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
-import loader from "@monaco-editor/loader";
 import { prettify } from "htmlfy";
+// 1. 直接引進本地的 monaco 核心（不要用 loader.init()）
+import * as monaco from "monaco-editor";
+
+// 2. 利用 Vite 的 ?worker&inline 語法，把 Worker 變成本地 Base64 字串，繞過所有 CSP 與跨域限制
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker&inline";
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker&inline";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker&inline";
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker&inline";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker&inline";
+
+// 3. 配置全域環境變數，讓 monaco 知道去哪裡找這群內聯的 Worker
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === "json") return new jsonWorker();
+    if (label === "css" || label === "scss" || label === "less")
+      return new cssWorker();
+    if (label === "html" || label === "handlebars" || label === "razor")
+      return new htmlWorker();
+    if (label === "typescript" || label === "javascript") return new tsWorker();
+    return new editorWorker();
+  },
+};
+
 // Credit: https://github.com/josephabbey/catppuccin-monaco
 import ctpMocha from "@/assets/themes/editor/mocha.json";
 
@@ -14,7 +36,6 @@ const props = defineProps<{
 
 const editorContainer = ref<HTMLElement | null>(null);
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
-const monacoRef = shallowRef<any>(null);
 const formattedCode = ref<string>("");
 
 async function formatCode(code: string, language?: string): Promise<string> {
@@ -73,16 +94,16 @@ onMounted(async () => {
   if (!editorContainer.value) return;
 
   try {
-    // 先格式化代码
     formattedCode.value = await formatCode(
       props.modelValue ?? "",
       props.language,
     );
 
-    const monaco = await loader.init();
-    monacoRef.value = monaco;
-
-    monaco.editor.defineTheme("catppuccinomocha", ctpMocha);
+    // 4. 不需要再 await loader.init() 了，直接使用本地的 monaco 變數
+    monaco.editor.defineTheme(
+      "catppuccinomocha",
+      ctpMocha as monaco.editor.IStandaloneThemeData,
+    );
 
     editorInstance.value = monaco.editor.create(editorContainer.value, {
       value: formattedCode.value,
@@ -97,7 +118,7 @@ onMounted(async () => {
       fontSize: 14,
     });
   } catch (error) {
-    console.error("[Monaco Loader Error]:", error);
+    console.error("[Monaco Init Error]:", error);
   }
 });
 
@@ -110,18 +131,13 @@ watch(
     formattedCode.value = nextValue;
 
     if (nextValue !== editorInstance.value.getValue()) {
-      console.log("[New Model Value]:", nextValue);
       editorInstance.value.setValue(nextValue);
     }
 
-    if (monacoRef.value) {
-      const model = editorInstance.value.getModel?.();
-      if (model) {
-        monacoRef.value.editor.setModelLanguage(
-          model,
-          props.language || "json",
-        );
-      }
+    // 5. 這裡也改為直接使用本地導入的 monaco
+    const model = editorInstance.value.getModel?.();
+    if (model) {
+      monaco.editor.setModelLanguage(model, props.language || "json");
     }
   },
 );

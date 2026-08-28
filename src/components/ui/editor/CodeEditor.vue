@@ -7,14 +7,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
-import loader from "@monaco-editor/loader";
+
+// 1. 直接引進本地的 monaco 核心（移除 loader）
+import * as monaco from "monaco-editor";
+
+// 2. 利用 Vite 的 ?worker&inline 語法，把所有 Worker 變成本地內聯字串，解決正式版黑屏與 CSP 限制
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker&inline";
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker&inline";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker&inline";
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker&inline";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker&inline";
+
+// 3. 配置全域環境變數，讓 monaco 核心正確找到這些內聯的 Worker 實體
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === "json") return new jsonWorker();
+    if (label === "css" || label === "scss" || label === "less")
+      return new cssWorker();
+    if (label === "html" || label === "handlebars" || label === "razor")
+      return new htmlWorker();
+    if (label === "typescript" || label === "javascript") return new tsWorker();
+    return new editorWorker();
+  },
+};
 
 // Monaco types may not be available in some environments. Use a lightweight local alias
-// to avoid TypeScript errors when the module or its type declarations aren't found.
 type MonacoEditorAlias = any;
 import { AcceptableValue } from "reka-ui";
 import { Button } from "@/components/ui/button";
 import { Upload } from "@lucide/vue";
+
+// 4. 引入你之前用到的 Catppuccin 主題 JSON 檔案
+import ctpMocha from "@/assets/themes/editor/mocha.json";
 
 const props = defineProps<{
   modelValue?: string; // 接收外部傳入的程式碼
@@ -28,25 +52,22 @@ const language = ref("json");
 const editorContainer = ref<HTMLElement | null>(null);
 const code = ref(
   props.modelValue ||
-    `{
-  "name": "SamHacker",
-  "age": null,
-  "isAdmin": true,
-}`,
+    `{\n  "name": "SamHacker",\n  "age": null,\n  "isAdmin": true\n}`,
 );
 
 // 使用 shallowRef 儲存實例以優化效能
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
-const monacoRef = shallowRef<any>(null);
 
-onMounted(async () => {
+onMounted(() => {
   if (editorContainer.value) {
     try {
-      // 透過 loader 初始化 monaco 實例
-      const monaco = await loader.init();
-      monacoRef.value = monaco;
+      // 5. 註冊 Catppuccin 主題（加上型態斷言防止 TS2345 錯誤）
+      monaco.editor.defineTheme(
+        "catppuccinomocha",
+        ctpMocha as monaco.editor.IStandaloneThemeData,
+      );
 
-      // 建立編輯器實例
+      // 6. 直接使用本地的 monaco.editor.create 建立編輯器實例
       editorInstance.value = monaco.editor.create(editorContainer.value, {
         value: code.value,
         language: language.value,
@@ -66,7 +87,7 @@ onMounted(async () => {
         }
       });
     } catch (error) {
-      console.error("[Monaco Loader Error]:", error);
+      console.error("[Monaco Init Error]:", error);
     }
   }
 });
@@ -79,9 +100,8 @@ watch(
     const currentEditorValue = editorInstance.value.getValue();
 
     // 只有當外部傳入的值與編輯器內部的內容「不一致」時，才執行 setValue
-    // 這通常發生在切換頁面回來、點擊重置按鈕或從 API 載入資料時
     if (newVal !== currentEditorValue) {
-      editorInstance.value.setValue(newVal);
+      editorInstance.value.setValue(newVal ?? "");
     }
   },
 );
@@ -94,9 +114,9 @@ function changeLanguage(newLanguage: AcceptableValue) {
   if (typeof newLanguage !== "string" || !newLanguage) return;
 
   const editor = editorInstance.value;
-  const monaco = monacoRef.value;
 
-  if (editor && monaco) {
+  // 7. 直接呼叫本地 monaco 實例進行語言變更
+  if (editor) {
     const model = editor.getModel();
     if (model) {
       monaco.editor.setModelLanguage(model, newLanguage);
@@ -113,10 +133,8 @@ onUnmounted(() => {
 
 // 處理讀取檔案的邏輯
 function handleFileUpload() {
-  // 建立一個隱藏的 input 元素
   const input = document.createElement("input");
   input.type = "file";
-  // 限制讀取文字類型的檔案 (可依需求調整，例如 .json, .txt, .js)
   input.accept = ".json,.txt,.js,.html,.xml,.ts,text/plain";
 
   input.onchange = (event: Event) => {
@@ -126,18 +144,13 @@ function handleFileUpload() {
     if (file) {
       const reader = new FileReader();
 
-      // 當檔案讀取完成時觸發
       reader.onload = (e) => {
         const content = e.target?.result;
         if (typeof content === "string") {
-          // 1. 更新編輯器實例的值 (這會觸發 onDidChangeContent 並 emit update:modelValue)
           if (editorInstance.value) {
             editorInstance.value.setValue(content);
           }
-
-          // 2. 嘗試自動根據副檔名判定語言 (選配功能)
           autoDetectLanguage(file.name);
-
           console.log(`[File System] Loaded: ${file.name}`);
         }
       };
@@ -146,12 +159,10 @@ function handleFileUpload() {
         console.error("[File System] Failed to read file.");
       };
 
-      // 以 UTF-8 編碼讀取檔案內容
       reader.readAsText(file);
     }
   };
 
-  // 觸發點擊，開啟系統檔案選取視窗
   input.click();
 }
 
