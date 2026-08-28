@@ -50,8 +50,8 @@ importers:
         specifier: ~2
         version: 2.10.1
       '@tauri-store/pinia':
-        specifier: ^4.2.0
-        version: 4.2.0(typescript@5.6.3)
+        specifier: ^5.0.2
+        version: 5.0.2(@vue/devtools-api@7.7.9)(typescript@5.6.3)
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -1024,11 +1024,11 @@ packages:
   '@tauri-apps/plugin-updater@2.10.1':
     resolution: {integrity: sha512-NFYMg+tWOZPJdzE/PpFj2qfqwAWwNS3kXrb1tm1gnBJ9mYzZ4WDRrwy8udzWoAnfGCHLuePNLY1WVCNHnh3eRA==}
 
-  '@tauri-store/pinia@4.2.0':
-    resolution: {integrity: sha512-fOwbrAuAN5kdjU42jjgOb6qAisglyskgVgAfSdLyz3lyxgN/2xRR4boQmzD6M40Q5mmX9TxMuAaL2bm5AZyEmw==}
+  '@tauri-store/pinia@5.0.2':
+    resolution: {integrity: sha512-z3IFRGVom+i7rD3CP0DLPde8mCu2ZecuqnvzLvcZIWYQ/ojjqnuyVW/2aliJOpPd9u9NB5/idz8D927XlbSlng==}
 
-  '@tauri-store/shared@0.10.3':
-    resolution: {integrity: sha512-6S2SbYxZUBOLL/t+49cIF4gdZNxYnw9yitNlIUsgiPI5ApRtdXfj4JdQd7WmDwoQXXTOzlOYaqGpmICWhzmmRg==}
+  '@tauri-store/shared@0.10.6':
+    resolution: {integrity: sha512-vRC4MH52j6ITeD9yWs6jwmYxJwt17x0YwSzigxwEkUQad6JC9m6lIJPD4r+ebZYpVJ47RlI9g5SPy2dxMOpYqg==}
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
@@ -1311,8 +1311,8 @@ packages:
   error-stack-parser-es@1.0.5:
     resolution: {integrity: sha512-5qucVt2XcuGMcEGgWI7i+yZpmpByQ8J1lHhcL7PwqCwu9FPP3VUXzT4ltHe5i2z9dePwEHcDVOAfSnHsOlCXRA==}
 
-  es-toolkit@1.46.1:
-    resolution: {integrity: sha512-5eNtXOs3tbfxXOj04tjjseeWkRWaoCjdEI+96DgwzZoe6c9juL49pXlzAFTI72aWC9Y8p7168g6XIKjh7k6pyQ==}
+  es-toolkit@1.51.0:
+    resolution: {integrity: sha512-zC2lQGkM7QX+Gm6iM3+WIdZJzthsEd14LvRNJneSO2hzyz/zNBENR8+YXWo1cKxgPBtV6ksPYHELbcwBRzmdCw==}
 
   esbuild@0.25.12:
     resolution: {integrity: sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==}
@@ -1603,6 +1603,9 @@ packages:
     resolution: {integrity: sha512-D9UOmYG3UH1V+ENW56t5QXBwJw1YEY18ruVeus89Rw+SyIgjPkCO84bRzO3uNIYosJbNwiabWVn48o3uJLjxFQ==}
     engines: {node: '>=18'}
 
+  nostics@1.2.0:
+    resolution: {integrity: sha512-FGqEfhQjrvo1lL8KFifdTQiNwwQHJxC1jtYE1Rc54qF/jxONUNL+kC9gS1krX8Q65PgrQ5fCqH/I4NhWBvdSqg==}
+
   obug@2.1.4:
     resolution: {integrity: sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA==}
     engines: {node: '>=12.20.0'}
@@ -1663,6 +1666,16 @@ packages:
     resolution: {integrity: sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==}
     peerDependencies:
       typescript: '>=4.5.0'
+      vue: ^3.5.11
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  pinia@4.0.3:
+    resolution: {integrity: sha512-XMQqpvjgG7LMqVhhFUzKLT4KEbsYbfZZ0CZU9PgdFm1O2VKBmIkykL8+SfNhOaT7sR0wT6BEgKT0YNDYWgmVRA==}
+    peerDependencies:
+      '@vue/devtools-api': ^8.1.5
+      typescript: '>=5.6.0'
       vue: ^3.5.11
     peerDependenciesMeta:
       typescript:
@@ -2688,19 +2701,20 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.11.0
 
-  '@tauri-store/pinia@4.2.0(typescript@5.6.3)':
+  '@tauri-store/pinia@5.0.2(@vue/devtools-api@7.7.9)(typescript@5.6.3)':
     dependencies:
-      '@tauri-apps/api': 2.11.0
-      '@tauri-store/shared': 0.10.3
-      pinia: 3.0.4(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3))
+      '@tauri-apps/api': 2.11.1
+      '@tauri-store/shared': 0.10.6
+      pinia: 4.0.3(@vue/devtools-api@7.7.9)(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3))
       vue: 3.5.41(typescript@5.6.3)
     transitivePeerDependencies:
+      - '@vue/devtools-api'
       - typescript
 
-  '@tauri-store/shared@0.10.3':
+  '@tauri-store/shared@0.10.6':
     dependencies:
-      '@tauri-apps/api': 2.11.0
-      es-toolkit: 1.46.1
+      '@tauri-apps/api': 2.11.1
+      es-toolkit: 1.51.0
 
   '@types/estree@1.0.9': {}
 
@@ -3016,7 +3030,7 @@ snapshots:
 
   error-stack-parser-es@1.0.5: {}
 
-  es-toolkit@1.46.1: {}
+  es-toolkit@1.51.0: {}
 
   esbuild@0.25.12:
     optionalDependencies:
@@ -3255,6 +3269,8 @@ snapshots:
 
   node-releases@2.0.53: {}
 
+  nostics@1.2.0: {}
+
   obug@2.1.4: {}
 
   ohash@2.0.12: {}
@@ -3315,6 +3331,14 @@ snapshots:
   pinia@3.0.4(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-api': 7.7.9
+      vue: 3.5.41(typescript@5.6.3)
+    optionalDependencies:
+      typescript: 5.6.3
+
+  pinia@4.0.3(@vue/devtools-api@7.7.9)(typescript@5.6.3)(vue@3.5.41(typescript@5.6.3)):
+    dependencies:
+      '@vue/devtools-api': 7.7.9
+      nostics: 1.2.0
       vue: 3.5.41(typescript@5.6.3)
     optionalDependencies:
       typescript: 5.6.3
