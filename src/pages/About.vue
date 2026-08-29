@@ -1,7 +1,7 @@
 <template>
   <main class="items-left flex h-full flex-col gap-5 px-15 py-10">
     <div class="flex items-center justify-between">
-      <img :src="logo" alt="Logo" class="h-12 w-fit" />
+      <img id="sh-logo" :src="logo" alt="Logo" class="h-12 w-fit" />
       <div class="flex h-full flex-col justify-between p-0">
         <p class="text-lh-subtext-1 text-right text-sm">
           Make HTTP requests simple, API calls easier
@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import logo from "@/assets/lighttp_logo_wordmark.svg";
 import { getVersion } from "@tauri-apps/api/app";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, computed } from "vue";
 import { Window } from "@tauri-apps/api/window";
 import { GitHubInfo, Updater } from "@/services";
 
@@ -121,7 +121,6 @@ import MarkdownItGitHubAlerts from "markdown-it-github-alerts"; // For > [!NOTE]
 
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
 
 interface Contributor {
   name: string;
@@ -179,6 +178,48 @@ function openReleaseNotes() {
 function openContributors() {
   openUrl(`https://github.com/510208/lighttp/graphs/contributors`);
 }
+
+function useEasterEgg() {
+  let clickCount = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  const logo = document.querySelector("#sh-logo");
+  if (!logo) return;
+
+  const handleClick = () => {
+    clickCount++;
+
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      clickCount = 0;
+    }, 5000);
+
+    if (clickCount === 7) {
+      openUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+      clickCount = 0;
+      clearTimeout(timer);
+    }
+  };
+
+  logo.addEventListener("click", handleClick);
+
+  // 回傳清除函數，供組件卸載時呼叫
+  return () => {
+    logo.removeEventListener("click", handleClick);
+    clearTimeout(timer);
+  };
+}
+
+let cleanup: (() => void) | undefined;
+
+// 註冊彩蛋到Logo上
+onMounted(() => {
+  cleanup = useEasterEgg();
+});
+
+onUnmounted(() => {
+  if (cleanup) cleanup();
+});
 </script>
 
 <style scoped>
