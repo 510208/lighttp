@@ -17,8 +17,11 @@ jobs:
       matrix:
         include:
           - platform: "macos-latest"
+            node_options: "--max-old-space-size=6144"
           - platform: "ubuntu-22.04"
+            node_options: ""
           - platform: "windows-latest"
+            node_options: ""
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -93,6 +96,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自動生成，無需手動設置
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          NODE_OPTIONS: ${{ matrix.node_options }}
 
         with:
           tagName: app-v__VERSION__
