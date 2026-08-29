@@ -5,30 +5,86 @@ on:
     tags:
       - "v*" # 當推送以 v 開頭的標籤（如 v1.0.0）時觸發
       - "[0-9]*.[0-9]*.[0-9]" # 當推送符合版本號格式的標籤（如 1.0.0）時觸發
-    # 允許手動觸發
   workflow_dispatch:
+    inputs:
+      build_macos:
+        description: "建置 macOS 版本"
+        required: true
+        type: boolean
+        default: true
+      build_ubuntu:
+        description: "建置 Ubuntu (Linux) 版本"
+        required: true
+        type: boolean
+        default: true
+      build_windows:
+        description: "建置 Windows 版本"
+        required: true
+        type: boolean
+        default: true
 
 jobs:
+  # 動態計算需要建置的作業系統
+  matrix-generator:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          # 1. 檢查是否為手動觸發，如果不是（例如推 Tag 自動觸發），則預設全開
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            INCLUDE_MACOS=true
+            INCLUDE_UBUNTU=true
+            INCLUDE_WINDOWS=true
+          else
+            INCLUDE_MACOS=${{ inputs.build_macos }}
+            INCLUDE_UBUNTU=${{ inputs.build_ubuntu }}
+            INCLUDE_WINDOWS=${{ inputs.build_windows }}
+          fi
+
+          # 2. 根據布爾值動態組合 JSON 陣列
+          JSON_ITEMS=""
+          if [ "$INCLUDE_MACOS" = "true" ]; then
+            JSON_ITEMS="$JSON_ITEMS{\"platform\":\"macos-latest\",\"node_options\":\"--max-old-space-size=6144\"},"
+          fi
+          if [ "$INCLUDE_UBUNTU" = "true" ]; then
+            JSON_ITEMS="$JSON_ITEMS{\"platform\":\"ubuntu-22.04\",\"node_options\":\"\"},"
+          fi
+          if [ "$INCLUDE_WINDOWS" = "true" ]; then
+            JSON_ITEMS="$JSON_ITEMS{\"platform\":\"windows-latest\",\"node_options\":\"\"},"
+          fi
+
+          # 3. 移除末尾逗號並加上外層包裝
+          JSON_ITEMS=$(echo "$JSON_ITEMS" | sed 's/,$//')
+
+          # 防呆機制：若手動觸發時全部都沒勾選，預設至少塞入一個空值防止 workflow 報錯，並退出
+          if [ -z "$JSON_ITEMS" ]; then
+            echo "❌ 錯誤：你沒有勾選任何作業系統！"
+            exit 1
+          fi
+
+          MATRIX_JSON="{\"include\":[$JSON_ITEMS]}"
+
+          echo "最終建置矩陣: $MATRIX_JSON"
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
+  # Tauri 建置
   publish-tauri:
+    needs: matrix-generator
     permissions:
       contents: write # 必須：允許 action 創建 release 和上傳附件
+
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - platform: "macos-latest"
-            node_options: "--max-old-space-size=6144"
-          - platform: "ubuntu-22.04"
-            node_options: ""
-          - platform: "windows-latest"
-            node_options: ""
+      matrix: ${{ fromJSON(needs.matrix-generator.outputs.matrix) }}
 
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          fetch-depth: 0 # 必須完整拉取歷史，否則無法正確比對 Git Tag
+          fetch-depth: 0 # 完整拉取歷史
 
       - name: Check if version is bumped
         id: get-version
@@ -43,8 +99,7 @@ jobs:
 
           echo "Checking if $TARGET_TAG already exists in global remote history..."
 
-          # 2. 直接對 GitHub 遠端庫查詢全部 Tag 列表 (最精確，且不需要處理本地 clone 深度問題)
-          # 只要遠端返回的 refs/tags/ 目錄包含此 Tag，就代表歷史上發布過
+          # 2. 直接對 GitHub 遠端庫查詢全部 Tag 列表
           IF_EXISTS=$(git ls-remote --tags origin "refs/tags/${TARGET_TAG}" | awk '{print $2}')
 
           if [ ! -z "$IF_EXISTS" ]; then
@@ -69,7 +124,7 @@ jobs:
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
         with:
-          toolchain: stable # 將 1.71.0 改為 stable 或 1.78.0 以上
+          toolchain: stable
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
@@ -81,7 +136,7 @@ jobs:
         run: pnpm install
 
       - name: Cache pnpm store
-        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 #v5.1.0
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -94,13 +149,12 @@ jobs:
       - name: Build the app
         uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自動生成，無需手動設置
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           NODE_OPTIONS: ${{ matrix.node_options }}
-
         with:
           tagName: app-v__VERSION__
           releaseName: "LigHTTP v__VERSION__"
           releaseBody: "See the assets to download this version and install."
-          releaseDraft: true # 發佈前為草稿，檢查後手動發佈
+          releaseDraft: true
           prerelease: false
