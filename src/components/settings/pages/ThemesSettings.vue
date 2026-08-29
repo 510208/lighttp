@@ -106,7 +106,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { computed, type Ref } from "vue";
+import { computed } from "vue";
 
 import { Plus, Minus } from "@lucide/vue";
 
