@@ -45,6 +45,14 @@ export default defineConfig(({ mode }) => {
 
     build: {
       target: "es2022",
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // 將 monaco-editor 及其資源獨立拆分成 monaco.js
+            monaco: ["monaco-editor"],
+          },
+        },
+      },
     },
     optimizeDeps: {
       esbuildOptions: {
