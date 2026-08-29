@@ -1,0 +1,55 @@
+name: Dependabot Tauri Fast Check
+
+on:
+  pull_request:
+    branches: ["main", "master"]
+
+permissions:
+  contents: read
+
+jobs:
+  fast-check:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 為了 pnpm 核心環境設定
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11 # 對應您 package.json 的 pnpm@11
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm" # 自動快取 pnpm 套件
+
+      # 設定 Rust 環境與快取（加快 Rust 後端 check 速度）
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+
+      # 安裝前端相依套件
+      - name: Install Node.js dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 前端檢查 1：使用 oxlint 進行極速語法檢查 (通常 < 0.1 秒)
+      - name: Run Front-end Oxlint
+        run: pnpm lint
+
+      # 前端檢查 2：使用 vue-tsc 進行 Vue/TS 型別安全檢查
+      - name: Run Front-end Type Check (vue-tsc)
+        run: pnpm type-check
+
+      # 後端檢查：執行 Rust 語法與型別檢查
+      - name: Run Back-end Check (cargo check)
+        run: |
+          cd src-tauri
+          cargo check --workspace --tests
