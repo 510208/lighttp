@@ -25,6 +25,8 @@
   "settings_panel.themes.binary_editor_theme.dark_themes": "深色主題",
   "settings_panel.themes.binary_editor_theme.light_themes": "淺色主題",
   "settings_panel.themes.binary_editor_theme.default": "預設",
+  "settings_panel.themes.zoom_ratio.label": "縮放比例",
+  "settings_panel.themes.zoom_ratio.description": "設定縮放比例，此設定將套用到整個使用者介面。您亦可使用Ctrl+滾輪调整。",
 
   "settings_panel.update.title": "檢查更新",
   "settings_panel.update.checking_for_updates": "正在檢查更新...",

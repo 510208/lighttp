@@ -58,11 +58,42 @@
         </SelectContent>
       </Select>
     </ConfigOptionFrame>
+
+    <Separator />
+
+    <ConfigOptionFrame
+      label-key="settings_panel.themes.zoom_ratio.label"
+      description-key="settings_panel.themes.zoom_ratio.description"
+    >
+      <div class="flex gap-0 overflow-hidden rounded-lg border">
+        <Button
+          @click="settingsStore.changeZoom(0.1)"
+          variant="secondary"
+          size="icon"
+          class="rounded-none"
+        >
+          <Plus />
+        </Button>
+        <Input
+          v-model="settingsStore.zoomRatio"
+          class="flex-1 rounded-none border-none hover:ring-0"
+        />
+        <Button
+          @click="settingsStore.changeZoom(-0.1)"
+          variant="secondary"
+          size="icon"
+          class="rounded-none"
+        >
+          <Minus />
+        </Button>
+      </div>
+    </ConfigOptionFrame>
   </div>
 </template>
 
 <script setup lang="ts">
 import Input from "@/components/ui/input/Input.vue";
+import Button from "@/components/ui/button/Button.vue";
 import ConfigOptionFrame from "@/components/settings/components/ConfigOptionFrame.vue";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import Separator from "@/components/ui/separator/Separator.vue";
@@ -75,7 +106,9 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { computed } from "vue";
+import { computed, type Ref } from "vue";
+
+import { Plus, Minus } from "@lucide/vue";
 
 const settingsStore = useSettingsStore();
 

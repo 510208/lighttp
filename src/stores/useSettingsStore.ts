@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { Ref, ref } from "vue";
+import { Ref, ref, watch } from "vue";
 import { changeLang } from "@/i18n";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 
 interface HexViewerConfig {
   enabled: boolean;
@@ -80,6 +81,7 @@ export const useSettingsStore = defineStore(
       css: null,
     } as unknown as Ref<ColorTheme>);
     const autoUpdate = ref(true);
+    const zoomRatio = ref(1.0 as number);
 
     function setQuicktypeConfig(newConfig: quicktypeConfig) {
       quicktypeConfig.value = newConfig;
@@ -117,6 +119,30 @@ export const useSettingsStore = defineStore(
       backgroundImageUrl.value = url;
     }
 
+    function changeZoom(amount: number) {
+      const currentRatio = Number(zoomRatio.value);
+      const step = Number(amount);
+
+      let nextValue = currentRatio + step;
+      nextValue = parseFloat(nextValue.toFixed(1));
+
+      // 限制區間在 0.5 到 3.0 之間
+      zoomRatio.value = Math.max(0.5, Math.min(2.0, nextValue));
+    }
+
+    watch(
+      zoomRatio,
+      async (newRatio) => {
+        try {
+          const appWindow = getCurrentWebview(); // 取得當前視窗實例 [1]
+          await appWindow.setZoom(newRatio); // 呼叫 Tauri 原生縮放 API [1]
+        } catch (error) {
+          console.error("Tauri zoom failed:", error);
+        }
+      },
+      { immediate: true },
+    ); // 初始建立時就套用一次
+
     return {
       language,
       setLanguage,
@@ -133,6 +159,9 @@ export const useSettingsStore = defineStore(
       getQuicktypeConfig,
 
       hexViewerConfig,
+
+      zoomRatio,
+      changeZoom,
 
       colorTheme,
     };

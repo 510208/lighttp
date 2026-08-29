@@ -25,6 +25,8 @@
   "settings_panel.themes.binary_editor_theme.dark_themes": "Dark Themes",
   "settings_panel.themes.binary_editor_theme.light_themes": "Light Themes",
   "settings_panel.themes.binary_editor_theme.default": "Default",
+  "settings_panel.themes.zoom_ratio.label": "Zoom Ratio",
+  "settings_panel.themes.zoom_ratio.description": "Set the zoom ratio, which affects the display scale of the editor content. You can also use Ctrl+滚轮 to adjust.",
 
   "settings_panel.update.title": "Check for Updates",
   "settings_panel.update.checking_for_updates": "Checking for updates...",
