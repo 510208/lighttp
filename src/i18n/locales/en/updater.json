@@ -1,0 +1,6 @@
+{
+  "updater.update_available.message": "There is a newer version: {version}",
+  "updater.no_release_notes": "No release notes available. Please visit the GitHub page for details ( {url} )",
+  "updater.view_on_github": "View on GitHub",
+  "updater.update_failed": "Update failed. Please try again later."
+}

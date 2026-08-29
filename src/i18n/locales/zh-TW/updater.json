@@ -1,0 +1,6 @@
+{
+  "updater.update_available.message": "有新版本可用：{version}",
+  "updater.no_release_notes": "沒有更新說明，詳細資訊可前往 GitHub 頁面查看",
+  "updater.view_on_github": "在 GitHub 上查看",
+  "updater.update_failed": "更新失敗，請稍後再試。"
+}
