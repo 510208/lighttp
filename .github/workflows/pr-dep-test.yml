@@ -3,6 +3,8 @@ name: Dependabot Tauri Fast Check
 on:
   pull_request:
     branches: ["main", "master"]
+  # 允許手動觸發
+  workflow_dispatch:
 
 permissions:
   contents: read
