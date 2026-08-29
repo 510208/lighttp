@@ -52,14 +52,6 @@ onMounted(() => {
     event.preventDefault();
     handleEnter();
   });
-
-  hotkeys("ctrl+g", (event) => {
-    // 聚焦到 URL 輸入框
-    event.preventDefault();
-    const inputElement =
-      document.querySelector<HTMLInputElement>('input[type="text"]');
-    inputElement?.focus();
-  });
 });
 
 onUnmounted(() => {

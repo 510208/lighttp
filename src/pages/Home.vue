@@ -110,6 +110,12 @@ onMounted(async () => {
   }
 });
 // #endregion
+
+// #region 註冊全局熱鍵
+import { useAppHotkeys } from "@/composables/useAppHotkeys";
+
+useAppHotkeys();
+// #endregion
 </script>
 
 <template>
@@ -134,7 +140,7 @@ onMounted(async () => {
           <RequestBuilder />
         </ResizablePanel>
 
-        <!-- 
+        <!--
           分割條手把 (ResizableHandle)：
           不論垂直或水平，皆直接作為 PanelGroup 的直屬 Child 存在。
           垂直模式下：設定 h-3 w-full (提供足夠的碰撞與拖曳熱區)
