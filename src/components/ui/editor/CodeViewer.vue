@@ -1,28 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 import { prettify } from "htmlfy";
-// 1. 直接引進本地的 monaco 核心（不要用 loader.init()）
-import * as monaco from "monaco-editor";
 
-// 2. 利用 Vite 的 ?worker&inline 語法，把 Worker 變成本地 Base64 字串，繞過所有 CSP 與跨域限制
-import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker&inline";
-import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker&inline";
-import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker&inline";
-import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker&inline";
-import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker&inline";
-
-// 3. 配置全域環境變數，讓 monaco 知道去哪裡找這群內聯的 Worker
-self.MonacoEnvironment = {
-  getWorker(_, label) {
-    if (label === "json") return new jsonWorker();
-    if (label === "css" || label === "scss" || label === "less")
-      return new cssWorker();
-    if (label === "html" || label === "handlebars" || label === "razor")
-      return new htmlWorker();
-    if (label === "typescript" || label === "javascript") return new tsWorker();
-    return new editorWorker();
-  },
-};
+import * as monaco from "./monaco";
 
 // Credit: https://github.com/josephabbey/catppuccin-monaco
 import ctpMocha from "@/assets/themes/editor/mocha.json";

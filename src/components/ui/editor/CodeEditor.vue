@@ -8,28 +8,7 @@ import {
 } from "@/components/ui/select";
 import { ref, onMounted, onUnmounted, shallowRef, watch } from "vue";
 
-// 1. 直接引進本地的 monaco 核心（移除 loader）
-import * as monaco from "monaco-editor";
-
-// 2. 利用 Vite 的 ?worker&inline 語法，把所有 Worker 變成本地內聯字串，解決正式版黑屏與 CSP 限制
-import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker&inline";
-import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker&inline";
-import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker&inline";
-import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker&inline";
-import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker&inline";
-
-// 3. 配置全域環境變數，讓 monaco 核心正確找到這些內聯的 Worker 實體
-self.MonacoEnvironment = {
-  getWorker(_, label) {
-    if (label === "json") return new jsonWorker();
-    if (label === "css" || label === "scss" || label === "less")
-      return new cssWorker();
-    if (label === "html" || label === "handlebars" || label === "razor")
-      return new htmlWorker();
-    if (label === "typescript" || label === "javascript") return new tsWorker();
-    return new editorWorker();
-  },
-};
+import * as monaco from "./monaco";
 
 // Monaco types may not be available in some environments. Use a lightweight local alias
 type MonacoEditorAlias = any;
