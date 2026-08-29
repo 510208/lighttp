@@ -49,30 +49,13 @@ import { Info, EllipsisVertical, Save, FolderOpen, Bolt } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
 import { Window, FileHelpers } from "@/services";
 import SettingPanel from "@/components/settings/SettingsPanel.vue";
-import { ref, onMounted, onUnmounted } from "vue";
-import hotkeys from "hotkeys-js";
+import { ref } from "vue";
 
 const isSettingsOpen = ref(false);
 
 function openSettings() {
   isSettingsOpen.value = true;
 }
-
-onMounted(() => {
-  hotkeys("ctrl+s", (event) => {
-    event.preventDefault();
-    FileHelpers.saveWorkspaceToFile();
-  });
-
-  hotkeys("ctrl+o", (event) => {
-    event.preventDefault();
-    FileHelpers.loadWorkspaceFromFile();
-  });
-});
-
-onUnmounted(() => {
-  hotkeys.unbind();
-});
 </script>
 
 <style scoped></style>
