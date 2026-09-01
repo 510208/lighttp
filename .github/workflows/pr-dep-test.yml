@@ -19,7 +19,7 @@ jobs:
 
       # 為了 pnpm 核心環境設定
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Install Linux dependencies
         run: |
