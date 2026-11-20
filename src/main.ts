@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { i18n } from "@/i18n";
-import { TauriPluginPinia } from "@tauri-store/pinia"; // 引入外掛
+import { TauriPluginPinia } from "@tauri-store/pinia";
 
 import App from "./App.vue";
 import "@/styles/index.css";
@@ -10,13 +10,32 @@ import router from "@/router";
 import VueHex from "vuehex";
 import "vuehex/style.css";
 
-const app = createApp(App);
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { applyColorTheme } from "@/services/colorTheme";
 
-const pinia = createPinia();
-pinia.use(TauriPluginPinia());
+async function bootstrap() {
+  const app = createApp(App);
 
-app.use(pinia);
-app.use(i18n);
-app.use(router);
-app.use(VueHex);
-app.mount("#app");
+  const pinia = createPinia();
+  pinia.use(TauriPluginPinia());
+
+  app.use(pinia);
+
+  // 初始化設定儲存系統
+  const settingsStore = useSettingsStore(pinia);
+  await settingsStore.$tauri.start();
+
+  // 套用使用者主題
+  applyColorTheme(settingsStore.colorTheme.css);
+
+  // 初始化其他 Plugin
+  app.use(i18n);
+  app.use(router);
+  app.use(VueHex);
+
+  app.mount("#app");
+}
+
+bootstrap().catch((error) => {
+  console.error("Failed to initialize LigHTTP:", error);
+});
