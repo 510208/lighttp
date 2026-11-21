@@ -28,28 +28,32 @@ interface ColorTheme {
 }
 
 function loadColorTheme(cssContent: string): ColorTheme {
-  // 提取出 CSS 中的Metadata
-  // /*
-  // Theme Name:     Mocha Theme
-  // Description:    The default Catppuccin Mocha theme for LigHTTP.
-  // Author:         SamHacker
-  // License:        MIT
-  // */
-  // @theme inline { /* ... */ }
-  const metadataRegex =
-    /\/\*\s*Theme Name:\s*(.+?)\s*Description:\s*(.+?)\s*Author:\s*(.+?)\s*License:\s*(.+?)\s*\*\//s;
-  const match = cssContent.match(metadataRegex);
-  if (!match) {
+  // 只讀取第一段 CSS 註解作為 Metadata
+  const metadata = cssContent.match(/^\s*\/\*([\s\S]*?)\*\//)?.[1];
+
+  if (!metadata) {
     throw new Error("Invalid theme CSS: Missing metadata");
   }
 
-  const [_, name, description, author, license] = match;
+  function getField(name: string): string {
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const match = metadata?.match(
+      new RegExp(`^\\s*${escapedName}\\s*:\\s*(.*?)\\s*$`, "mi"),
+    );
+
+    if (!match || !match[1]) {
+      throw new Error(`Invalid theme CSS: Missing ${name}`);
+    }
+
+    return match[1].trim();
+  }
 
   return {
-    name: name.trim(),
-    description: description.trim(),
-    author: author.trim(),
-    license: license.trim(),
+    name: getField("Theme Name"),
+    description: getField("Description"),
+    author: getField("Author"),
+    license: getField("License"),
     css: cssContent,
   };
 }
@@ -143,6 +147,23 @@ export const useSettingsStore = defineStore(
       { immediate: true },
     ); // 初始建立時就套用一次
 
+    function setColorTheme(cssContent: string | null): void {
+      if (cssContent === null) {
+        colorTheme.value = {
+          name: "Mocha Theme",
+          description: "The default Catppuccin Mocha theme for LigHTTP.",
+          author: "SamHacker",
+          license: "MIT",
+          css: null,
+        };
+
+        return;
+      }
+
+      // 先解析，成功後才更新 Store，避免錯誤資料覆蓋原本設定。
+      colorTheme.value = loadColorTheme(cssContent);
+    }
+
     return {
       language,
       setLanguage,
@@ -164,6 +185,7 @@ export const useSettingsStore = defineStore(
       changeZoom,
 
       colorTheme,
+      setColorTheme,
     };
   },
   {

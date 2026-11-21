@@ -32,7 +32,7 @@
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "hotkeys-js": "^4.0.4",
+    "hotkeys-js": "^4.0.7",
     "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",
     "markdown-it-github-alerts": "^1.0.1",
@@ -44,12 +44,12 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.4",
     "vue": "^3.5.41",
-    "vue-i18n": "^11.4.2",
+    "vue-i18n": "^11.4.14",
     "vue-markdown-render": "^2.3.1",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9",
     "vuehex": "^0.7.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@tauri-apps/api": "^2.11.1",
