@@ -65,8 +65,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       hotkeys-js:
-        specifier: ^4.0.4
-        version: 4.0.4
+        specifier: ^4.0.7
+        version: 4.0.7
       htmlfy:
         specifier: ^1.0.1
         version: 1.0.1
@@ -1377,8 +1377,8 @@ packages:
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
-  hotkeys-js@4.0.4:
-    resolution: {integrity: sha512-hseNiqaskxSnujuGp8aRMLJfcjaFiTSS0I2GQhqru82N/sx6CGyUf6pvU5X1iycvw2EqmvILkFIb5OzYFXY+9A==}
+  hotkeys-js@4.0.7:
+    resolution: {integrity: sha512-/NET0IaevsVdHmr5fCf3gvAQYxfLPxW5gBIforvwDpHvHsf7gyDo/BJyrU75f3gArXHDzS5QwAxeByIoB6IapA==}
 
   htmlfy@1.0.1:
     resolution: {integrity: sha512-M85PmyEpWUDqhlEknsnvqmqGLq67h8e86WuKLMdXQdUl8iyvOSDbAAyv0tv0IVmIfh7Py1Vsot/IU1skdswt6g==}
@@ -3099,7 +3099,7 @@ snapshots:
 
   hookable@5.5.3: {}
 
-  hotkeys-js@4.0.4: {}
+  hotkeys-js@4.0.7: {}
 
   htmlfy@1.0.1: {}
 
