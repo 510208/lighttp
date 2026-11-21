@@ -10,7 +10,6 @@
 @import "@/styles/mocha.lhtheme.css";
 
 @theme inline {
-  /* Main Colors */
   --color-lh-rosewater: var(--catppuccin-color-rosewater);
   --color-lh-flamingo: var(--catppuccin-color-flamingo);
   --color-lh-pink: var(--catppuccin-color-pink);
@@ -25,23 +24,15 @@
   --color-lh-sapphire: var(--catppuccin-color-sapphire);
   --color-lh-blue: var(--catppuccin-color-blue);
   --color-lh-lavender: var(--catppuccin-color-lavender);
-
-  /* Text Colors */
   --color-lh-text: var(--catppuccin-color-text);
   --color-lh-subtext-0: var(--catppuccin-color-subtext0);
   --color-lh-subtext-1: var(--catppuccin-color-subtext1);
-
-  /* Overlay Colors */
   --color-lh-overlay-0: var(--catppuccin-color-overlay0);
   --color-lh-overlay-1: var(--catppuccin-color-overlay1);
   --color-lh-overlay-2: var(--catppuccin-color-overlay2);
-
-  /* Surface Colors */
   --color-lh-surface-0: var(--catppuccin-color-surface0);
   --color-lh-surface-1: var(--catppuccin-color-surface1);
   --color-lh-surface-2: var(--catppuccin-color-surface2);
-
-  /* Secondary Panes */
   --color-lh-base: var(--catppuccin-color-base);
   --color-lh-mantle: var(--catppuccin-color-mantle);
   --color-lh-crust: var(--catppuccin-color-crust);
@@ -50,63 +41,47 @@
 @custom-variant dark (&);
 
 #app {
-  @apply bg-lh-crust h-screen w-screen;
+  @apply h-screen w-screen bg-lh-crust;
 }
 
-/* shadcn/ui */
+/* shadcn/ui tokens */
 @theme inline {
   --font-heading: var(--font-sans);
-
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
-
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
-
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
-
   --color-sidebar-foreground: var(--sidebar-foreground);
-
   --color-sidebar: var(--sidebar);
-
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
-
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
-
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
-
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
-
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
-
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
   --font-sans: "Noto Sans TC Variable", sans-serif;
   --font-space: "Space Grotesk Variable", monospace;
 }
@@ -117,47 +92,41 @@
   ::before {
     border-color: var(--catppuccin-color-surface2);
   }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 :root {
   --radius: 0.625rem;
-
   --background: var(--catppuccin-color-mantle);
   --foreground: white;
-
   --card: var(--catppuccin-color-overlay0);
   --card-foreground: var(--catppuccin-color-text);
-
   --popover: var(--catppuccin-color-surface0);
   --popover-foreground: var(--catppuccin-color-text);
-
-  --primary: color-mix(
-    in oklch,
-    var(--catppuccin-color-green) 50%,
-    transparent
-  );
+  --primary: color-mix(in oklch, var(--catppuccin-color-green) 50%, transparent);
   --primary-foreground: var(--foreground);
-
   --secondary: var(--catppuccin-color-surface1);
   --secondary-foreground: var(--catppuccin-color-text);
-
   --muted: var(--catppuccin-color-surface2);
   --muted-foreground: var(--catppuccin-color-subtext0);
-
   --accent: var(--catppuccin-color-surface1);
   --accent-foreground: var(--catppuccin-color-blue-foreground);
-
   --destructive: var(--catppuccin-color-red);
   --border: var(--catppuccin-color-surface2);
   --input: var(--catppuccin-color-surface2);
   --ring: var(--catppuccin-color-green);
-
   --chart-1: var(--catppuccin-color-blue);
   --chart-2: var(--catppuccin-color-green);
   --chart-3: var(--catppuccin-color-peach);
   --chart-4: var(--catppuccin-color-mauve);
   --chart-5: var(--catppuccin-color-red);
-
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -166,7 +135,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
   --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180);
   --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250);
   --admonitions-color-important: oklch(0.7 0.14 310) oklch(0.75 0.14 310);
@@ -174,25 +142,88 @@
   --admonitions-color-caution: oklch(0.6 0.2 25) oklch(0.65 0.2 25);
 }
 
-@layer base {
-  * {
-    @apply outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Shared component recipes */
+.lh-settings-dialog {
+  @apply h-[calc(100%-2rem)] max-h-[760px] min-h-[60vh] w-[min(92vw,1000px)] min-w-0 overflow-hidden rounded-2xl border border-lh-surface-1 bg-lh-base p-0;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.lh-settings-layout {
+  @apply flex h-full min-h-0 flex-row;
 }
 
-/* UI元件 */
+.lh-settings-sidebar {
+  @apply flex h-full w-[200px] shrink-0 flex-col items-stretch gap-2 overflow-y-auto border-r border-lh-surface-1 bg-lh-surface-0 px-4 py-5;
+}
+
+.lh-settings-content {
+  @apply h-full min-w-0 flex-1 overflow-y-auto px-6 py-5;
+}
+
+.lh-settings-heading {
+  @apply mb-4 flex flex-col gap-0.5 px-2;
+}
+
+.lh-settings-title {
+  @apply text-base font-bold text-lh-text;
+}
+
+.lh-settings-version {
+  @apply text-[10px] text-lh-overlay-1;
+}
+
+.lh-settings-search {
+  @apply mb-2 flex h-9 items-center gap-2 rounded-lg bg-lh-base px-3 text-xs text-lh-subtext-1;
+}
+
+.sh-settings-tab {
+  @apply flex h-auto w-full flex-none items-center justify-start gap-2 rounded-lg px-3 py-2 text-left text-sm text-lh-subtext-1 shadow-none transition-colors hover:bg-lh-surface-1 hover:text-lh-text data-[state=active]:border data-[state=active]:border-lh-green/20 data-[state=active]:bg-lh-green/20 data-[state=active]:text-lh-green data-[state=active]:shadow-none;
+}
+
+.lh-settings-page {
+  @apply mx-auto flex w-full max-w-3xl flex-col gap-4;
+}
+
+.lh-settings-page-title {
+  @apply text-xl font-bold text-lh-text;
+}
+
+.lh-settings-page-description {
+  @apply text-xs text-lh-overlay-1;
+}
+
+.lh-setting-option {
+  @apply flex min-w-0 flex-col gap-2;
+}
+
+.lh-setting-label {
+  @apply text-sm font-medium text-lh-subtext-1;
+}
+
+.lh-setting-description {
+  @apply text-xs leading-relaxed text-lh-subtext-0;
+}
+
+.lh-setting-control {
+  @apply min-w-0;
+}
+
+.lh-setting-card {
+  @apply flex w-full flex-col gap-3 rounded-lg border border-lh-surface-2 bg-lh-surface-0 p-3;
+}
+
+.lh-control {
+  @apply rounded-md border border-lh-surface-2 bg-lh-surface-0 text-sm text-lh-text shadow-none transition-colors placeholder:text-lh-overlay-1 hover:border-lh-overlay-0 focus-visible:border-lh-green focus-visible:ring-2 focus-visible:ring-lh-green/20 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.lh-settings-tab-icon {
+  @apply size-4 shrink-0;
+}
+
+/* Existing utility hooks */
+.min-h-ui {
+  @apply min-h-30;
+}
+
 button[data-slot="tabs-trigger"] {
   @apply data-active:bg-lh-green/20 data-active:text-lh-green data-[state=open]:bg-lh-green/20 data-[state=open]:text-lh-green;
 }
@@ -201,35 +232,40 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
   @apply text-lh-green;
 }
 
-.min-h-ui {
-  @apply min-h-30;
-}
-
-/* 自訂捲軸樣式 */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(
-    --color-scrollbar-thumb,
-    var(--catppuccin-color-surface2)
-  );
+  background-color: var(--color-scrollbar-thumb, var(--catppuccin-color-surface2));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(
-    --color-scrollbar-thumb-hover,
-    var(--catppuccin-color-surface1)
-  );
+  background-color: var(--color-scrollbar-thumb-hover, var(--catppuccin-color-surface1));
 }
 
 ::-webkit-scrollbar-track {
   background-color: var(--color-scrollbar-track, transparent);
 }
 
-.sh-settings-tab {
-  @apply data-[state=active]:bg-lh-surface-1 data-[state=active]:text-lh-text h-auto w-full flex-none justify-start gap-2 rounded-md px-3 py-1 text-left data-[state=active]:shadow-none;
+@media (max-width: 640px) {
+  .lh-settings-sidebar {
+    @apply w-14 px-2;
+  }
+
+  .lh-settings-heading {
+    @apply items-center px-0;
+  }
+
+  .lh-settings-version,
+  .lh-settings-heading-text {
+    @apply sr-only;
+  }
+
+  .lh-settings-content {
+    @apply px-4 py-4;
+  }
 }
