@@ -41,7 +41,7 @@
 @custom-variant dark (&);
 
 #app {
-  @apply h-screen w-screen bg-lh-crust;
+  @apply bg-lh-crust h-screen w-screen;
 }
 
 /* shadcn/ui tokens */
@@ -110,7 +110,11 @@
   --card-foreground: var(--catppuccin-color-text);
   --popover: var(--catppuccin-color-surface0);
   --popover-foreground: var(--catppuccin-color-text);
-  --primary: color-mix(in oklch, var(--catppuccin-color-green) 50%, transparent);
+  --primary: color-mix(
+    in oklch,
+    var(--catppuccin-color-green) 50%,
+    transparent
+  );
   --primary-foreground: var(--foreground);
   --secondary: var(--catppuccin-color-surface1);
   --secondary-foreground: var(--catppuccin-color-text);
@@ -144,7 +148,7 @@
 
 /* Shared component recipes */
 .lh-settings-dialog {
-  @apply h-[calc(100%-2rem)] max-h-[760px] min-h-[60vh] w-[min(92vw,1000px)] min-w-0 overflow-hidden rounded-2xl border border-lh-surface-1 bg-lh-base p-0;
+  @apply border-lh-surface-1 bg-lh-base h-[calc(100%-2rem)] max-h-[800px] min-h-[60vh] w-[96vw] max-w-[1200px] min-w-0 overflow-hidden rounded-2xl border p-0;
 }
 
 .lh-settings-layout {
@@ -152,7 +156,7 @@
 }
 
 .lh-settings-sidebar {
-  @apply flex h-full w-[200px] shrink-0 flex-col items-stretch gap-2 overflow-y-auto border-r border-lh-surface-1 bg-lh-surface-0 px-4 py-5;
+  @apply border-lh-surface-1 bg-lh-surface-0 flex h-full w-[200px] shrink-0 flex-col items-stretch justify-start gap-2 overflow-y-auto border-r px-4 py-5;
 }
 
 .lh-settings-content {
@@ -164,19 +168,19 @@
 }
 
 .lh-settings-title {
-  @apply text-base font-bold text-lh-text;
+  @apply text-lh-text text-base font-bold;
 }
 
 .lh-settings-version {
-  @apply text-[10px] text-lh-overlay-1;
+  @apply text-lh-overlay-1 text-[10px];
 }
 
 .lh-settings-search {
-  @apply mb-2 flex h-9 items-center gap-2 rounded-lg bg-lh-base px-3 text-xs text-lh-subtext-1;
+  @apply bg-lh-base text-lh-subtext-1 mb-2 flex h-9 items-center gap-2 rounded-lg px-3 text-xs;
 }
 
 .sh-settings-tab {
-  @apply flex h-auto w-full flex-none items-center justify-start gap-2 rounded-lg px-3 py-2 text-left text-sm text-lh-subtext-1 shadow-none transition-colors hover:bg-lh-surface-1 hover:text-lh-text data-[state=active]:border data-[state=active]:border-lh-green/20 data-[state=active]:bg-lh-green/20 data-[state=active]:text-lh-green data-[state=active]:shadow-none;
+  @apply text-lh-subtext-1 hover:bg-lh-surface-1 hover:text-lh-text data-[state=active]:border-lh-green/20 data-[state=active]:bg-lh-green/20 data-[state=active]:text-lh-green flex h-auto w-full flex-none items-center justify-start gap-2 rounded-lg px-3 py-2 text-left text-sm shadow-none transition-colors data-[state=active]:border data-[state=active]:shadow-none;
 }
 
 .lh-settings-page {
@@ -184,11 +188,11 @@
 }
 
 .lh-settings-page-title {
-  @apply text-xl font-bold text-lh-text;
+  @apply text-lh-text text-xl font-bold;
 }
 
 .lh-settings-page-description {
-  @apply text-xs text-lh-overlay-1;
+  @apply text-lh-overlay-1 text-xs;
 }
 
 .lh-setting-option {
@@ -207,11 +211,11 @@
 }
 
 .lh-setting-label {
-  @apply text-sm font-medium text-lh-subtext-1;
+  @apply text-lh-subtext-1 text-sm font-medium;
 }
 
 .lh-setting-description {
-  @apply text-xs leading-relaxed text-lh-subtext-0;
+  @apply text-lh-subtext-0 text-xs leading-relaxed;
 }
 
 .lh-setting-control {
@@ -219,11 +223,11 @@
 }
 
 .lh-setting-card {
-  @apply flex w-full flex-col gap-3 rounded-lg border border-lh-surface-2 bg-lh-surface-0 p-3;
+  @apply border-lh-surface-2 bg-lh-surface-0 flex w-full flex-col gap-3 rounded-lg border p-3;
 }
 
 .lh-control {
-  @apply rounded-md border border-lh-surface-2 bg-lh-surface-0 text-sm text-lh-text shadow-none transition-colors placeholder:text-lh-overlay-1 hover:border-lh-overlay-0 focus-visible:border-lh-green focus-visible:ring-2 focus-visible:ring-lh-green/20 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply border-lh-surface-2 bg-lh-surface-0 text-lh-text placeholder:text-lh-overlay-1 hover:border-lh-overlay-0 focus-visible:border-lh-green focus-visible:ring-lh-green/20 rounded-md border text-sm shadow-none transition-colors focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .lh-settings-tab-icon {
@@ -250,12 +254,18 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb, var(--catppuccin-color-surface2));
+  background-color: var(
+    --color-scrollbar-thumb,
+    var(--catppuccin-color-surface2)
+  );
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-scrollbar-thumb-hover, var(--catppuccin-color-surface1));
+  background-color: var(
+    --color-scrollbar-thumb-hover,
+    var(--catppuccin-color-surface1)
+  );
 }
 
 ::-webkit-scrollbar-track {

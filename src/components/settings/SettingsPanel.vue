@@ -4,14 +4,14 @@
       <slot name="settings" />
     </DialogTrigger>
 
-    <DialogContent class="lh-settings-dialog">
+    <DialogContent class="lh-settings-dialog !max-w-[800px]">
       <Tabs class="lh-settings-layout">
-        <TabsList class="lh-settings-sidebar">
+        <TabsList class="lh-settings-sidebar rounded-none">
           <div class="lh-settings-heading">
             <DialogTitle class="lh-settings-title">
               {{ $t("settings_panel.title") }}
             </DialogTitle>
-            <p class="lh-settings-version">LigHTTP · 0.6.1</p>
+            <p class="lh-settings-version">LigHTTP · {{ version }}</p>
           </div>
 
           <TabsTrigger value="general" class="sh-settings-tab">
@@ -52,29 +52,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import {
-  CircleFadingArrowUp,
-  Hash,
-  Palette,
-  Settings,
-} from "@lucide/vue";
+import { computed, onMounted, ref } from "vue";
+import { CircleFadingArrowUp, Hash, Palette, Settings } from "@lucide/vue";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
 import DefineGenSettings from "./pages/DefineGenSettings.vue";
 import UpdateSettings from "./pages/UpdateSettings.vue";
+
+import { getVersion } from "@tauri-apps/api/app";
+
+const version = ref("???");
+
+onMounted(async () => {
+  version.value = await getVersion();
+});
 
 const props = defineProps<{ open?: boolean }>();
 const emit = defineEmits(["update:open"]);
