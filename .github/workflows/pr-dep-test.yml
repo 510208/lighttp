@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # 取得 Dependabot 更新資訊
       - name: Fetch Dependabot Metadata
