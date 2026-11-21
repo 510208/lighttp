@@ -88,12 +88,12 @@ const activeSection = computed({
 });
 
 const { t } = useI18n();
-const navigation: SettingsNavigationItem[] = [
+const navigation = computed<SettingsNavigationItem[]>(() => [
   { value: "general", label: t("settings_panel.tabs.general"), icon: Settings },
   { value: "themes", label: t("settings_panel.tabs.themes"), icon: Palette },
   { value: "define_gen", label: t("settings_panel.tabs.define_gen"), icon: Hash },
   { value: "update", label: t("settings_panel.tabs.update"), icon: CircleFadingArrowUp },
-];
+]);
 
 const pages: Record<string, Component> = {
   general: GeneralSettings,
