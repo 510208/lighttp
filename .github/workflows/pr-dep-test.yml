@@ -1,25 +1,50 @@
-name: Dependabot Tauri Fast Check
+name: Dependabot Validation
 
 on:
   pull_request:
-    branches: ["main", "master"]
-  # 允許手動觸發
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
   workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: read
+
+concurrency:
+  group: dependabot-validation-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  fast-check:
+  validate:
+    name: Validate Dependency Update
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.user.login == 'dependabot[bot]'
+
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      # 為了 pnpm 核心環境設定
+      # 取得 Dependabot 更新資訊
+      - name: Fetch Dependabot Metadata
+        id: metadata
+        if: github.event_name == 'pull_request'
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Node.js / pnpm
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Install Linux dependencies
         run: |
@@ -33,34 +58,67 @@ jobs:
             patchelf
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: "pnpm" # 自動快取 pnpm 套件
+          cache: pnpm
 
-      # 設定 Rust 環境與快取（加快 Rust 後端 check 速度）
-      - name: Set up Rust toolchain
+      # Rust
+      - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Rust cache
+      - name: Rust Cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
 
-      # 安裝前端相依套件
-      - name: Install Node.js dependencies
+      # Tauri Linux dependencies
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
+
+      # Frontend dependencies
+      - name: Install Node Dependencies
         run: pnpm install --frozen-lockfile
 
-      # 前端檢查 1：使用 oxlint 進行極速語法檢查 (通常 < 0.1 秒)
-      - name: Run Front-end Oxlint
+      # Frontend validation
+      - name: Run Oxlint
         run: pnpm lint
 
-      # 前端檢查 2：使用 vue-tsc 進行 Vue/TS 型別安全檢查
-      - name: Run Front-end Type Check (vue-tsc)
-        run: pnpm type-check
+      - name: Build Frontend
+        run: pnpm build
 
-      # 後端檢查：執行 Rust 語法與型別檢查
-      - name: Run Back-end Check (cargo check)
+      # Backend validation
+      - name: Cargo Check
+        working-directory: src-tauri
+        run: cargo check --workspace --all-targets
+
+      - name: Cargo Tests
+        working-directory: src-tauri
+        run: cargo test --workspace
+
+      # Generate validation summary
+      - name: Generate Summary
+        if: always()
+        env:
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          PACKAGE_ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          JOB_STATUS: ${{ job.status }}
         run: |
-          cd src-tauri
-          cargo check --workspace --tests
+          {
+            echo "## Dependabot Validation"
+            echo ""
+            echo "| Property | Value |"
+            echo "|---|---|"
+            echo "| Ecosystem | ${PACKAGE_ECOSYSTEM:-Manual / Unknown} |"
+            echo "| Update Type | ${UPDATE_TYPE:-N/A} |"
+            echo "| Validation | ${JOB_STATUS} |"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
