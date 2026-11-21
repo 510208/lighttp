@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { Component } from "vue";
 import {
   CircleFadingArrowUp,
@@ -86,11 +87,12 @@ const activeSection = computed({
   },
 });
 
+const { t } = useI18n();
 const navigation: SettingsNavigationItem[] = [
-  { value: "general", label: "一般", icon: Settings },
-  { value: "themes", label: "外觀與主題", icon: Palette },
-  { value: "define_gen", label: "型別產生", icon: Hash },
-  { value: "update", label: "更新", icon: CircleFadingArrowUp },
+  { value: "general", label: t("settings_panel.tabs.general"), icon: Settings },
+  { value: "themes", label: t("settings_panel.tabs.themes"), icon: Palette },
+  { value: "define_gen", label: t("settings_panel.tabs.define_gen"), icon: Hash },
+  { value: "update", label: t("settings_panel.tabs.update"), icon: CircleFadingArrowUp },
 ];
 
 const pages: Record<string, Component> = {
