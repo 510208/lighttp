@@ -27,6 +27,6 @@ jobs:
           npx credit-roll > ./docs/CREDITS.md
 
       - name: Commit the changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: '📄 docs: Auto update CREDITS.md by Action'
