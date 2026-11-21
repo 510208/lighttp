@@ -54,7 +54,7 @@
       >
         <div class="flex flex-col gap-3">
           <div class="flex flex-wrap gap-2">
-            <SettingAction :disabled="isImporting" @click="importColorTheme">
+            <SettingAction variant="default" :disabled="isImporting" @click="importColorTheme">
               <Palette class="mr-2 size-4" />
               {{ isImporting ? "匯入中..." : "匯入主題" }}
             </SettingAction>
@@ -131,6 +131,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { Plus, Minus, Palette, RotateCcw } from "@lucide/vue";
 import { open } from "@tauri-apps/plugin-dialog";
 import { readTextFile } from "@tauri-apps/plugin-fs";
@@ -150,6 +151,7 @@ import { useSettingsStore, loadColorTheme } from "@/stores/useSettingsStore";
 import { applyColorTheme } from "@/services/colorTheme";
 
 const settingsStore = useSettingsStore();
+const { t } = useI18n();
 
 const opacitySlider = computed({
   get: () => [settingsStore.backgroundImageConfig.opacity],
@@ -169,15 +171,32 @@ const blurSlider = computed({
   },
 });
 
-const binaryEditorThemes = [
+const binaryEditorThemes = computed(() => [
   {
-    label: `Dark (${"Default"})`,
+    label: `Dark (${t("settings_panel.themes.binary_editor_theme.default")})`,
     value: "dark",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
   },
-  { label: "Terminal", value: "terminal" },
-  { label: "Sunset", value: "sunset" },
-  { label: "Light", value: "light" },
-];
+  {
+    label: "Terminal",
+    value: "terminal",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
+  },
+  {
+    label: "Sunset",
+    value: "sunset",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
+  },
+  {
+    label: "Light",
+    value: "light",
+    group: "light",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.light_themes"),
+  },
+]);
 
 const isImporting = ref(false);
 
