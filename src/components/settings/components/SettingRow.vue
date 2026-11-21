@@ -24,6 +24,7 @@ const id = useId();
       <div class="flex flex-wrap items-center gap-2">
         <h4 :id="`setting-title-${id}`" class="lh-setting-label">{{ title }}</h4>
         <span v-if="badge" class="text-lh-yellow text-xs font-medium">{{ badge }}</span>
+        <slot name="badge" />
       </div>
       <p v-if="description" :id="`setting-description-${id}`" class="lh-setting-description">{{ description }}</p>
     </div>
