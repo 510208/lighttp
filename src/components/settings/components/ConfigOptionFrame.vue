@@ -1,25 +1,29 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-between gap-2 space-x-4 sm:flex-row"
+  <section
+    class="lh-setting-option"
+    :aria-labelledby="labelId"
+    :aria-describedby="descriptionId"
   >
-    <div class="flex w-fit flex-col gap-1">
-      <div class="flex gap-1">
-        <Label class="w-32 text-sm">
+    <div class="min-w-0">
+      <div class="flex items-center gap-2">
+        <h3 :id="labelId" class="lh-setting-label">
           {{ $t(props.labelKey) }}
-        </Label>
+        </h3>
         <BetaBadge v-if="props.beta" />
       </div>
-      <p class="text-muted-foreground text-sm">
+      <p :id="descriptionId" class="lh-setting-description">
         {{ $t(props.descriptionKey) }}
       </p>
     </div>
 
-    <slot />
-  </div>
+    <div class="lh-setting-control">
+      <slot />
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { Label } from "@/components/ui/label";
+import { useId } from "vue";
 import BetaBadge from "./BetaBadge.vue";
 
 interface Props {
@@ -29,6 +33,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const id = useId();
+const labelId = `setting-label-${id}`;
+const descriptionId = `setting-description-${id}`;
 </script>
-
-<style scoped></style>
