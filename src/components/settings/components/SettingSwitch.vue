@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SwitchRootEmits, SwitchRootProps } from "reka-ui";
+import type { SwitchRootProps } from "reka-ui";
 import { Switch } from "@/components/ui/switch";
 
 defineProps<SwitchRootProps>();
