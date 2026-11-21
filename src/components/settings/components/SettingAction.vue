@@ -7,7 +7,6 @@ withDefaults(defineProps<{
   variant?: ButtonVariants["variant"];
   size?: ButtonVariants["size"];
   disabled?: boolean;
-  loading?: boolean;
 }>(), {
   variant: "outline",
   size: "default",
@@ -20,7 +19,6 @@ withDefaults(defineProps<{
     :variant="variant"
     :size="size"
     :disabled="disabled"
-    :loading="loading"
   >
     <slot>{{ label }}</slot>
   </Button>
