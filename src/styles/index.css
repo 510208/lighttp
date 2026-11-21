@@ -195,6 +195,17 @@
   @apply flex min-w-0 flex-col gap-2;
 }
 
+/* Compact controls stay beside their descriptions, matching the design spec. */
+.lh-setting-option:has([data-slot="select-trigger"]),
+.lh-setting-option:has([data-slot="switch"]) {
+  @apply flex-row items-center justify-between gap-4;
+}
+
+.lh-setting-option:has([data-slot="select-trigger"]) .lh-setting-control,
+.lh-setting-option:has([data-slot="switch"]) .lh-setting-control {
+  @apply shrink-0;
+}
+
 .lh-setting-label {
   @apply text-sm font-medium text-lh-subtext-1;
 }
