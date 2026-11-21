@@ -52,31 +52,60 @@
         :description="$t('settings_panel.themes.color_theme.description')"
         layout="vertical"
       >
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-wrap gap-2">
-            <SettingAction variant="default" :disabled="isImporting" @click="importColorTheme">
-              <Palette class="mr-2 size-4" />
-              {{ isImporting ? "匯入中..." : "匯入主題" }}
-            </SettingAction>
+        <div class="lh-setting-card lh-color-theme-card">
+          <div class="flex items-start gap-3">
+            <div class="lh-color-theme-icon" aria-hidden="true">
+              <Palette class="size-5" />
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <p class="font-semibold text-lh-text">
+                  {{ settingsStore.colorTheme.name }}
+                </p>
+                <span class="text-lh-overlay-1 text-xs">
+                  {{ settingsStore.colorTheme.author }}
+                </span>
+                <span class="text-lh-overlay-1 text-xs" aria-hidden="true">·</span>
+                <span class="text-lh-overlay-1 text-xs">
+                  {{ settingsStore.colorTheme.license }}
+                </span>
+              </div>
+              <p class="mt-2 text-sm text-lh-subtext-0">
+                {{ settingsStore.colorTheme.description }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="lh-color-theme-swatches"
+            role="group"
+            :aria-label="$t('settings_panel.themes.color_theme.preview_label')"
+          >
+            <span
+              v-for="swatch in colorPreviews"
+              :key="swatch.name"
+              class="lh-color-theme-swatch"
+              :style="{ backgroundColor: swatch.color }"
+              :title="swatch.label"
+              role="img"
+              :aria-label="`${swatch.label}: ${swatch.color}`"
+            />
+          </div>
+
+          <div class="flex flex-wrap justify-end gap-2">
             <SettingAction variant="outline" @click="resetColorTheme">
               <RotateCcw class="mr-2 size-4" />
               恢復預設
             </SettingAction>
-          </div>
-
-          <div class="space-y-1 rounded-lg border p-3">
-            <div class="flex items-center justify-between gap-2">
-              <p class="font-semibold">{{ settingsStore.colorTheme.name }}</p>
-              <span class="text-muted-foreground text-xs">
-                {{ settingsStore.colorTheme.license }}
-              </span>
-            </div>
-            <p class="text-muted-foreground text-sm">
-              {{ settingsStore.colorTheme.description }}
-            </p>
-            <p class="text-muted-foreground text-xs">
-              Author: {{ settingsStore.colorTheme.author }}
-            </p>
+            <SettingAction
+              variant="default"
+              :disabled="isImporting"
+              @click="importColorTheme"
+            >
+              <Palette class="mr-2 size-4" />
+              {{ isImporting ? "匯入中..." : "匯入主題" }}
+            </SettingAction>
           </div>
         </div>
       </SettingRow>
@@ -152,6 +181,27 @@ import { applyColorTheme } from "@/services/colorTheme";
 
 const settingsStore = useSettingsStore();
 const { t } = useI18n();
+const colorPreviewVersion = ref(0);
+
+const colorPreviews = computed(() => {
+  // 讀取目前生效的 CSS custom properties，而非只讀取主題檔案文字。
+  // 因此預設主題、匯入主題與恢復預設都會呈現實際套用的顏色。
+  colorPreviewVersion.value;
+
+  const styles = getComputedStyle(document.documentElement);
+  const colors = [
+    { name: "text", label: "Text", variable: "--catppuccin-color-text" },
+    { name: "overlay-1", label: "Overlay 1", variable: "--catppuccin-color-overlay1" },
+    { name: "base", label: "Base Pane", variable: "--catppuccin-color-base" },
+    { name: "green", label: "Green", variable: "--catppuccin-color-green" },
+    { name: "red", label: "Red", variable: "--catppuccin-color-red" },
+  ];
+
+  return colors.map((color) => ({
+    ...color,
+    color: styles.getPropertyValue(color.variable).trim() || "transparent",
+  }));
+});
 
 const opacitySlider = computed({
   get: () => [settingsStore.backgroundImageConfig.opacity],
@@ -217,6 +267,7 @@ async function importColorTheme(): Promise<void> {
     const theme = loadColorTheme(cssContent);
     settingsStore.setColorTheme(cssContent);
     applyColorTheme(theme.css);
+    colorPreviewVersion.value += 1;
     toast.success(`已成功套用主題：${theme.name}`);
   } catch (error) {
     console.error("Failed to import color theme:", error);
@@ -233,6 +284,25 @@ async function importColorTheme(): Promise<void> {
 function resetColorTheme(): void {
   settingsStore.setColorTheme(null);
   applyColorTheme(null);
+  colorPreviewVersion.value += 1;
   toast.success("已恢復預設主題");
 }
 </script>
+
+<style scoped>
+.lh-color-theme-card {
+  gap: 0.875rem;
+}
+
+.lh-color-theme-icon {
+  @apply bg-lh-surface-1 text-lh-subtext-1 flex size-8 shrink-0 items-center justify-center rounded-md;
+}
+
+.lh-color-theme-swatches {
+  @apply grid grid-cols-5 gap-3;
+}
+
+.lh-color-theme-swatch {
+  @apply h-4 min-w-0 rounded-sm border border-white/10;
+}
+</style>
