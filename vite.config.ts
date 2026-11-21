@@ -55,9 +55,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      esbuildOptions: {
-        target: "es2022", // 提升開發階段（Vite 預編譯）的目標
-      },
+      target: "es2022", // 提升開發階段（Vite 預編譯）的目標
     },
 
     resolve: {
