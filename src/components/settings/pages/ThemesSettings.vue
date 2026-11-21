@@ -293,16 +293,4 @@ function resetColorTheme(): void {
 .lh-color-theme-card {
   gap: 0.875rem;
 }
-
-.lh-color-theme-icon {
-  @apply bg-lh-surface-1 text-lh-subtext-1 flex size-8 shrink-0 items-center justify-center rounded-md;
-}
-
-.lh-color-theme-swatches {
-  @apply grid grid-cols-5 gap-3;
-}
-
-.lh-color-theme-swatch {
-  @apply h-4 min-w-0 rounded-sm border border-white/10;
-}
 </style>
