@@ -34,7 +34,7 @@ export const useRequestStore = defineStore("request", () => {
       id: crypto.randomUUID(),
       enabled: true,
       key: "User-Agent",
-      value: "LigHTTP/0.6.0", // 預設值，由 async 初始化替換
+      value: "LigHTTP/0.6.1", // 預設值，由 async 初始化替換
     },
   ]);
 

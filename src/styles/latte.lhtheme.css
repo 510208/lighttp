@@ -1,0 +1,93 @@
+/*
+Theme Name:     Catppuccin Latte
+Description:    A light pastel theme for LigHTTP based on Catppuccin Latte.
+Author:         SamHacker
+License:        MIT
+*/
+
+@layer base {
+  :root {
+    /* Main Colors */
+    --catppuccin-color-rosewater: #dc8a78;
+    --catppuccin-color-flamingo: #dd7878;
+    --catppuccin-color-pink: #ea76cb;
+    --catppuccin-color-mauve: #8839ef;
+    --catppuccin-color-red: #d20f39;
+    --catppuccin-color-maroon: #e64553;
+    --catppuccin-color-peach: #fe640b;
+    --catppuccin-color-yellow: #df8e1d;
+    --catppuccin-color-green: #40a02b;
+    --catppuccin-color-teal: #179299;
+    --catppuccin-color-sky: #04a5e5;
+    --catppuccin-color-sapphire: #209fb5;
+    --catppuccin-color-blue: #1e66f5;
+    --catppuccin-color-lavender: #7287fd;
+
+    /* Text Colors */
+    --catppuccin-color-text: #4c4f69;
+    --catppuccin-color-subtext1: #5c5f77;
+    --catppuccin-color-subtext0: #6c6f85;
+
+    /* Overlay Colors */
+    --catppuccin-color-overlay2: #7c7f93;
+    --catppuccin-color-overlay1: #8c8fa1;
+    --catppuccin-color-overlay0: #9ca0b0;
+
+    /* Surface Colors */
+    --catppuccin-color-surface2: #acb0be;
+    --catppuccin-color-surface1: #bcc0cc;
+    --catppuccin-color-surface0: #ccd0da;
+
+    /* Background Colors */
+    --catppuccin-color-base: #eff1f5;
+    --catppuccin-color-mantle: #e6e9ef;
+    --catppuccin-color-crust: #dce0e8;
+
+    /* shadcn/ui Colors */
+    --background: var(--catppuccin-color-base);
+    --foreground: var(--catppuccin-color-text);
+
+    --card: #ffffff;
+    --card-foreground: var(--catppuccin-color-text);
+
+    --popover: #ffffff;
+    --popover-foreground: var(--catppuccin-color-text);
+
+    --primary: color-mix(
+      in oklch,
+      var(--catppuccin-color-green) 50%,
+      transparent
+    );
+    --primary-foreground: var(--foreground);
+
+    --secondary: var(--catppuccin-color-surface0);
+    --secondary-foreground: var(--catppuccin-color-text);
+
+    --muted: var(--catppuccin-color-surface0);
+    --muted-foreground: var(--catppuccin-color-subtext0);
+
+    --accent: var(--catppuccin-color-surface1);
+    --accent-foreground: var(--catppuccin-color-blue);
+
+    --destructive: var(--catppuccin-color-red);
+    --border: var(--catppuccin-color-surface1);
+    --input: var(--catppuccin-color-surface1);
+    --ring: var(--catppuccin-color-green);
+
+    --chart-1: var(--catppuccin-color-blue);
+    --chart-2: var(--catppuccin-color-green);
+    --chart-3: var(--catppuccin-color-peach);
+    --chart-4: var(--catppuccin-color-mauve);
+    --chart-5: var(--catppuccin-color-red);
+
+    /* Sidebar */
+    --sidebar: var(--catppuccin-color-mantle);
+    --sidebar-foreground: var(--catppuccin-color-text);
+    --sidebar-primary: var(--catppuccin-color-blue);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: var(--catppuccin-color-surface0);
+    --sidebar-accent-foreground: var(--catppuccin-color-text);
+    --sidebar-border: var(--catppuccin-color-surface1);
+    --sidebar-ring: var(--catppuccin-color-green);
+  }
+}
