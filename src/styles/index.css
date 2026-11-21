@@ -290,3 +290,50 @@ button[data-slot="tabs-trigger"][data-active] p.sh_tabs_chinese-name {
     @apply px-4 py-4;
   }
 }
+
+/* Composable settings panel primitives */
+.lh-settings-page-header {
+  @apply flex items-start justify-between gap-4;
+}
+
+.lh-settings-section {
+  @apply flex flex-col gap-4;
+}
+
+.lh-settings-section-header {
+  @apply flex flex-col gap-1;
+}
+
+.lh-settings-section-title {
+  @apply text-lh-text text-sm font-semibold;
+}
+
+.lh-settings-section-content {
+  @apply flex flex-col gap-4;
+}
+
+.lh-setting-row {
+  @apply flex min-w-0 items-center justify-between gap-6;
+}
+
+.lh-setting-row-vertical {
+  @apply flex-col items-stretch gap-3;
+}
+
+.lh-setting-row .lh-setting-control {
+  @apply flex shrink-0 items-center justify-end;
+}
+
+.lh-setting-row-vertical .lh-setting-control {
+  @apply w-full;
+}
+
+@media (max-width: 640px) {
+  .lh-setting-row {
+    @apply flex-col items-stretch gap-3;
+  }
+
+  .lh-setting-row .lh-setting-control {
+    @apply w-full justify-start;
+  }
+}
