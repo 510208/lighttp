@@ -47,8 +47,8 @@ importers:
         specifier: ~2.3.1
         version: 2.3.1
       '@tauri-apps/plugin-updater':
-        specifier: ~2
-        version: 2.10.1
+        specifier: ~2.11.0
+        version: 2.11.0
       '@tauri-store/pinia':
         specifier: ^5.0.2
         version: 5.0.2(@vue/devtools-api@7.7.9)(typescript@5.6.3)
@@ -822,8 +822,8 @@ packages:
   '@tauri-apps/plugin-process@2.3.1':
     resolution: {integrity: sha512-nCa4fGVaDL/B9ai03VyPOjfAHRHSBz5v6F/ObsB73r/dA3MHHhZtldaDMIc0V/pnUw9ehzr2iEG+XkSEyC0JJA==}
 
-  '@tauri-apps/plugin-updater@2.10.1':
-    resolution: {integrity: sha512-NFYMg+tWOZPJdzE/PpFj2qfqwAWwNS3kXrb1tm1gnBJ9mYzZ4WDRrwy8udzWoAnfGCHLuePNLY1WVCNHnh3eRA==}
+  '@tauri-apps/plugin-updater@2.11.0':
+    resolution: {integrity: sha512-AE36XkOoSna24G40jZMY15nzAnkXEPL/73tGoseGrtGOHuI/cZwWzHpZFLjKXDPgzYZ435z1gHu28LgrsBwIxQ==}
 
   '@tauri-store/pinia@5.0.2':
     resolution: {integrity: sha512-z3IFRGVom+i7rD3CP0DLPde8mCu2ZecuqnvzLvcZIWYQ/ojjqnuyVW/2aliJOpPd9u9NB5/idz8D927XlbSlng==}
@@ -2453,9 +2453,9 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.11.0
 
-  '@tauri-apps/plugin-updater@2.10.1':
+  '@tauri-apps/plugin-updater@2.11.0':
     dependencies:
-      '@tauri-apps/api': 2.11.0
+      '@tauri-apps/api': 2.11.1
 
   '@tauri-store/pinia@5.0.2(@vue/devtools-api@7.7.9)(typescript@5.6.3)':
     dependencies:
