@@ -26,7 +26,7 @@ defineEmits<{
         :key="item.value"
         type="button"
         class="sh-settings-tab"
-        :data-active="modelValue === item.value"
+        :data-state="modelValue === item.value ? 'active' : 'inactive'"
         :aria-current="modelValue === item.value ? 'page' : undefined"
         @click="$emit('update:modelValue', item.value)"
       >
