@@ -1,208 +1,259 @@
 <template>
-  <h2 class="text-lg font-semibold">
-    {{ $t("settings_panel.themes.title") }}
-  </h2>
+  <div class="lh-settings-page">
+    <SettingsPageHeader :title="$t('settings_panel.themes.title')" />
 
-  <div class="mt-4 space-y-4">
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.theme_selection.label"
-      description-key="settings_panel.themes.theme_selection.description"
-    >
-      <Input
-        :placeholder="$t('settings_panel.themes.theme_selection.placeholder')"
-        v-model="settingsStore.backgroundImageUrl"
-      />
-    </ConfigOptionFrame>
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.background_image_opacity.label"
-      description-key="settings_panel.themes.background_image_opacity.description"
-    >
-      <Slider
-        v-model="opacitySlider"
-        :min="0"
-        :max="1"
-        :step="0.01"
-        class="w-70"
-      />
-    </ConfigOptionFrame>
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.background_image_blur.label"
-      description-key="settings_panel.themes.background_image_blur.description"
-    >
-      <Slider v-model="blurSlider" :min="0" :max="30" :step="1" class="w-70" />
-    </ConfigOptionFrame>
+    <SettingsSection>
+      <SettingRow
+        :title="$t('settings_panel.themes.theme_selection.label')"
+        :description="$t('settings_panel.themes.theme_selection.description')"
+        layout="vertical"
+      >
+        <SettingInput
+          v-model="settingsStore.backgroundImageUrl"
+          :placeholder="$t('settings_panel.themes.theme_selection.placeholder')"
+          class="w-full"
+        />
+      </SettingRow>
+
+      <SettingRow
+        :title="$t('settings_panel.themes.background_image_opacity.label')"
+        :description="$t('settings_panel.themes.background_image_opacity.description')"
+        layout="vertical"
+      >
+        <SettingSlider
+          v-model="opacitySlider"
+          :min="0"
+          :max="1"
+          :step="0.01"
+          class="w-full"
+        />
+      </SettingRow>
+
+      <SettingRow
+        :title="$t('settings_panel.themes.background_image_blur.label')"
+        :description="$t('settings_panel.themes.background_image_blur.description')"
+        layout="vertical"
+      >
+        <SettingSlider
+          v-model="blurSlider"
+          :min="0"
+          :max="30"
+          :step="1"
+          class="w-full"
+        />
+      </SettingRow>
+    </SettingsSection>
 
     <Separator />
 
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.color_theme.label"
-      description-key="settings_panel.themes.color_theme.description"
-    >
-      <div class="flex flex-col gap-3">
-        <div class="flex flex-wrap gap-2">
-          <Button @click="importColorTheme" :disabled="isImporting">
-            <Palette class="mr-2 size-4" />
-            {{ isImporting ? "匯入中..." : "匯入主題" }}
-          </Button>
+    <SettingsSection>
+      <SettingRow
+        :title="$t('settings_panel.themes.color_theme.label')"
+        :description="$t('settings_panel.themes.color_theme.description')"
+        layout="vertical"
+      >
+        <div class="lh-setting-card lh-color-theme-card">
+          <div class="flex items-start gap-3">
+            <div class="lh-color-theme-icon" aria-hidden="true">
+              <Palette class="size-5" />
+            </div>
 
-          <Button variant="outline" @click="resetColorTheme">
-            <RotateCcw class="mr-2 size-4" />
-            恢復預設
-          </Button>
-        </div>
-
-        <div class="space-y-1 rounded-lg border p-3">
-          <div class="flex items-center justify-between gap-2">
-            <p class="font-semibold">
-              {{ settingsStore.colorTheme.name }}
-            </p>
-
-            <span class="text-muted-foreground text-xs">
-              {{ settingsStore.colorTheme.license }}
-            </span>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <p class="font-semibold text-lh-text">
+                  {{ settingsStore.colorTheme.name }}
+                </p>
+                <span class="text-lh-overlay-1 text-xs">
+                  {{ settingsStore.colorTheme.author }}
+                </span>
+                <span class="text-lh-overlay-1 text-xs" aria-hidden="true">·</span>
+                <span class="text-lh-overlay-1 text-xs">
+                  {{ settingsStore.colorTheme.license }}
+                </span>
+              </div>
+              <p class="mt-2 text-sm text-lh-subtext-0">
+                {{ settingsStore.colorTheme.description }}
+              </p>
+            </div>
           </div>
 
-          <p class="text-muted-foreground text-sm">
-            {{ settingsStore.colorTheme.description }}
-          </p>
+          <div
+            class="lh-color-theme-swatches"
+            role="group"
+            :aria-label="$t('settings_panel.themes.color_theme.preview_label')"
+          >
+            <span
+              v-for="swatch in colorPreviews"
+              :key="`${swatch.name}-${swatch.version}`"
+              class="lh-color-theme-swatch"
+              :style="{ backgroundColor: swatch.color }"
+              :title="swatch.label"
+              role="img"
+              :aria-label="`${swatch.label}: ${swatch.color}`"
+            />
+          </div>
 
-          <p class="text-muted-foreground text-xs">
-            Author: {{ settingsStore.colorTheme.author }}
-          </p>
+          <div class="flex flex-wrap justify-end gap-2">
+            <SettingAction variant="outline" @click="resetColorTheme">
+              <RotateCcw class="mr-2 size-4" />
+              恢復預設
+            </SettingAction>
+            <SettingAction
+              variant="default"
+              :disabled="isImporting"
+              @click="importColorTheme"
+            >
+              <Palette class="mr-2 size-4" />
+              {{ isImporting ? "匯入中..." : "匯入主題" }}
+            </SettingAction>
+          </div>
         </div>
-      </div>
-    </ConfigOptionFrame>
+      </SettingRow>
+    </SettingsSection>
 
     <Separator />
 
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.binary_editor_theme.label"
-      description-key="settings_panel.themes.binary_editor_theme.description"
-    >
-      <Select v-model="settingsStore.hexViewerConfig.theme">
-        <SelectTrigger>
-          <SelectValue placeholder="選擇主題" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectLabel>
-            {{ $t("settings_panel.themes.binary_editor_theme.dark_themes") }}
-          </SelectLabel>
-          <SelectItem value="dark">
-            Dark ({{ $t("settings_panel.themes.binary_editor_theme.default") }})
-          </SelectItem>
-          <SelectItem value="terminal">Terminal</SelectItem>
-          <SelectItem value="sunset">Sunset</SelectItem>
-          <SelectLabel>
-            {{ $t("settings_panel.themes.binary_editor_theme.light_themes") }}
-          </SelectLabel>
-          <SelectItem value="light">Light</SelectItem>
-        </SelectContent>
-      </Select>
-    </ConfigOptionFrame>
-
-    <Separator />
-
-    <ConfigOptionFrame
-      label-key="settings_panel.themes.zoom_ratio.label"
-      description-key="settings_panel.themes.zoom_ratio.description"
-    >
-      <div class="flex gap-0 overflow-hidden rounded-lg border">
-        <Button
-          @click="settingsStore.changeZoom(0.1)"
-          variant="secondary"
-          size="icon"
-          class="rounded-none"
-        >
-          <Plus />
-        </Button>
-        <Input
-          v-model="settingsStore.zoomRatio"
-          class="flex-1 rounded-none border-none hover:ring-0"
+    <SettingsSection>
+      <SettingRow
+        :title="$t('settings_panel.themes.binary_editor_theme.label')"
+        :description="$t('settings_panel.themes.binary_editor_theme.description')"
+      >
+        <SettingSelect
+          v-model="settingsStore.hexViewerConfig.theme"
+          :placeholder="$t('settings_panel.themes.binary_editor_theme.default')"
+          :options="binaryEditorThemes"
         />
-        <Button
-          @click="settingsStore.changeZoom(-0.1)"
-          variant="secondary"
-          size="icon"
-          class="rounded-none"
-        >
-          <Minus />
-        </Button>
-      </div>
-    </ConfigOptionFrame>
+      </SettingRow>
+
+      <SettingRow
+        :title="$t('settings_panel.themes.zoom_ratio.label')"
+        :description="$t('settings_panel.themes.zoom_ratio.description')"
+      >
+        <div class="flex w-full max-w-56 gap-0 overflow-hidden rounded-lg border">
+          <SettingAction
+            variant="secondary"
+            size="icon"
+            class="rounded-none"
+            aria-label="Increase zoom"
+            @click="settingsStore.changeZoom(0.1)"
+          >
+            <Plus />
+          </SettingAction>
+          <SettingInput
+            v-model="settingsStore.zoomRatio"
+            class="min-w-0 flex-1 rounded-none border-none text-center hover:ring-0"
+          />
+          <SettingAction
+            variant="secondary"
+            size="icon"
+            class="rounded-none"
+            aria-label="Decrease zoom"
+            @click="settingsStore.changeZoom(-0.1)"
+          >
+            <Minus />
+          </SettingAction>
+        </div>
+      </SettingRow>
+    </SettingsSection>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-
-import Input from "@/components/ui/input/Input.vue";
-import Button from "@/components/ui/button/Button.vue";
-import ConfigOptionFrame from "@/components/settings/components/ConfigOptionFrame.vue";
-import Separator from "@/components/ui/separator/Separator.vue";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectLabel,
-} from "@/components/ui/select";
-
-import { Slider } from "@/components/ui/slider";
+import { useI18n } from "vue-i18n";
 import { Plus, Minus, Palette, RotateCcw } from "@lucide/vue";
-
 import { open } from "@tauri-apps/plugin-dialog";
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { toast } from "vue-sonner";
 
+import Separator from "@/components/ui/separator/Separator.vue";
+import {
+  SettingAction,
+  SettingInput,
+  SettingRow,
+  SettingSelect,
+  SettingSlider,
+  SettingsPageHeader,
+  SettingsSection,
+} from "@/components/settings/components";
 import { useSettingsStore, loadColorTheme } from "@/stores/useSettingsStore";
 import { applyColorTheme } from "@/services/colorTheme";
 
 const settingsStore = useSettingsStore();
+const { t } = useI18n();
+const colorPreviewVersion = ref(0);
 
-// ============================================================
-// 背景圖片設定
-// ============================================================
+const colorPreviews = computed(() => {
+  // 讀取目前生效的 CSS custom properties，而非只讀取主題檔案文字。
+  // 因此預設主題、匯入主題與恢復預設都會呈現實際套用的顏色。
+  const version = colorPreviewVersion.value;
+  const styles = getComputedStyle(document.documentElement);
+  const colors = [
+    { name: "text", label: "Text", variable: "--catppuccin-color-text" },
+    { name: "overlay-1", label: "Overlay 1", variable: "--catppuccin-color-overlay1" },
+    { name: "base", label: "Base Pane", variable: "--catppuccin-color-base" },
+    { name: "green", label: "Green", variable: "--catppuccin-color-green" },
+    { name: "red", label: "Red", variable: "--catppuccin-color-red" },
+  ];
 
-// 透明度
+  return colors.map((color) => ({
+    ...color,
+    color: styles.getPropertyValue(color.variable).trim() || "transparent",
+    version,
+  }));
+});
+
 const opacitySlider = computed({
   get: () => [settingsStore.backgroundImageConfig.opacity],
-  set: (val: number[]) => {
-    if (val && val.length > 0) {
-      settingsStore.backgroundImageConfig.opacity = val[0];
+  set: (value: number[]) => {
+    if (value.length > 0) {
+      settingsStore.backgroundImageConfig.opacity = value[0];
     }
   },
 });
 
-// 模糊
 const blurSlider = computed({
   get: () => [settingsStore.backgroundImageConfig.blur],
-  set: (val: number[]) => {
-    if (val && val.length > 0) {
-      settingsStore.backgroundImageConfig.blur = val[0];
+  set: (value: number[]) => {
+    if (value.length > 0) {
+      settingsStore.backgroundImageConfig.blur = value[0];
     }
   },
 });
 
-// ============================================================
-// 色彩主題設定
-// ============================================================
+const binaryEditorThemes = computed(() => [
+  {
+    label: `Dark (${t("settings_panel.themes.binary_editor_theme.default")})`,
+    value: "dark",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
+  },
+  {
+    label: "Terminal",
+    value: "terminal",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
+  },
+  {
+    label: "Sunset",
+    value: "sunset",
+    group: "dark",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.dark_themes"),
+  },
+  {
+    label: "Light",
+    value: "light",
+    group: "light",
+    groupLabel: t("settings_panel.themes.binary_editor_theme.light_themes"),
+  },
+]);
 
 const isImporting = ref(false);
 
-/**
- * 匯入主題檔案。
- */
 async function importColorTheme(): Promise<void> {
   const filePath = await open({
     multiple: false,
-    filters: [
-      {
-        name: "LigHTTP Theme",
-        extensions: ["lhtheme.css"],
-      },
-    ],
+    filters: [{ name: "LigHTTP Theme", extensions: ["lhtheme.css"] }],
   });
 
   if (typeof filePath !== "string") {
@@ -213,18 +264,13 @@ async function importColorTheme(): Promise<void> {
 
   try {
     const cssContent = await readTextFile(filePath);
-
-    // 驗證主題 Metadata
     const theme = loadColorTheme(cssContent);
-
-    // 更新設定並即時套用主題
     settingsStore.setColorTheme(cssContent);
     applyColorTheme(theme.css);
-
+    colorPreviewVersion.value += 1;
     toast.success(`已成功套用主題：${theme.name}`);
   } catch (error) {
     console.error("Failed to import color theme:", error);
-
     toast.error(
       error instanceof Error
         ? `主題匯入失敗：${error.message}`
@@ -235,13 +281,16 @@ async function importColorTheme(): Promise<void> {
   }
 }
 
-/**
- * 恢復預設主題。
- */
 function resetColorTheme(): void {
   settingsStore.setColorTheme(null);
   applyColorTheme(null);
-
+  colorPreviewVersion.value += 1;
   toast.success("已恢復預設主題");
 }
 </script>
+
+<style scoped>
+.lh-color-theme-card {
+  gap: 0.875rem;
+}
+</style>

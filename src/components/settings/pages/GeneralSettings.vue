@@ -1,45 +1,45 @@
 <template>
-  <h2 class="text-lg font-semibold">
-    {{ $t("settings_panel.general.title") }}
-  </h2>
+  <div class="lh-settings-page">
+    <SettingsPageHeader
+      :title="$t('settings_panel.general.title')"
+    />
 
-  <div class="mt-4 space-y-4">
-    <ConfigOptionFrame
-      label-key="settings_panel.general.language.label"
-      description-key="settings_panel.general.language.description"
-    >
-      <Select v-model="language">
-        <SelectTrigger class="w-32">
-          <SelectValue
-            :placeholder="$t('settings_panel.general.language.placeholder')"
-          />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem
-              v-for="(name, code) in languages"
-              :key="code"
-              :value="code"
-            >
-              {{ name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </ConfigOptionFrame>
+    <SettingsSection>
+      <SettingRow
+        :title="$t('settings_panel.general.language.label')"
+        :description="$t('settings_panel.general.language.description')"
+      >
+        <Select v-model="language">
+          <SelectTrigger class="w-32">
+            <SelectValue :placeholder="$t('settings_panel.general.language.placeholder')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem v-for="(name, code) in languages" :key="code" :value="code">
+                {{ name }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </SettingRow>
 
-    <Separator />
+      <Separator />
 
-    <ConfigOptionFrame
-      label-key="settings_panel.general.check_update_when_open.label"
-      description-key="settings_panel.general.check_update_when_open.description"
-    >
-      <Switch v-model="settingsStore.autoUpdate" />
-    </ConfigOptionFrame>
+      <SettingRow
+        :title="$t('settings_panel.general.check_update_when_open.label')"
+        :description="$t('settings_panel.general.check_update_when_open.description')"
+      >
+        <SettingSwitch v-model="settingsStore.autoUpdate" />
+      </SettingRow>
+    </SettingsSection>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { languages } from "@/i18n";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -48,17 +48,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { languages } from "@/i18n";
-import { computed } from "vue";
-import { useSettingsStore } from "@/stores/useSettingsStore";
-import ConfigOptionFrame from "@/components/settings/components/ConfigOptionFrame.vue";
-import Separator from "@/components/ui/separator/Separator.vue";
+import {
+  SettingsPageHeader,
+  SettingsSection,
+  SettingRow,
+  SettingSwitch,
+} from "@/components/settings/components";
 
 const settingsStore = useSettingsStore();
 
 const language = computed({
   get: () => settingsStore.language,
-  set: (v: string) => settingsStore.setLanguage(v),
+  set: (value: string) => settingsStore.setLanguage(value),
 });
 </script>

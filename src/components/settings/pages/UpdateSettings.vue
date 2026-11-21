@@ -1,54 +1,51 @@
 <template>
-  <h2 class="text-lg font-semibold">
-    {{ $t("settings_panel.update.title") }}
-  </h2>
+  <div class="lh-settings-page">
+    <SettingsPageHeader
+      :title="$t('settings_panel.update.title')"
+      :description="appVersion ? `LigHTTP · v${appVersion}` : undefined"
+    />
 
-  <div class="mt-4 space-y-4">
-    <div class="flex flex-1 flex-col gap-4 rounded p-2">
-      <div class="flex w-full items-center justify-center gap-2">
-        <img :src="logoUrl" alt="Lighttp Logo" class="h-12 w-auto" />
-      </div>
-      <div
-        class="text-muted-foreground mt-4 flex w-full items-center justify-center gap-2"
-      >
-        <!-- 檢查更新中 -->
+    <SettingsSection>
+      <div class="flex flex-col items-center gap-4 rounded-lg border p-4">
+        <img :src="logoUrl" alt="LigHTTP" class="h-12 w-auto" />
+
         <div
-          class="flex w-full animate-pulse items-center justify-center gap-2"
           v-if="latestInfo === null"
+          class="flex w-full animate-pulse items-center justify-center gap-2 text-muted-foreground"
+          role="status"
+          aria-live="polite"
         >
           <Loader class="h-5 w-5 animate-spin" />
           <p>{{ $t("settings_panel.update.checking_for_updates") }}</p>
         </div>
-        <!-- 檢查更新失敗 -->
+
         <div
-          class="flex w-full items-center justify-center gap-2 text-red-500"
           v-else-if="typeof latestInfo === 'string'"
+          class="flex w-full flex-wrap items-center justify-center gap-2 text-red-500"
+          role="alert"
         >
           <CircleX class="h-5 w-5" />
           <p>
-            {{
-              $t("settings_panel.update.check_failed", { error: latestInfo })
-            }}
+            {{ $t("settings_panel.update.check_failed", { error: latestInfo }) }}
           </p>
-          <Button variant="outline" @click="checkUpdates">
+          <SettingAction @click="checkUpdates">
             {{ $t("settings_panel.update.recheck_button.label") }}
-          </Button>
+          </SettingAction>
         </div>
-        <!-- 已是最新版本 -->
+
         <div
-          class="flex w-full items-center justify-center gap-2 text-green-500"
           v-else-if="!latestInfo.needsUpdate"
+          class="flex w-full flex-wrap items-center justify-center gap-2 text-green-500"
+          role="status"
+          aria-live="polite"
         >
           <p>{{ $t("settings_panel.update.up_to_date") }}</p>
-          <Button variant="outline" @click="checkUpdates">
+          <SettingAction @click="checkUpdates">
             {{ $t("settings_panel.update.recheck_button.label") }}
-          </Button>
+          </SettingAction>
         </div>
-        <!-- 有新版本可用 -->
-        <div
-          class="flex w-full flex-col items-center justify-center gap-4"
-          v-else
-        >
+
+        <div v-else class="flex w-full flex-col items-center gap-4">
           <p class="text-center text-lg font-semibold">
             {{
               $t("settings_panel.update.new_version_available", {
@@ -56,89 +53,88 @@
               })
             }}
           </p>
-          <div
-            class="text-muted-foreground max-w-xl rounded border p-2 text-sm"
-          >
+
+          <div class="text-muted-foreground w-full max-w-xl rounded border p-3 text-sm">
             <VueMarkdown
-              class="changelog-container max-h-50 overflow-y-scroll"
+              class="changelog-container max-h-50 overflow-y-auto"
               :source="
-                latestInfo.body
-                  ? latestInfo.body
-                  : $t('settings_panel.update.no_release_notes', {
-                      url: latestInfo.url,
-                    })
+                latestInfo.body ||
+                $t('settings_panel.update.no_release_notes', {
+                  url: latestInfo.url,
+                })
               "
               :plugins="plugins"
             />
           </div>
+
           <a
             :href="latestInfo.url"
             target="_blank"
+            rel="noopener noreferrer"
             class="text-sm text-blue-500 hover:underline"
           >
             {{ $t("settings_panel.update.view_release_notes") }}
           </a>
-          <div class="flex items-center gap-2">
-            <Button @click="runUpdate()">
+
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <SettingAction variant="default" @click="runUpdate()">
               {{ $t("settings_panel.update.update_button.label") }}
-            </Button>
-            <Button variant="outline" @click="checkUpdates">
+            </SettingAction>
+            <SettingAction @click="checkUpdates">
               {{ $t("settings_panel.update.recheck_button.label") }}
-            </Button>
+            </SettingAction>
           </div>
         </div>
       </div>
-    </div>
+    </SettingsSection>
   </div>
 </template>
 
 <script setup lang="ts">
-import logoUrl from "@/assets/lighttp_logo_wordmark.svg";
+import { onMounted, ref } from "vue";
 import { getVersion } from "@tauri-apps/api/app";
-import { onMounted, Ref, ref } from "vue";
 import { Loader, CircleX } from "@lucide/vue";
+import VueMarkdown from "vue-markdown-render";
+import taskLists from "markdown-it-task-lists";
+import MarkdownItGitHubAlerts from "markdown-it-github-alerts";
+
+import logoUrl from "@/assets/lighttp_logo_wordmark.svg";
+import { SettingAction, SettingsPageHeader, SettingsSection } from "@/components/settings/components";
 import {
   type UpdateInfo,
   checkForUpdates,
   runUpdate,
 } from "@/services/updater";
-import { Button } from "@/components/ui/button";
+
 const appVersion = ref("");
-const latestInfo = ref(null) as Ref<null | string | UpdateInfo>;
-
-import VueMarkdown from "vue-markdown-render";
-import taskLists from "markdown-it-task-lists";
-import MarkdownItGitHubAlerts from "markdown-it-github-alerts"; // For > [!NOTE] styles
-
+const latestInfo = ref<null | string | UpdateInfo>(null);
 const plugins = [taskLists, MarkdownItGitHubAlerts];
 
-function checkUpdates() {
-  latestInfo.value = null; // 重置狀態以顯示檢查中
-  checkForUpdates()
-    .then((info) => {
-      latestInfo.value = info;
-    })
-    .catch((error) => {
-      if (error instanceof Error) {
-        latestInfo.value = error.message;
-        console.error("檢查更新失敗:", error.message);
-      } else {
-        latestInfo.value = "Unknown error";
-        console.error("檢查更新失敗: Unknown error", error);
-      }
-    });
+async function checkUpdates(): Promise<void> {
+  latestInfo.value = null;
+
+  try {
+    latestInfo.value = await checkForUpdates();
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Unknown error";
+    latestInfo.value = message;
+    console.error("檢查更新失敗:", error);
+  }
 }
 
 onMounted(async () => {
-  appVersion.value = await getVersion();
+  try {
+    appVersion.value = await getVersion();
+  } catch (error) {
+    console.error("取得應用程式版本失敗:", error);
+  }
 
-  // 檢查更新
-  checkUpdates();
+  await checkUpdates();
 });
 </script>
 
 <style scoped>
-/* 深度選擇器：針對 VueMarkdown 動態產生的 DOM 子元素 */
 .changelog-container :deep(h2) {
   font-size: 1.15rem;
   font-weight: 600;
@@ -153,7 +149,6 @@ onMounted(async () => {
   margin-top: 0;
 }
 
-/* 超連結 */
 .changelog-container :deep(a) {
   color: #58a6ff;
   text-decoration: none;
@@ -165,7 +160,6 @@ onMounted(async () => {
   text-decoration: underline;
 }
 
-/* GitHub Markdown Alert (Important) */
 .changelog-container :deep(.markdown-alert.important) {
   margin: 1rem 0;
   padding: 0.85rem 1rem;
@@ -200,7 +194,6 @@ onMounted(async () => {
   text-decoration: underline;
 }
 
-/* 清單與 Task List */
 .changelog-container :deep(ul.contains-task-list) {
   list-style-type: none;
   padding-left: 0;
@@ -214,7 +207,6 @@ onMounted(async () => {
   font-size: 0.9rem;
 }
 
-/* 客製化已勾選 Checkbox */
 .changelog-container :deep(.task-list-item-checkbox) {
   appearance: none;
   -webkit-appearance: none;
@@ -242,13 +234,11 @@ onMounted(async () => {
   transform: rotate(45deg);
 }
 
-/* 強調文字與標籤 */
 .changelog-container :deep(strong) {
   color: #f0f6fc;
   font-weight: 600;
 }
 
-/* 分隔線 */
 .changelog-container :deep(hr) {
   height: 1px;
   background-color: #30363d;

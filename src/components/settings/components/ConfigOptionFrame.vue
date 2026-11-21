@@ -1,25 +1,5 @@
-<template>
-  <div
-    class="flex flex-col items-center justify-between gap-2 space-x-4 sm:flex-row"
-  >
-    <div class="flex w-fit flex-col gap-1">
-      <div class="flex gap-1">
-        <Label class="w-32 text-sm">
-          {{ $t(props.labelKey) }}
-        </Label>
-        <BetaBadge v-if="props.beta" />
-      </div>
-      <p class="text-muted-foreground text-sm">
-        {{ $t(props.descriptionKey) }}
-      </p>
-    </div>
-
-    <slot />
-  </div>
-</template>
-
 <script setup lang="ts">
-import { Label } from "@/components/ui/label";
+import SettingRow from "./SettingRow.vue";
 import BetaBadge from "./BetaBadge.vue";
 
 interface Props {
@@ -31,4 +11,14 @@ interface Props {
 const props = defineProps<Props>();
 </script>
 
-<style scoped></style>
+<template>
+  <SettingRow
+    :title="$t(props.labelKey)"
+    :description="$t(props.descriptionKey)"
+  >
+    <template #badge>
+      <BetaBadge v-if="props.beta" />
+    </template>
+    <slot />
+  </SettingRow>
+</template>
