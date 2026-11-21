@@ -1,90 +1,90 @@
 <template>
-  <h2 class="text-lg font-semibold">
-    {{ $t("settings_panel.update.title") }}
-  </h2>
+  <div class="lh-settings-page">
+    <SettingsPageHeader :title="$t('settings_panel.update.title')" />
 
-  <div class="mt-4 space-y-4">
-    <div class="flex flex-1 flex-col gap-4 rounded p-2">
-      <div class="flex w-full items-center justify-center gap-2">
-        <img :src="logoUrl" alt="Lighttp Logo" class="h-12 w-auto" />
-      </div>
-      <div
-        class="text-muted-foreground mt-4 flex w-full items-center justify-center gap-2"
-      >
-        <!-- 檢查更新中 -->
-        <div
-          class="flex w-full animate-pulse items-center justify-center gap-2"
-          v-if="latestInfo === null"
-        >
-          <Loader class="h-5 w-5 animate-spin" />
-          <p>{{ $t("settings_panel.update.checking_for_updates") }}</p>
+    <div class="mt-4 space-y-4">
+      <div class="flex flex-1 flex-col gap-4 rounded p-2">
+        <div class="flex w-full items-center justify-center gap-2">
+          <img :src="logoUrl" alt="Lighttp Logo" class="h-12 w-auto" />
         </div>
-        <!-- 檢查更新失敗 -->
         <div
-          class="flex w-full items-center justify-center gap-2 text-red-500"
-          v-else-if="typeof latestInfo === 'string'"
+          class="text-muted-foreground mt-4 flex w-full items-center justify-center gap-2"
         >
-          <CircleX class="h-5 w-5" />
-          <p>
-            {{
-              $t("settings_panel.update.check_failed", { error: latestInfo })
-            }}
-          </p>
-          <Button variant="outline" @click="checkUpdates">
-            {{ $t("settings_panel.update.recheck_button.label") }}
-          </Button>
-        </div>
-        <!-- 已是最新版本 -->
-        <div
-          class="flex w-full items-center justify-center gap-2 text-green-500"
-          v-else-if="!latestInfo.needsUpdate"
-        >
-          <p>{{ $t("settings_panel.update.up_to_date") }}</p>
-          <Button variant="outline" @click="checkUpdates">
-            {{ $t("settings_panel.update.recheck_button.label") }}
-          </Button>
-        </div>
-        <!-- 有新版本可用 -->
-        <div
-          class="flex w-full flex-col items-center justify-center gap-4"
-          v-else
-        >
-          <p class="text-center text-lg font-semibold">
-            {{
-              $t("settings_panel.update.new_version_available", {
-                version: latestInfo.version,
-              })
-            }}
-          </p>
+          <!-- 檢查更新中 -->
           <div
-            class="text-muted-foreground max-w-xl rounded border p-2 text-sm"
+            class="flex w-full animate-pulse items-center justify-center gap-2"
+            v-if="latestInfo === null"
           >
-            <VueMarkdown
-              class="changelog-container max-h-50 overflow-y-scroll"
-              :source="
-                latestInfo.body
-                  ? latestInfo.body
-                  : $t('settings_panel.update.no_release_notes', {
-                      url: latestInfo.url,
-                    })
-              "
-              :plugins="plugins"
-            />
+            <Loader class="h-5 w-5 animate-spin" />
+            <p>{{ $t("settings_panel.update.checking_for_updates") }}</p>
           </div>
-          <a
-            :href="latestInfo.url"
-            target="_blank"
-            class="text-sm text-blue-500 hover:underline"
+          <!-- 檢查更新失敗 -->
+          <div
+            class="flex w-full items-center justify-center gap-2 text-red-500"
+            v-else-if="typeof latestInfo === 'string'"
           >
-            {{ $t("settings_panel.update.view_release_notes") }}
-          </a>
-          <div class="flex items-center gap-2">
-            <Button @click="runUpdate()">
-              {{ $t("settings_panel.update.update_button.label") }}
-            </Button>
+            <CircleX class="h-5 w-5" />
+            <p>
+              {{
+                $t("settings_panel.update.check_failed", { error: latestInfo })
+              }}
+            </p>
             <Button variant="outline" @click="checkUpdates">
               {{ $t("settings_panel.update.recheck_button.label") }}
             </Button>
+          </div>
+          <!-- 已是最新版本 -->
+          <div
+            class="flex w-full items-center justify-center gap-2 text-green-500"
+            v-else-if="!latestInfo.needsUpdate"
+          >
+            <p>{{ $t("settings_panel.update.up_to_date") }}</p>
+            <Button variant="outline" @click="checkUpdates">
+              {{ $t("settings_panel.update.recheck_button.label") }}
+            </Button>
+          </div>
+          <!-- 有新版本可用 -->
+          <div
+            class="flex w-full flex-col items-center justify-center gap-4"
+            v-else
+          >
+            <p class="text-center text-lg font-semibold">
+              {{
+                $t("settings_panel.update.new_version_available", {
+                  version: latestInfo.version,
+                })
+              }}
+            </p>
+            <div
+              class="text-muted-foreground max-w-xl rounded border p-2 text-sm"
+            >
+              <VueMarkdown
+                class="changelog-container max-h-50 overflow-y-scroll"
+                :source="
+                  latestInfo.body
+                    ? latestInfo.body
+                    : $t('settings_panel.update.no_release_notes', {
+                        url: latestInfo.url,
+                      })
+                "
+                :plugins="plugins"
+              />
+            </div>
+            <a
+              :href="latestInfo.url"
+              target="_blank"
+              class="text-sm text-blue-500 hover:underline"
+            >
+              {{ $t("settings_panel.update.view_release_notes") }}
+            </a>
+            <div class="flex items-center gap-2">
+              <Button @click="runUpdate()">
+                {{ $t("settings_panel.update.update_button.label") }}
+              </Button>
+              <Button variant="outline" @click="checkUpdates">
+                {{ $t("settings_panel.update.recheck_button.label") }}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
