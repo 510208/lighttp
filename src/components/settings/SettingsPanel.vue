@@ -4,81 +4,109 @@
       <slot name="settings" />
     </DialogTrigger>
 
-    <DialogContent class="lh-settings-dialog !max-w-[800px]">
-      <Tabs class="lh-settings-layout">
-        <TabsList class="lh-settings-sidebar rounded-none">
-          <div class="lh-settings-heading">
-            <DialogTitle class="lh-settings-title">
-              {{ $t("settings_panel.title") }}
-            </DialogTitle>
-            <p class="lh-settings-version">LigHTTP · {{ version }}</p>
-          </div>
+    <DialogContent class="lh-settings-dialog !max-w-[1200px]">
+      <SettingsLayout>
+        <template #sidebar>
+          <SettingsSidebar v-model="activeSection" :items="navigation">
+            <template #header>
+              <div class="lh-settings-heading">
+                <DialogTitle class="lh-settings-title">
+                  {{ $t("settings_panel.title") }}
+                </DialogTitle>
+                <p class="lh-settings-version">LigHTTP · {{ version }}</p>
+              </div>
+            </template>
+          </SettingsSidebar>
+        </template>
 
-          <TabsTrigger value="general" class="sh-settings-tab">
-            <Settings class="lh-settings-tab-icon" />
-            {{ $t("settings_panel.tabs.general") }}
-          </TabsTrigger>
-          <TabsTrigger value="themes" class="sh-settings-tab">
-            <Palette class="lh-settings-tab-icon" />
-            {{ $t("settings_panel.tabs.themes") }}
-          </TabsTrigger>
-          <TabsTrigger value="define_gen" class="sh-settings-tab">
-            <Hash class="lh-settings-tab-icon" />
-            {{ $t("settings_panel.tabs.define_gen") }}
-          </TabsTrigger>
-          <TabsTrigger value="update" class="sh-settings-tab">
-            <CircleFadingArrowUp class="lh-settings-tab-icon" />
-            {{ $t("settings_panel.tabs.update") }}
-          </TabsTrigger>
-        </TabsList>
-
-        <main class="lh-settings-content">
-          <TabsContent value="general">
-            <GeneralSettings />
-          </TabsContent>
-          <TabsContent value="themes">
-            <ThemesSettings />
-          </TabsContent>
-          <TabsContent value="define_gen">
-            <DefineGenSettings />
-          </TabsContent>
-          <TabsContent value="update">
-            <UpdateSettings />
-          </TabsContent>
-        </main>
-      </Tabs>
+        <template #content>
+          <SettingsContent>
+            <component :is="pages[activeSection]" />
+          </SettingsContent>
+        </template>
+      </SettingsLayout>
     </DialogContent>
   </Dialog>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { CircleFadingArrowUp, Hash, Palette, Settings } from "@lucide/vue";
+import type { Component } from "vue";
+import {
+  CircleFadingArrowUp,
+  Hash,
+  Palette,
+  Settings,
+} from "@lucide/vue";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SettingsContent,
+  SettingsLayout,
+  SettingsSidebar,
+} from "./layout";
+import type { SettingsNavigationItem } from "./layout";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
 import DefineGenSettings from "./pages/DefineGenSettings.vue";
 import UpdateSettings from "./pages/UpdateSettings.vue";
-
 import { getVersion } from "@tauri-apps/api/app";
 
-const version = ref("???");
+const props = withDefaults(
+  defineProps<{
+    open?: boolean;
+    section?: string;
+    defaultSection?: string;
+  }>(),
+  {
+    defaultSection: "general",
+  },
+);
 
-onMounted(async () => {
-  version.value = await getVersion();
-});
-
-const props = defineProps<{ open?: boolean }>();
-const emit = defineEmits(["update:open"]);
+const emit = defineEmits<{
+  (event: "update:open", value: boolean): void;
+  (event: "update:section", value: string): void;
+}>();
 
 const isOpen = computed({
   get: () => props.open ?? false,
   set: (value: boolean) => emit("update:open", value),
+});
+
+const internalSection = ref(props.defaultSection);
+const activeSection = computed({
+  get: () => props.section ?? internalSection.value,
+  set: (value: string) => {
+    internalSection.value = value;
+    emit("update:section", value);
+  },
+});
+
+const navigation: SettingsNavigationItem[] = [
+  { value: "general", label: "一般", icon: Settings },
+  { value: "themes", label: "外觀與主題", icon: Palette },
+  { value: "define_gen", label: "型別產生", icon: Hash },
+  { value: "update", label: "更新", icon: CircleFadingArrowUp },
+];
+
+const pages: Record<string, Component> = {
+  general: GeneralSettings,
+  themes: ThemesSettings,
+  define_gen: DefineGenSettings,
+  update: UpdateSettings,
+};
+
+const version = ref("???");
+
+onMounted(async () => {
+  try {
+    version.value = await getVersion();
+  } catch (error) {
+    console.error("Failed to get application version:", error);
+  }
 });
 </script>
