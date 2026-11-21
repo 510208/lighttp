@@ -1,34 +1,38 @@
 <template>
-  <!-- <ConfigLoader /> -->
   <Dialog v-model:open="isOpen">
     <DialogTrigger>
       <slot name="settings" />
     </DialogTrigger>
-    <DialogContent
-      class="h-[calc(100%-4rem)] max-h-[600px] min-h-[60vh] w-[85vw] min-w-0 p-0 sm:max-w-[1000px]"
-    >
-      <Tabs class="flex h-full flex-row">
-        <TabsList
-          class="bg-lh-surface-0 border-lh-surface-1 flex h-full w-[180px] flex-col items-stretch justify-start gap-1 overflow-y-auto rounded-none border-r px-3 py-4 lg:w-[220px]"
-        >
-          <DialogTitle class="mb-4 ml-2 text-lg font-semibold">
-            {{ $t("settings_panel.title") }}
-          </DialogTitle>
+
+    <DialogContent class="lh-settings-dialog">
+      <Tabs class="lh-settings-layout">
+        <TabsList class="lh-settings-sidebar">
+          <div class="lh-settings-heading">
+            <DialogTitle class="lh-settings-title">
+              {{ $t("settings_panel.title") }}
+            </DialogTitle>
+            <p class="lh-settings-version">LigHTTP · 0.6.1</p>
+          </div>
+
           <TabsTrigger value="general" class="sh-settings-tab">
-            <Settings />{{ $t("settings_panel.tabs.general") }}
+            <Settings class="lh-settings-tab-icon" />
+            {{ $t("settings_panel.tabs.general") }}
           </TabsTrigger>
           <TabsTrigger value="themes" class="sh-settings-tab">
-            <Palette />{{ $t("settings_panel.tabs.themes") }}
+            <Palette class="lh-settings-tab-icon" />
+            {{ $t("settings_panel.tabs.themes") }}
           </TabsTrigger>
           <TabsTrigger value="define_gen" class="sh-settings-tab">
-            <Hash />{{ $t("settings_panel.tabs.define_gen") }}
+            <Hash class="lh-settings-tab-icon" />
+            {{ $t("settings_panel.tabs.define_gen") }}
           </TabsTrigger>
           <TabsTrigger value="update" class="sh-settings-tab">
-            <CircleFadingArrowUp />{{ $t("settings_panel.tabs.update") }}
+            <CircleFadingArrowUp class="lh-settings-tab-icon" />
+            {{ $t("settings_panel.tabs.update") }}
           </TabsTrigger>
         </TabsList>
 
-        <div class="h-full flex-1 overflow-auto p-6">
+        <main class="lh-settings-content">
           <TabsContent value="general">
             <GeneralSettings />
           </TabsContent>
@@ -41,22 +45,32 @@
           <TabsContent value="update">
             <UpdateSettings />
           </TabsContent>
-        </div>
+        </main>
       </Tabs>
     </DialogContent>
   </Dialog>
 </template>
 
 <script setup lang="ts">
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { computed } from "vue";
+import {
+  CircleFadingArrowUp,
+  Hash,
+  Palette,
+  Settings,
+} from "@lucide/vue";
 import {
   Dialog,
   DialogContent,
-  DialogTrigger,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { computed } from "vue";
-import { Settings, Palette, Hash, CircleFadingArrowUp } from "@lucide/vue";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import GeneralSettings from "./pages/GeneralSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
 import DefineGenSettings from "./pages/DefineGenSettings.vue";
@@ -67,6 +81,6 @@ const emit = defineEmits(["update:open"]);
 
 const isOpen = computed({
   get: () => props.open ?? false,
-  set: (v: boolean) => emit("update:open", v),
+  set: (value: boolean) => emit("update:open", value),
 });
 </script>
