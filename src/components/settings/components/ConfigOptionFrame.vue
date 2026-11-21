@@ -16,11 +16,9 @@ const props = defineProps<Props>();
     :title="$t(props.labelKey)"
     :description="$t(props.descriptionKey)"
   >
-    <template #default>
-      <div class="flex items-center gap-2">
-        <BetaBadge v-if="props.beta" />
-        <slot />
-      </div>
+    <template #badge>
+      <BetaBadge v-if="props.beta" />
     </template>
+    <slot />
   </SettingRow>
 </template>
