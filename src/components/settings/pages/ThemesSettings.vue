@@ -84,7 +84,7 @@
           >
             <span
               v-for="swatch in colorPreviews"
-              :key="swatch.name"
+              :key="`${swatch.name}-${swatch.version}`"
               class="lh-color-theme-swatch"
               :style="{ backgroundColor: swatch.color }"
               :title="swatch.label"
@@ -186,8 +186,7 @@ const colorPreviewVersion = ref(0);
 const colorPreviews = computed(() => {
   // 讀取目前生效的 CSS custom properties，而非只讀取主題檔案文字。
   // 因此預設主題、匯入主題與恢復預設都會呈現實際套用的顏色。
-  colorPreviewVersion.value;
-
+  const version = colorPreviewVersion.value;
   const styles = getComputedStyle(document.documentElement);
   const colors = [
     { name: "text", label: "Text", variable: "--catppuccin-color-text" },
@@ -200,6 +199,7 @@ const colorPreviews = computed(() => {
   return colors.map((color) => ({
     ...color,
     color: styles.getPropertyValue(color.variable).trim() || "transparent",
+    version,
   }));
 });
 
