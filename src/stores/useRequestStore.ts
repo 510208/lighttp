@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import { useWorkspaceStore } from "./useWorkspaceStore";
+import { restoreWorkspace } from "@/services/workspace/persistence";
+import type { RequestState } from "@/types/workspace";
 import {
   useTableManager,
   type KeyValuePair,
@@ -7,60 +10,124 @@ import {
 
 import type { AuthStore, AuthStoreForBackend } from "./authType.d";
 import type { ProxyConfig } from "./proxyConfig.d";
-import { getVersion } from "@tauri-apps/api/app";
 
 // 引入 Zod Schema 與型別
 import {
   WorkspaceSchema,
   type WorkspaceData,
-  // type KeyValuePairData,
   type ProxyConfigData,
 } from "@/schemas/workspace";
 
 export const useRequestStore = defineStore("request", () => {
-  const method = ref("GET");
-  const url = ref("https://api.samhacker.xyz");
+  const workspace = useWorkspaceStore();
+  const requests = ref<Record<string, RequestState>>({});
 
-  // 基礎資料
-  const params = ref<KeyValuePair[]>([]);
-  const headers = ref<KeyValuePair[]>([
-    {
-      id: crypto.randomUUID(),
-      enabled: true,
-      key: "Content-Type",
-      value: "application/json",
-    },
-    {
-      id: crypto.randomUUID(),
-      enabled: true,
-      key: "User-Agent",
-      value: "LigHTTP/0.6.1", // 預設值，由 async 初始化替換
-    },
-  ]);
-
-  // 系統 User-Agent 初始化
-  async function initUserAgent() {
-    try {
-      const version = await getVersion();
-      const uaIndex = headers.value.findIndex((h) => h.key === "User-Agent");
-      if (uaIndex !== -1) {
-        headers.value[uaIndex].value = `LigHTTP/${version}`;
-      }
-    } catch {
-      // 靜默處理非 Tauri 環境下的初始化失敗
-    }
+  function createRequest(): RequestState {
+    return {
+      method: "GET",
+      url: "https://api.samhacker.xyz",
+      params: [],
+      headers: [],
+      auth: { type: "none", content: {} },
+      bodyType: "None",
+      bodyContent: "",
+      proxyConfig: {
+        enabled: false,
+        checkBeforeSend: false,
+        protocol: "https",
+        host: "",
+        port: 0,
+      },
+    };
   }
-  initUserAgent();
 
-  // 認證資料
-  const auth = ref<AuthStore>({
-    type: "none",
-    content: {},
-  });
+  function fromDraft(data: WorkspaceData): RequestState {
+    const pairs = (items: WorkspaceData["params"]): KeyValuePair[] =>
+      items.map((item) => ({ ...item, id: item.id || crypto.randomUUID() }));
+    return {
+      method: data.method,
+      url: data.url,
+      params: pairs(data.params),
+      headers: pairs(data.headers),
+      auth: { type: data.auth.auth_type, content: data.auth.content ?? {} },
+      bodyType: data.body.type,
+      bodyContent: data.body.content,
+      proxyConfig: data.proxy
+        ? {
+            ...data.proxy,
+            protocol: data.proxy.protocol as ProxyConfig["protocol"],
+            auth: data.proxy.auth ?? undefined,
+          }
+        : createRequest().proxyConfig,
+    };
+  }
+
+  const restored = restoreWorkspace();
+  for (const tab of workspace.tabs) {
+    const draft = restored?.requests[tab.id];
+    requests.value[tab.id] = draft ? fromDraft(draft) : createRequest();
+  }
+
+  const emptyRequest = createRequest();
+  const activeRequest = computed(() =>
+    workspace.activeTabId
+      ? (requests.value[workspace.activeTabId] ?? emptyRequest)
+      : emptyRequest,
+  );
+  function field<K extends keyof RequestState>(key: K) {
+    return computed({
+      get: () => activeRequest.value[key],
+      set: (value: RequestState[K]) => {
+        if (workspace.activeTabId && requests.value[workspace.activeTabId]) {
+          requests.value[workspace.activeTabId][key] = value;
+        }
+      },
+    });
+  }
+
+  const method = field("method");
+  const url = field("url");
+  const params = field("params");
+  const headers = field("headers");
+  const auth = field("auth");
+  const bodyType = field("bodyType");
+  const bodyContent = field("bodyContent");
+  const proxyConfig = field("proxyConfig");
 
   function setAuth(newAuth: AuthStore) {
     auth.value = newAuth;
   }
+  function setBodyType(type: string) {
+    bodyType.value = type;
+  }
+  function setBodyContent(content: string) {
+    bodyContent.value = content;
+  }
+  function setProxyConfig(config: ProxyConfig) {
+    proxyConfig.value = config;
+  }
+
+  function initializeRequest(tabId: string) {
+    if (!requests.value[tabId]) requests.value[tabId] = createRequest();
+  }
+  function deleteRequest(tabId: string) {
+    delete requests.value[tabId];
+  }
+  function getRequest(tabId: string) {
+    return requests.value[tabId];
+  }
+  function updateRequest(tabId: string, updates: Partial<RequestState>) {
+    if (requests.value[tabId]) Object.assign(requests.value[tabId], updates);
+  }
+
+  watch(
+    activeRequest,
+    (value, previous) => {
+      if (value === previous && workspace.activeTabId)
+        workspace.touchTab(workspace.activeTabId);
+    },
+    { deep: true },
+  );
 
   // URL 與 Params 同步邏輯
   const syncUrlFromParams = () => {
@@ -79,70 +146,41 @@ export const useRequestStore = defineStore("request", () => {
   const paramManager = useTableManager(params, syncUrlFromParams);
   const headerManager = useTableManager(headers);
 
-  // 監聽 URL 變動
-  watch(url, (newUrl) => {
-    try {
-      const urlObj = new URL(newUrl);
-      const searchParams = urlObj.searchParams;
-
-      const currentParamsStr = params.value
-        .filter((p) => p.enabled)
-        .map((p) => `${p.key}=${p.value}`)
-        .join("&");
-      const newParamsStr = searchParams.toString();
-
-      if (currentParamsStr === newParamsStr && params.value.length > 0) {
-        return;
+  // Activating a draft must never rewrite its parameters.
+  watch(
+    () => [workspace.activeTabId, url.value] as const,
+    ([tabId, newUrl], [previousTabId]) => {
+      if (!tabId || tabId !== previousTabId) return;
+      try {
+        const searchParams = new URL(newUrl).searchParams;
+        const current = new URLSearchParams();
+        params.value
+          .filter((p) => p.enabled && p.key)
+          .forEach((p) => current.append(p.key, p.value));
+        if (current.toString() === searchParams.toString()) return;
+        const disabledItems = params.value.filter((p) => !p.enabled);
+        const newItems: KeyValuePair[] = [];
+        searchParams.forEach((value, key) =>
+          newItems.push({
+            id: crypto.randomUUID(),
+            enabled: true,
+            key,
+            value,
+          }),
+        );
+        params.value = [...disabledItems, ...newItems];
+      } catch {
+        // Keep unfinished URLs editable.
       }
-
-      const disabledItems = params.value.filter((p) => !p.enabled);
-      const newItems: KeyValuePair[] = [];
-
-      searchParams.forEach((value, key) => {
-        newItems.push({
-          id: crypto.randomUUID(),
-          enabled: true,
-          key,
-          value,
-        });
-      });
-
-      params.value = [...disabledItems, ...newItems];
-    } catch {
-      // 格式錯誤忽略
-    }
-  });
+    },
+    { flush: "sync" },
+  );
 
   function renameAuthType(original: AuthStore): AuthStoreForBackend {
     return {
       auth_type: original.type,
       content: original.content,
     };
-  }
-
-  // Body
-  const bodyType = ref("None");
-  const bodyContent = ref("");
-
-  function setBodyType(type: string) {
-    bodyType.value = type;
-  }
-
-  function setBodyContent(content: string) {
-    bodyContent.value = content;
-  }
-
-  // Proxy
-  const proxyConfig = ref<ProxyConfig>({
-    enabled: false,
-    checkBeforeSend: false,
-    protocol: "http",
-    host: "",
-    port: 0,
-  });
-
-  function setProxyConfig(config: ProxyConfig) {
-    proxyConfig.value = config;
   }
 
   // 匯出JSON資料
@@ -205,59 +243,33 @@ export const useRequestStore = defineStore("request", () => {
     });
   }
 
-  // 接收經由 Zod 驗證完畢的 WorkspaceData 進行狀態更新
-  function loadRequestData(data: WorkspaceData) {
-    url.value = data.url;
-    method.value = data.method;
-
-    params.value = data.params.map((p: any) => ({
-      id: p.id || crypto.randomUUID(),
-      enabled: p.enabled,
-      key: p.key,
-      value: p.value,
-    }));
-
-    headers.value = data.headers.map((h: any) => ({
-      id: h.id || crypto.randomUUID(),
-      enabled: h.enabled,
-      key: h.key,
-      value: h.value,
-    }));
-
-    auth.value = {
-      type: data.auth.auth_type,
-      content: data.auth.content,
+  function getRequestDraft(tabId: string): WorkspaceData {
+    const request = requests.value[tabId];
+    if (!request) throw new Error("Request tab no longer exists.");
+    return {
+      url: request.url,
+      method: request.method,
+      params: request.params,
+      headers: request.headers,
+      auth: renameAuthType(request.auth),
+      body: { type: request.bodyType, content: request.bodyContent },
+      proxy: { ...request.proxyConfig, auth: request.proxyConfig.auth ?? null },
     };
+  }
 
-    bodyType.value = data.body.type;
-    bodyContent.value = data.body.content;
-
-    if (data.proxy && data.proxy.enabled) {
-      proxyConfig.value = {
-        enabled: true,
-        checkBeforeSend: data.proxy.checkBeforeSend,
-        protocol: data.proxy.protocol as "http" | "https" | "socks4" | "socks5",
-        host: data.proxy.host,
-        port: data.proxy.port,
-        auth: data.proxy.auth
-          ? {
-              username: data.proxy.auth.username,
-              password: data.proxy.auth.password,
-            }
-          : undefined,
-      };
-    } else {
-      proxyConfig.value = {
-        enabled: false,
-        checkBeforeSend: false,
-        protocol: "http",
-        host: "",
-        port: 0,
-      };
-    }
+  function loadRequestData(data: WorkspaceData, tabId = workspace.activeTabId) {
+    const targetId = tabId ?? workspace.createTab();
+    requests.value[targetId] = fromDraft(data);
+    workspace.touchTab(targetId);
   }
 
   return {
+    requests,
+    initializeRequest,
+    deleteRequest,
+    getRequest,
+    updateRequest,
+    getRequestDraft,
     method,
     url,
     params,

@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { Slider } from "@/components/ui/slider";
 
+const modelValue = defineModel<number[]>({ required: true });
+
 defineProps<{
-  modelValue: number[];
   min?: number;
   max?: number;
   step?: number;
   disabled?: boolean;
-}>();
-
-defineEmits<{
-  (event: "update:modelValue", value: number[]): void;
 }>();
 </script>
 
@@ -22,6 +19,10 @@ defineEmits<{
     :max="max"
     :step="step"
     :disabled="disabled"
-    @update:model-value="$emit('update:modelValue', $event)"
+    @update:model-value="
+      (val) => {
+        if (val !== undefined) modelValue = val;
+      }
+    "
   />
 </template>

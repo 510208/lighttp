@@ -3,6 +3,8 @@ import { Ref, ref, watch } from "vue";
 import { changeLang } from "@/i18n";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 
+type StartupBehavior = "new-request" | "resume" | "empty";
+
 interface HexViewerConfig {
   enabled: boolean;
   theme: string;
@@ -85,6 +87,7 @@ export const useSettingsStore = defineStore(
       css: null,
     } as unknown as Ref<ColorTheme>);
     const autoUpdate = ref(true);
+    const startupBehavior = ref<StartupBehavior>("resume");
     const zoomRatio = ref(1.0 as number);
 
     function setQuicktypeConfig(newConfig: quicktypeConfig) {
@@ -169,6 +172,7 @@ export const useSettingsStore = defineStore(
       setLanguage,
 
       autoUpdate,
+      startupBehavior,
 
       backgroundImageUrl,
       setBackgroundImageUrl,

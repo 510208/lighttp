@@ -127,5 +127,20 @@
 
   "home.status_bar.proxy_status.success_text": "Proxy Configured",
   "home.status_bar.proxy_status.loading_text": "Proxy Configuration Incomplete",
-  "home.status_bar.proxy_status.none": "Proxy Disabled"
+  "home.status_bar.proxy_status.none": "Proxy Disabled",
+
+  "home.workspace.tabs": "Request tabs",
+  "home.workspace.tab_count": "{count} request tabs",
+  "home.workspace.new_request": "New Request",
+  "home.workspace.untitled": "Untitled Request",
+  "home.workspace.close_named": "Close {title}",
+  "home.workspace.close_tab": "Close Tab",
+  "home.workspace.close_others": "Close Other Tabs",
+  "home.workspace.close_below": "Close Tabs Below",
+  "home.workspace.close_all": "Close All Tabs",
+  "home.workspace.empty_title": "Your request workspace",
+  "home.workspace.empty_description": "Create a request tab to get started. Each tab keeps its own request and response.",
+  "home.workspace.author_hint": "LigHTTP，Built with ♥️ by {author} in Taiwan",
+  "home.workspace.status.pending": "Sending request…",
+  "home.workspace.status.error": "Request failed"
 }

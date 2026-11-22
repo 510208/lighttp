@@ -152,6 +152,7 @@ watch(
     }
     //#endregion
   },
+  { immediate: true },
 );
 
 // 監視 responseStore 的 requestTime 屬性，當它改變時更新 requestTime 變數
@@ -160,6 +161,7 @@ watch(
   (newRequestTime) => {
     requestTime.value = newRequestTime;
   },
+  { immediate: true },
 );
 
 function checkProxyStatus() {
@@ -192,7 +194,7 @@ watch(
   () => {
     checkProxyStatus();
   },
-  { deep: true },
+  { deep: true, immediate: true },
 );
 </script>
 

@@ -34,6 +34,17 @@
   </DropdownMenu>
 
   <SettingPanel v-model:open="isSettingsOpen" />
+  <Dialog v-model:open="aboutOpen">
+    <DialogContent
+      class="bg-lh-base border-lh-surface-1 max-h-[90vh] max-w-2xl overflow-y-auto p-0"
+    >
+      <DialogHeader class="sr-only">
+        <DialogTitle>{{ $t("title_bar.dropdown_menu.about") }}</DialogTitle>
+        <DialogDescription>LigHTTP</DialogDescription>
+      </DialogHeader>
+      <About embedded @close="aboutOpen = false" />
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -50,8 +61,17 @@ import { Button } from "@/components/ui/button";
 import { Window, FileHelpers } from "@/services";
 import SettingPanel from "@/components/settings/SettingsPanel.vue";
 import { ref } from "vue";
+import About from "@/pages/About.vue";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const isSettingsOpen = ref(false);
+const { aboutOpen } = Window;
 
 function openSettings() {
   isSettingsOpen.value = true;

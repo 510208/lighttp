@@ -5,8 +5,7 @@ import { Request } from "@/services";
 
 import { SendHorizontal } from "@lucide/vue";
 import { Button } from "@/components/ui/button";
-import hotkeys from "hotkeys-js";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { cn } from "@/lib/utils";
 
 const requestStore = useRequestStore();
@@ -47,17 +46,6 @@ async function handleTextboxTimeout() {
   inputColorClass.value = ""; // 顏色清空
 }
 
-onMounted(() => {
-  hotkeys("ctrl+enter", (event) => {
-    event.preventDefault();
-    handleEnter();
-  });
-});
-
-onUnmounted(() => {
-  hotkeys.unbind();
-});
-
 // 監聽輸入框，當輸入框改變時，將邊線顏色恢復為原本的顏色
 watch(
   () => requestStore.url,
@@ -82,7 +70,7 @@ watch(
       type="text"
       :placeholder="$t('home.target_input.url_input.placeholder')"
       class="text-lh-text placeholder:text-lh-subtext-0 flex-1 bg-transparent px-4 py-2 text-sm outline-none"
-      @keyup.enter="handleEnter"
+      @keyup.enter="!$event.ctrlKey && !$event.metaKey && handleEnter()"
       @blur="handleUrlBlur"
     />
     <Button

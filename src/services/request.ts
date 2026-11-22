@@ -1,84 +1,110 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useRequestStore } from "@/stores/useRequestStore";
 import {
-  type ResponseState,
   useResponseStore,
+  type ResponseState,
 } from "@/stores/useResponseStore";
-
+import { useWorkspaceStore } from "@/stores/useWorkspaceStore";
+import { useExecutionStore } from "@/stores/useExecutionStore";
 import { toast } from "vue-sonner";
 
-async function sendRequest(): Promise<ResponseState | null> {
-  const requestStore = useRequestStore();
-  const responseStore = useResponseStore();
-
-  responseStore.setStatus(undefined); // 重置狀態
-
-  if (requestStore.method === "NONE") {
-    console.warn("未選擇 HTTP 方法，跳過請求");
-    return null;
-  }
-
-  // 初始化計時
-  const startTime = performance.now();
-
-  try {
-    console.log(
-      `[handleSend] Sending ${requestStore.method} request to: ${requestStore.url}`,
-    );
-
-    // 使用 await 等待 Rust 後端回傳，response 為物件
-    const response = await invoke<any>("handle_request", {
-      payload: requestStore.getRequestData(),
-    });
-
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-
-    console.log("[handleSend] Response from Rust:", response);
-
-    const responseDataParsed: ResponseState = {
-      status: response.status,
-      body: response.body,
-      headers: response.headers,
-      timeTaken: duration,
-      body_type: response.body_type || "text/plain",
-      size: new Blob([response.body]).size,
-      bodyBinary: response.bodyBinary as Uint8Array,
-      bodyB64: response.body_binary_b64,
-    };
-
-    // toast.success(
-    //   `已收到回應: ${responseDataParsed.status} (${duration.toFixed(2)} ms)`,
-    // );
-
-    return responseDataParsed;
-  } catch (error) {
-    console.error("[handleSend] Rust Command Error:", error);
-    throw error;
-  }
+interface BackendResponse {
+  status: number;
+  body: string;
+  headers: Record<string, string[]>;
+  bodyType: string;
+  bodyBinary: number[];
+  bodyBinaryB64?: string;
 }
 
 async function handleSend() {
-  const responseStore = useResponseStore();
+  const workspace = useWorkspaceStore();
   const requestStore = useRequestStore();
+  const responseStore = useResponseStore();
+  const executionStore = useExecutionStore();
+  // Capture identity and payload before crossing any async boundary.
+  const tabId = workspace.activeTabId;
+  if (!tabId || !requestStore.url.trim() || requestStore.method === "NONE")
+    return;
 
-  // 使用 toast.promise 自動管理狀態
-  toast.promise(sendRequest(), {
-    loading: `正在發送 ${requestStore.method} 請求至 ${requestStore.url}...`,
-    success: async (data: ResponseState | null) => {
-      await new Promise((resolve) => setTimeout(resolve, 200)); // 模擬處理時間，讓 loading 狀態更明顯
-      // 當 sendRequest resolve 時執行
-      if (data) {
-        await responseStore.setResponse(data);
-        return `收到結果: ${data.status} (${data.timeTaken != null ? data.timeTaken.toFixed(2) : "NaN"} ms)`;
-      }
-      return "請求完成";
-    },
-    error: (err: unknown) => {
-      // 當 sendRequest reject 時執行
-      return `發送失敗: ${(err as Error).message || String(err)}`;
-    },
-  });
+  let payload;
+  try {
+    payload = requestStore.getRequestData();
+    if (!/^https?:\/\//i.test(payload.url))
+      payload.url = "http://" + payload.url;
+    const url = new URL(payload.url);
+    requestStore.updateRequest(tabId, { url: url.href });
+    payload.url = url.href;
+    if (url.protocol !== "http:" && url.protocol !== "https:")
+      throw new Error("Only HTTP and HTTPS URLs are supported.");
+  } catch (error) {
+    toast.error(String(error));
+    return;
+  }
+
+  const requestId = executionStore.startExecution(tabId);
+  const signal = executionStore.getSignal(requestId)!;
+  const startedAt = performance.now();
+  const toastId = toast.loading(payload.method + " " + payload.url);
+  const cancel = () => {
+    toast.dismiss(toastId);
+    void invoke("cancel_request", { requestId }).catch((error) => {
+      console.warn("Failed to cancel request:", error);
+    });
+  };
+  signal.addEventListener("abort", cancel, { once: true });
+
+  try {
+    const response = await invoke<BackendResponse>("handle_request", {
+      payload,
+      requestId,
+    });
+    if (!executionStore.isCurrent(tabId, requestId)) return;
+    const timeTaken = performance.now() - startedAt;
+    const data: ResponseState = {
+      status: response.status,
+      body: response.body,
+      headers: response.headers,
+      timeTaken,
+      body_type: response.bodyType,
+      size: response.bodyBinary.length,
+      bodyBinary: new Uint8Array(response.bodyBinary),
+      bodyB64: response.bodyBinaryB64,
+      error:
+        response.bodyType === "text" && response.status >= 400
+          ? response.body
+          : null,
+    };
+    responseStore.setResponse(data, tabId);
+    executionStore.finishExecution(
+      tabId,
+      requestId,
+      data.error || (response.status >= 400 ? "HTTP " + response.status : null),
+    );
+    const message = response.status + " (" + timeTaken.toFixed(2) + " ms)";
+    if (response.status >= 400) toast.error(message, { id: toastId });
+    else toast.success(message, { id: toastId });
+  } catch (error) {
+    if (!executionStore.isCurrent(tabId, requestId)) return;
+    const message = error instanceof Error ? error.message : String(error);
+    responseStore.setResponse(
+      {
+        status: 500,
+        body: message,
+        headers: {},
+        size: 0,
+        timeTaken: performance.now() - startedAt,
+        body_type: "text/plain",
+        bodyBinary: new Uint8Array(0),
+        error: message,
+      },
+      tabId,
+    );
+    executionStore.finishExecution(tabId, requestId, message);
+    toast.error(message, { id: toastId });
+  } finally {
+    signal.removeEventListener("abort", cancel);
+  }
 }
 
 export { handleSend };

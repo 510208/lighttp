@@ -11,6 +11,7 @@ import VueHex from "vuehex";
 import "vuehex/style.css";
 
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import { initializeWorkspacePersistence } from "@/services/workspace/persistence";
 import { applyColorTheme } from "@/services/colorTheme";
 
 async function bootstrap() {
@@ -32,6 +33,8 @@ async function bootstrap() {
   app.use(i18n);
   app.use(router);
   app.use(VueHex);
+
+  initializeWorkspacePersistence();
 
   app.mount("#app");
 }

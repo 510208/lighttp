@@ -46,7 +46,7 @@ export async function openLghttpFile(filePath: string): Promise<boolean> {
 
     // 載入到 Pinia Store
     const requestStore = useRequestStore();
-    requestStore.loadRequestData(requestData);
+    requestStore.loadRequestData(sanitizedData);
 
     console.log("[LigHTTP CLI] 成功載入檔案資料至 Store");
     return true;

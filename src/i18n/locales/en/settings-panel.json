@@ -9,6 +9,11 @@
   "settings_panel.general.language.label": "Interface Language",
   "settings_panel.general.language.description": "Select the language to be used in the interface.",
   "settings_panel.general.language.placeholder": "Select Language",
+  "settings_panel.general.startup_behavior.label": "On Startup",
+  "settings_panel.general.startup_behavior.description": "Choose what to show the next time the application starts. Resuming restores request drafts, but not responses.",
+  "settings_panel.general.startup_behavior.new_request": "Open a new request workspace",
+  "settings_panel.general.startup_behavior.resume": "Resume the previous workspace",
+  "settings_panel.general.startup_behavior.empty": "Show no workspace",
   "settings_panel.general.check_update_when_open.label": "Check for Updates on Startup",
   "settings_panel.general.check_update_when_open.description": "When enabled, the application will automatically check for new versions when it starts up.",
 
@@ -29,7 +34,6 @@
   "settings_panel.themes.zoom_ratio.description": "Set the zoom ratio, which affects the display scale of the editor content. You can also use Ctrl+滚轮 to adjust.",
   "settings_panel.themes.color_theme.label": "Interface Color Theme",
   "settings_panel.themes.color_theme.description": "Import or switch LigHTTP .lhtheme.css theme files.",
-
 
   "settings_panel.update.title": "Check for Updates",
   "settings_panel.update.checking_for_updates": "Checking for updates...",

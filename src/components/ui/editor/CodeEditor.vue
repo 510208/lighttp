@@ -29,10 +29,7 @@ const emit = defineEmits<{
 
 const language = ref("json");
 const editorContainer = ref<HTMLElement | null>(null);
-const code = ref(
-  props.modelValue ||
-    `{\n  "name": "SamHacker",\n  "age": null,\n  "isAdmin": true\n}`,
-);
+const code = ref(props.modelValue ?? "");
 
 // 使用 shallowRef 儲存實例以優化效能
 const editorInstance = shallowRef<MonacoEditorAlias | null>(null);
@@ -53,8 +50,6 @@ onMounted(() => {
         theme: "catppuccinomocha",
         automaticLayout: true,
       });
-
-      emit("update:modelValue", code.value);
 
       editorInstance.value.getModel().onDidChangeContent(() => {
         const newValue = editorInstance.value?.getValue() || "";
@@ -106,7 +101,10 @@ function changeLanguage(newLanguage: AcceptableValue) {
 // 組件卸載時銷毀實例，防止記憶體洩漏
 onUnmounted(() => {
   if (editorInstance.value) {
+    const model = editorInstance.value.getModel();
     editorInstance.value.dispose();
+    model?.dispose();
+    editorInstance.value = null;
   }
 });
 
