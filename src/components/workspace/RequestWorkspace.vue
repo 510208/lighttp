@@ -12,6 +12,7 @@ import BrowserTabBar from "./BrowserTabBar.vue";
 import RequestBuilder from "@/layouts/RequestBuilder.vue";
 import ResponsePanel from "@/components/Home/ResponsePanel/ResponsePanel.vue";
 import StatusBar from "@/components/Home/StatusBar/StatusBar.vue";
+import Separator from "../ui/separator/Separator.vue";
 
 const workspace = useWorkspaceStore();
 const groupDirection = ref<"vertical" | "horizontal">("vertical");
@@ -35,6 +36,9 @@ onUnmounted(() => window.removeEventListener("resize", checkScreenSize));
 <template>
   <main class="flex min-h-0 flex-1">
     <BrowserTabBar />
+
+    <Separator orientation="vertical" class="opacity-40" />
+
     <section
       v-if="workspace.activeTabId"
       :id="'workspace-panel-' + workspace.activeTabId"
