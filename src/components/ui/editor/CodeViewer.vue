@@ -124,7 +124,10 @@ watch(
 
 onUnmounted(() => {
   if (editorInstance.value) {
+    const model = editorInstance.value.getModel();
     editorInstance.value.dispose();
+    model?.dispose();
+    editorInstance.value = null;
   }
 });
 </script>
