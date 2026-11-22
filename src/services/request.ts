@@ -7,6 +7,7 @@ import {
 import { useWorkspaceStore } from "@/stores/useWorkspaceStore";
 import { useExecutionStore } from "@/stores/useExecutionStore";
 import { toast } from "vue-sonner";
+import { validateBodyFiles } from "@/lib/requestBody";
 
 interface BackendResponse {
   status: number;
@@ -29,6 +30,7 @@ async function handleSend() {
 
   let payload;
   try {
+    validateBodyFiles(requestStore);
     payload = requestStore.getRequestData();
     if (!/^https?:\/\//i.test(payload.url))
       payload.url = "http://" + payload.url;
