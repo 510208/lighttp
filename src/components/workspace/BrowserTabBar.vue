@@ -19,6 +19,41 @@ const draggedTabId = ref<string | null>(null);
 const dropTarget = ref<{ tabId: string; position: "before" | "after" } | null>(
   null,
 );
+let lastWheelSwitch = -Infinity;
+let wheelDelta = 0;
+let lastWheelEvent = -Infinity;
+
+function switchWithWheel(event: WheelEvent) {
+  if (
+    event.ctrlKey ||
+    event.metaKey ||
+    event.altKey ||
+    draggedTabId.value ||
+    workspace.tabs.length < 2
+  )
+    return;
+  const delta =
+    Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+      ? event.deltaY
+      : event.deltaX;
+  if (!delta) return;
+  event.preventDefault();
+  const now = performance.now();
+  if (now - lastWheelEvent > 180 || Math.sign(delta) !== Math.sign(wheelDelta))
+    wheelDelta = 0;
+  lastWheelEvent = now;
+  // Normalize mouse wheels and touchpads; avoid racing through tabs on momentum.
+  wheelDelta +=
+    delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 100 : 1);
+  if (now - lastWheelSwitch < 160) {
+    wheelDelta = 0;
+    return;
+  }
+  if (Math.abs(wheelDelta) < 24) return;
+  workspace.cycleTabs(wheelDelta > 0 ? 1 : -1);
+  lastWheelSwitch = now;
+  wheelDelta = 0;
+}
 const dragType = "application/x-lighttp-tab";
 
 function titleFor(tab: WorkspaceTab) {
@@ -28,16 +63,19 @@ function titleFor(tab: WorkspaceTab) {
     t("home.workspace.untitled")
   );
 }
+
 function finishDrag() {
   draggedTabId.value = null;
   dropTarget.value = null;
 }
+
 function startDrag(tabId: string, event: DragEvent) {
   if (!event.dataTransfer) return;
   draggedTabId.value = tabId;
   event.dataTransfer.effectAllowed = "move";
   event.dataTransfer.setData(dragType, tabId);
 }
+
 function dragOver(tabId: string, event: DragEvent) {
   if (!draggedTabId.value || draggedTabId.value === tabId) {
     dropTarget.value = null;
@@ -122,6 +160,7 @@ watch(
   <aside
     class="flex h-full min-h-0 w-11 shrink-0 flex-col px-1.5 py-5"
     :aria-label="$t('home.workspace.tabs')"
+    @wheel="switchWithWheel"
   >
     <TooltipProvider :delay-duration="250">
       <div
