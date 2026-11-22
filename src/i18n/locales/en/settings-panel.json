@@ -6,6 +6,10 @@
   "settings_panel.tabs.update": "Updates",
 
   "settings_panel.general.title": "General Settings",
+  "settings_panel.general.settings_file.label": "Settings File",
+  "settings_panel.general.settings_file.description": "Open the LigHTTP settings file location in your file manager.",
+  "settings_panel.general.settings_file.open": "Open File Location",
+  "settings_panel.general.settings_file.open_failed": "Unable to open the settings file location. Please try again later.",
   "settings_panel.general.language.label": "Interface Language",
   "settings_panel.general.language.description": "Select the language to be used in the interface.",
   "settings_panel.general.language.placeholder": "Select Language",

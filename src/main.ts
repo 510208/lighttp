@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { i18n } from "@/i18n";
+import { changeLang, i18n } from "@/i18n";
 import { TauriPluginPinia } from "@tauri-store/pinia";
 
 import App from "./App.vue";
@@ -25,6 +25,9 @@ async function bootstrap() {
   // 初始化設定儲存系統
   const settingsStore = useSettingsStore(pinia);
   await settingsStore.$tauri.start();
+
+  // 還原設定不會呼叫 setLanguage，需在畫面掛載前同步翻譯語言。
+  changeLang(settingsStore.language);
 
   // 套用使用者主題
   applyColorTheme(settingsStore.colorTheme.css);

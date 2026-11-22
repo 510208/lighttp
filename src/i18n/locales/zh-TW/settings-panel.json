@@ -6,6 +6,10 @@
   "settings_panel.tabs.update": "更新",
 
   "settings_panel.general.title": "一般設定",
+  "settings_panel.general.settings_file.label": "設定檔案",
+  "settings_panel.general.settings_file.description": "在檔案管理員中開啟 LigHTTP 設定檔案的儲存位置。",
+  "settings_panel.general.settings_file.open": "開啟儲存位置",
+  "settings_panel.general.settings_file.open_failed": "無法開啟設定檔案的儲存位置，請稍後再試。",
   "settings_panel.general.language.label": "介面語言",
   "settings_panel.general.language.description": "選擇欲在界面中使用的語言",
   "settings_panel.general.language.placeholder": "選擇語言",
