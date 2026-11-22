@@ -47,9 +47,11 @@ export default defineConfig(({ mode }) => {
       target: "es2022",
       rollupOptions: {
         output: {
-          manualChunks: {
-            // 將 monaco-editor 及其資源獨立拆分成 monaco.js
-            monaco: ["monaco-editor"],
+          manualChunks(id) {
+            // Vite 8 僅接受函式形式，仍將 Monaco 及其資源獨立分包。
+            if (id.includes("/node_modules/monaco-editor/")) {
+              return "monaco";
+            }
           },
         },
       },
