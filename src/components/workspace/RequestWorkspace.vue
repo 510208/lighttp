@@ -74,7 +74,7 @@ onUnmounted(() => window.removeEventListener("resize", checkScreenSize));
           @collapse="isResponsePanelOpen = false"
           @expand="isResponsePanelOpen = true"
         >
-          <ResponsePanel :key="workspace.activeTabId" />
+          <ResponsePanel />
         </ResizablePanel>
       </ResizablePanelGroup>
       <StatusBar

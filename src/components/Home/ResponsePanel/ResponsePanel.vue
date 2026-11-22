@@ -79,7 +79,7 @@ import WaitingResponse from "./WaitingResponseMessage.vue";
 import ErrorResponse from "./ErrorResponse.vue";
 
 import { useResponseStore } from "@/stores/useResponseStore.ts";
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 
 import { Dot, Timer, File } from "@lucide/vue";
 import ActionDropdown from "@/components/Home/ResponsePanel/common/ActionDropdown.vue";
@@ -92,26 +92,11 @@ const responseStatus = computed(() => {
   return "success";
 });
 
-// ------
-// 檢查回應是否有問題
-const responseIsNormal = ref(true as boolean | undefined);
-watch(
-  () => responseStore.status,
-  (newStatus) => {
-    if (newStatus === null) {
-      responseIsNormal.value = true;
-    } else if (newStatus === undefined) {
-      // undefined 代表仍在等待回應
-      responseIsNormal.value = undefined;
-      console.log("Response status is undefined, waiting for response...");
-    } else if (responseStore.error) {
-      responseIsNormal.value = false;
-    } else {
-      responseIsNormal.value = true;
-    }
-  },
-  { immediate: true },
-);
+// Observe the response identity and error too, even when two tabs share a status.
+const responseIsNormal = computed(() => {
+  if (responseStore.status === undefined) return undefined;
+  return !responseStore.error;
+});
 </script>
 
 <style scoped></style>

@@ -3,6 +3,8 @@
     <CodeViewer
       :model-value="responseStore.body"
       :language="responseLanguage"
+      :cache-key="workspace.activeTabId ?? undefined"
+      :cache-keys="tabIds"
       v-if="!bodyIsMedia()"
     />
     <div
@@ -69,7 +71,8 @@ import CodeViewer from "@/components/ui/editor/CodeViewer.vue";
 
 import { useResponseStore } from "@/stores/useResponseStore.ts";
 import { Binary } from "@lucide/vue";
-import { onUnmounted, ref, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
+import { useWorkspaceStore } from "@/stores/useWorkspaceStore";
 import { toast } from "vue-sonner";
 import { useI18n } from "vue-i18n";
 
@@ -78,6 +81,8 @@ const forceShowMedia = ref(false);
 const mediaUrl = ref<string>("");
 
 const responseStore = useResponseStore();
+const workspace = useWorkspaceStore();
+const tabIds = computed(() => workspace.tabs.map((tab) => tab.id));
 const URL = globalThis.URL;
 
 // 監控 responseStore.headers 中的 Content-Type，根據不同的類型設置 responseLanguage
@@ -113,8 +118,9 @@ function getPrimaryContentType(): string {
 }
 
 watch(
-  () => responseStore.headers,
-  (newHeaders) => {
+  () => [workspace.activeTabId, responseStore.headers] as const,
+  ([, newHeaders]) => {
+    forceShowMedia.value = false;
     if (!newHeaders || typeof newHeaders !== "object") {
       responseLanguage.value = "json";
       return;
