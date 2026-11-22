@@ -25,7 +25,7 @@ export const useRequestStore = defineStore("request", () => {
   function createRequest(): RequestState {
     return {
       method: "GET",
-      url: "",
+      url: "https://api.samhacker.xyz",
       params: [],
       headers: [],
       auth: { type: "none", content: {} },
@@ -34,7 +34,7 @@ export const useRequestStore = defineStore("request", () => {
       proxyConfig: {
         enabled: false,
         checkBeforeSend: false,
-        protocol: "http",
+        protocol: "https",
         host: "",
         port: 0,
       },
