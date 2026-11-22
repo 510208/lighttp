@@ -1,6 +1,9 @@
 <template>
   <div class="lh-settings-page">
-    <SettingsPageHeader :title="$t('settings_panel.general.title')" />
+    <SettingsPageHeader
+      :title="$t('settings_panel.general.title')"
+      :description="$t('settings_panel.general.description')"
+    />
 
     <SettingsSection>
       <SettingRow
@@ -93,14 +96,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-import { getStorePath, saveNow } from "@tauri-store/pinia";
-import { dirname } from "@tauri-apps/api/path";
-import { openPath } from "@tauri-apps/plugin-opener";
-import { toast } from "vue-sonner";
-import { languages, useI18n } from "@/i18n";
-import { useSettingsStore } from "@/stores/useSettingsStore";
-import { Separator } from "@/components/ui/separator";
+import {
+  SettingAction,
+  SettingRow,
+  SettingsPageHeader,
+  SettingsSection,
+  SettingSwitch,
+} from "@/components/settings/components";
 import {
   Select,
   SelectContent,
@@ -109,17 +111,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  SettingsPageHeader,
-  SettingsSection,
-  SettingRow,
-  SettingSwitch,
-  SettingAction,
-} from "@/components/settings/components";
+import { Separator } from "@/components/ui/separator";
+import { languages, useI18n } from "@/i18n";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { dirname } from "@tauri-apps/api/path";
+import { openPath } from "@tauri-apps/plugin-opener";
+import { getStorePath, saveNow } from "@tauri-store/pinia";
+import { computed, onMounted, ref } from "vue";
+import { toast } from "vue-sonner";
 
 import { FolderOpen } from "@lucide/vue";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const settingsStore = useSettingsStore();
 const { t } = useI18n();
@@ -128,7 +136,7 @@ const configFilePath = ref("N/A");
 
 onMounted(async () => {
   configFilePath.value = await getStorePath(settingsStore.$id);
-})
+});
 
 async function openSettingsLocation(): Promise<void> {
   if (openingSettingsFile.value) return;
