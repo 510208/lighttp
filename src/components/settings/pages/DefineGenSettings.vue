@@ -1,6 +1,9 @@
 <template>
   <div class="lh-settings-page">
-    <SettingsPageHeader :title="$t('settings_panel.define_gen.title')" />
+    <SettingsPageHeader
+      :title="$t('settings_panel.define_gen.title')"
+      :description="$t('settings_panel.general.description')"
+    />
 
     <SettingsSection>
       <SettingRow
@@ -9,7 +12,9 @@
       >
         <Select v-model="settingsStore.quicktypeConfig.indentation">
           <SelectTrigger class="w-32">
-            <SelectValue :placeholder="$t('settings_panel.define_gen.indent.placeholder')" />
+            <SelectValue
+              :placeholder="$t('settings_panel.define_gen.indent.placeholder')"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -17,10 +22,18 @@
                 {{ $t("settings_panel.define_gen.indent.options.tab") }}
               </SelectItem>
               <SelectItem :value="'  '">
-                {{ $t("settings_panel.define_gen.indent.options.spaces", { count: 2 }) }}
+                {{
+                  $t("settings_panel.define_gen.indent.options.spaces", {
+                    count: 2,
+                  })
+                }}
               </SelectItem>
               <SelectItem :value="'    '">
-                {{ $t("settings_panel.define_gen.indent.options.spaces", { count: 4 }) }}
+                {{
+                  $t("settings_panel.define_gen.indent.options.spaces", {
+                    count: 4,
+                  })
+                }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
@@ -40,17 +53,25 @@
 
       <SettingRow
         :title="$t('settings_panel.define_gen.all_as_optional.label')"
-        :description="$t('settings_panel.define_gen.all_as_optional.description')"
+        :description="
+          $t('settings_panel.define_gen.all_as_optional.description')
+        "
       >
-        <SettingSwitch v-model="settingsStore.quicktypeConfig.allPropertiesOptional" />
+        <SettingSwitch
+          v-model="settingsStore.quicktypeConfig.allPropertiesOptional"
+        />
       </SettingRow>
     </SettingsSection>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useSettingsStore } from "@/stores/useSettingsStore";
-import { Separator } from "@/components/ui/separator";
+import {
+  SettingRow,
+  SettingsPageHeader,
+  SettingsSection,
+  SettingSwitch,
+} from "@/components/settings/components";
 import {
   Select,
   SelectContent,
@@ -59,12 +80,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  SettingsPageHeader,
-  SettingsSection,
-  SettingRow,
-  SettingSwitch,
-} from "@/components/settings/components";
+import { Separator } from "@/components/ui/separator";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 
 const settingsStore = useSettingsStore();
 </script>

@@ -7,6 +7,7 @@
   "settings_panel.tabs.update": "Updates",
 
   "settings_panel.general.title": "General Settings",
+  "settings_panel.general.description": "You can master the general settings of LigHTTP.",
   "settings_panel.general.settings_file.label": "Settings File",
   "settings_panel.general.settings_file.description": "Open the LigHTTP settings file location in your file manager.",
   "settings_panel.general.settings_file.open": "Open File Location",
@@ -44,6 +45,7 @@
   "settings_panel.http_client.httpsOnly.description": "Reject HTTP requests and redirects to HTTP when enabled. Disabled by default.",
 
   "settings_panel.themes.title": "Theme Settings",
+  "settings_panel.themes.description": "Make your own LigHTTP in this page!",
   "settings_panel.themes.theme_selection.label": "Background Image URL",
   "settings_panel.themes.theme_selection.description": "Enter a direct image URL to use as the application's background image.",
   "settings_panel.themes.theme_selection.placeholder": "https://example.com/image.jpg",
@@ -72,6 +74,7 @@
   "settings_panel.update.update_button.label": "Update Now",
 
   "settings_panel.define_gen.title": "Definition Generator Settings",
+  "settings_panel.define_gen.description": "Set the behavior of QuickType to match your development habits",
   "settings_panel.define_gen.indent.label": "Default Indent Size",
   "settings_panel.define_gen.indent.placeholder": "Select Indent Size",
   "settings_panel.define_gen.indent.description": "Set the number of spaces to use for indentation in the generated structure definitions. Default is 2. This setting may be overridden by certain generators.",

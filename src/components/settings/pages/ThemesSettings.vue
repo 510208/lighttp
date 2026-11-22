@@ -1,6 +1,9 @@
 <template>
   <div class="lh-settings-page">
-    <SettingsPageHeader :title="$t('settings_panel.themes.title')" />
+    <SettingsPageHeader
+      :title="$t('settings_panel.themes.title')"
+      :description="$t('settings_panel.general.description')"
+    />
 
     <SettingsSection>
       <SettingRow
@@ -17,7 +20,9 @@
 
       <SettingRow
         :title="$t('settings_panel.themes.background_image_opacity.label')"
-        :description="$t('settings_panel.themes.background_image_opacity.description')"
+        :description="
+          $t('settings_panel.themes.background_image_opacity.description')
+        "
         layout="vertical"
       >
         <SettingSlider
@@ -31,7 +36,9 @@
 
       <SettingRow
         :title="$t('settings_panel.themes.background_image_blur.label')"
-        :description="$t('settings_panel.themes.background_image_blur.description')"
+        :description="
+          $t('settings_panel.themes.background_image_blur.description')
+        "
         layout="vertical"
       >
         <SettingSlider
@@ -60,18 +67,20 @@
 
             <div class="min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <p class="font-semibold text-lh-text">
+                <p class="text-lh-text font-semibold">
                   {{ settingsStore.colorTheme.name }}
                 </p>
                 <span class="text-lh-overlay-1 text-xs">
                   {{ settingsStore.colorTheme.author }}
                 </span>
-                <span class="text-lh-overlay-1 text-xs" aria-hidden="true">·</span>
+                <span class="text-lh-overlay-1 text-xs" aria-hidden="true"
+                  >·</span
+                >
                 <span class="text-lh-overlay-1 text-xs">
                   {{ settingsStore.colorTheme.license }}
                 </span>
               </div>
-              <p class="mt-2 text-sm text-lh-subtext-0">
+              <p class="text-lh-subtext-0 mt-2 text-sm">
                 {{ settingsStore.colorTheme.description }}
               </p>
             </div>
@@ -116,7 +125,9 @@
     <SettingsSection>
       <SettingRow
         :title="$t('settings_panel.themes.binary_editor_theme.label')"
-        :description="$t('settings_panel.themes.binary_editor_theme.description')"
+        :description="
+          $t('settings_panel.themes.binary_editor_theme.description')
+        "
       >
         <SettingSelect
           v-model="settingsStore.hexViewerConfig.theme"
@@ -129,7 +140,9 @@
         :title="$t('settings_panel.themes.zoom_ratio.label')"
         :description="$t('settings_panel.themes.zoom_ratio.description')"
       >
-        <div class="flex w-full max-w-56 gap-0 overflow-hidden rounded-lg border">
+        <div
+          class="flex w-full max-w-56 gap-0 overflow-hidden rounded-lg border"
+        >
           <SettingAction
             variant="secondary"
             size="icon"
@@ -159,14 +172,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { Plus, Minus, Palette, RotateCcw } from "@lucide/vue";
+import { Minus, Palette, Plus, RotateCcw } from "@lucide/vue";
 import { open } from "@tauri-apps/plugin-dialog";
 import { readTextFile } from "@tauri-apps/plugin-fs";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { toast } from "vue-sonner";
 
-import Separator from "@/components/ui/separator/Separator.vue";
 import {
   SettingAction,
   SettingInput,
@@ -176,8 +188,9 @@ import {
   SettingsPageHeader,
   SettingsSection,
 } from "@/components/settings/components";
-import { useSettingsStore, loadColorTheme } from "@/stores/useSettingsStore";
+import Separator from "@/components/ui/separator/Separator.vue";
 import { applyColorTheme } from "@/services/colorTheme";
+import { loadColorTheme, useSettingsStore } from "@/stores/useSettingsStore";
 
 const settingsStore = useSettingsStore();
 const { t } = useI18n();
@@ -190,7 +203,11 @@ const colorPreviews = computed(() => {
   const styles = getComputedStyle(document.documentElement);
   const colors = [
     { name: "text", label: "Text", variable: "--catppuccin-color-text" },
-    { name: "overlay-1", label: "Overlay 1", variable: "--catppuccin-color-overlay1" },
+    {
+      name: "overlay-1",
+      label: "Overlay 1",
+      variable: "--catppuccin-color-overlay1",
+    },
     { name: "base", label: "Base Pane", variable: "--catppuccin-color-base" },
     { name: "green", label: "Green", variable: "--catppuccin-color-green" },
     { name: "red", label: "Red", variable: "--catppuccin-color-red" },
