@@ -1,18 +1,10 @@
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { ref } from "vue";
+
+// About shares the main native window with the request workspace.
+const aboutOpen = ref(false);
 
 function openAboutWindow() {
-  const aboutWindow = new WebviewWindow("about", {
-    url: "/about", // 或是您的路由路徑
-    title: "About",
-    width: 600,
-    height: 500,
-    resizable: false,
-    maximizable: false,
-    alwaysOnTop: true, // 讓它保持在最上層
-    fullscreen: false,
-  });
-
-  return aboutWindow;
+  aboutOpen.value = true;
 }
 
-export { openAboutWindow };
+export { aboutOpen, openAboutWindow };
