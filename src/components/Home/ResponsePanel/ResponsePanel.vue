@@ -104,7 +104,7 @@ watch(
       // undefined 代表仍在等待回應
       responseIsNormal.value = undefined;
       console.log("Response status is undefined, waiting for response...");
-    } else if (newStatus === 500) {
+    } else if (responseStore.error) {
       responseIsNormal.value = false;
     } else {
       responseIsNormal.value = true;
