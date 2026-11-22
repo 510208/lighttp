@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useWorkspaceStore } from "./useWorkspaceStore";
 import { restoreWorkspace } from "@/services/workspace/persistence";
-import type { RequestState } from "@/types/workspace";
+import type { FormDataField, RequestState } from "@/types/workspace";
 import {
   useTableManager,
   type KeyValuePair,
@@ -31,6 +31,9 @@ export const useRequestStore = defineStore("request", () => {
       auth: { type: "none", content: {} },
       bodyType: "None",
       bodyContent: "",
+      formData: [],
+      urlEncoded: [],
+      bodyFilePath: null,
       proxyConfig: {
         enabled: false,
         checkBeforeSend: false,
@@ -52,6 +55,12 @@ export const useRequestStore = defineStore("request", () => {
       auth: { type: data.auth.auth_type, content: data.auth.content ?? {} },
       bodyType: data.body.type,
       bodyContent: data.body.content,
+      formData: data.body.formData.map((item) => ({
+        ...item,
+        id: item.id || crypto.randomUUID(),
+      })),
+      urlEncoded: pairs(data.body.urlEncoded),
+      bodyFilePath: data.body.filePath,
       proxyConfig: data.proxy
         ? {
             ...data.proxy,
@@ -92,6 +101,9 @@ export const useRequestStore = defineStore("request", () => {
   const auth = field("auth");
   const bodyType = field("bodyType");
   const bodyContent = field("bodyContent");
+  const formData = field("formData");
+  const urlEncoded = field("urlEncoded");
+  const bodyFilePath = field("bodyFilePath");
   const proxyConfig = field("proxyConfig");
 
   function setAuth(newAuth: AuthStore) {
@@ -145,6 +157,30 @@ export const useRequestStore = defineStore("request", () => {
 
   const paramManager = useTableManager(params, syncUrlFromParams);
   const headerManager = useTableManager(headers);
+  const urlEncodedManager = useTableManager(urlEncoded);
+
+  function addFormData() {
+    formData.value.push({
+      id: crypto.randomUUID(),
+      enabled: true,
+      key: "",
+      value: "",
+      type: "text",
+      filePath: null,
+    });
+  }
+
+  function updateFormData(
+    id: string,
+    updates: Partial<Omit<FormDataField, "id">>,
+  ) {
+    const item = formData.value.find((item) => item.id === id);
+    if (item) Object.assign(item, updates);
+  }
+
+  function removeFormData(id: string) {
+    formData.value = formData.value.filter((item) => item.id !== id);
+  }
 
   // Activating a draft must never rewrite its parameters.
   watch(
@@ -238,6 +274,9 @@ export const useRequestStore = defineStore("request", () => {
       body: {
         type: bodyType.value,
         content: bodyContent.value,
+        formData: formData.value,
+        urlEncoded: urlEncoded.value,
+        filePath: bodyFilePath.value,
       },
       proxy: checkedProxyConfig,
     });
@@ -252,7 +291,13 @@ export const useRequestStore = defineStore("request", () => {
       params: request.params,
       headers: request.headers,
       auth: renameAuthType(request.auth),
-      body: { type: request.bodyType, content: request.bodyContent },
+      body: {
+        type: request.bodyType,
+        content: request.bodyContent,
+        formData: request.formData,
+        urlEncoded: request.urlEncoded,
+        filePath: request.bodyFilePath,
+      },
       proxy: { ...request.proxyConfig, auth: request.proxyConfig.auth ?? null },
     };
   }
@@ -296,6 +341,16 @@ export const useRequestStore = defineStore("request", () => {
     bodyContent,
     setBodyType,
     setBodyContent,
+    formData,
+    addFormData,
+    updateFormData,
+    removeFormData,
+    urlEncoded,
+    addUrlEncoded: () => urlEncodedManager.add("", ""),
+    updateUrlEncoded: urlEncodedManager.update,
+    removeUrlEncoded: urlEncodedManager.remove,
+    toggleUrlEncoded: urlEncodedManager.toggle,
+    bodyFilePath,
 
     proxyConfig,
     setProxyConfig,
