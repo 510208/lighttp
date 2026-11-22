@@ -247,13 +247,16 @@ async function generateRustType() {
 }
 
 function generateCurlCommand(symbol: string) {
-  const curlCommand = getCurlCommand(
-    requestStore,
-    settingsStore.getQuicktypeIndentString(),
-    symbol,
-  );
-  generatedSchema.value = curlCommand;
-  schemaLanguage.value = "shell";
-  isModalOpen.value = true;
+  try {
+    generatedSchema.value = getCurlCommand(
+      requestStore,
+      settingsStore.getQuicktypeIndentString(),
+      symbol,
+    );
+    schemaLanguage.value = "shell";
+    isModalOpen.value = true;
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : String(error));
+  }
 }
 </script>

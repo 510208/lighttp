@@ -4,7 +4,9 @@
     @update:model-value="(v) => emit('update:modelValue', v as string)"
   >
     <SelectTrigger size="sm">
-      <SelectValue placeholder="選擇內容類型" />
+      <SelectValue
+        :placeholder="$t('home.settings_panel.tabs.body.choose_placeholder')"
+      />
     </SelectTrigger>
     <SelectContent>
       <SelectItem
