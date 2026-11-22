@@ -128,6 +128,9 @@ interface Contributor {
   github_url: string;
 }
 
+const props = defineProps<{ embedded?: boolean }>();
+const emit = defineEmits<{ close: [] }>();
+
 const plugins = [taskLists, MarkdownItGitHubAlerts];
 
 const appVersion = ref("");
@@ -165,6 +168,10 @@ const displayContributors = computed(() => {
 });
 
 function closeWindow() {
+  if (props.embedded) {
+    emit("close");
+    return;
+  }
   const appWindow = Window.getCurrent();
   appWindow.close();
 }
