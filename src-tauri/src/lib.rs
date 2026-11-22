@@ -4,13 +4,26 @@ mod services;
 pub mod utils;
 
 use std::sync::Mutex;
+#[cfg(desktop)]
+use tauri::Manager;
 use utils::cli::handle_cli_args;
 use utils::cli::AppCliState;
 use utils::cli::CliData;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let builder = tauri::Builder::default();
+    #[cfg(desktop)]
+    let builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+        if let Some(window) = app.get_webview_window("main") {
+            let _ = window.unminimize();
+            let _ = window.show();
+            let _ = window.set_focus();
+        }
+    }));
+
+    builder
+        .manage(commands::RequestExecutions::default())
         .manage(AppCliState(Mutex::new(CliData::default())))
         .plugin(tauri_plugin_cli::init())
         .setup(|app| {
@@ -28,6 +41,7 @@ pub fn run() {
         .plugin(tauri_plugin_pinia::init())
         .invoke_handler(tauri::generate_handler![
             commands::handle_request,
+            commands::cancel_request,
             commands::get_cli_state
         ])
         .run(tauri::generate_context!())
