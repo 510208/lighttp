@@ -1,4 +1,5 @@
 use crate::models::{RequestPayload, ResponsePayload};
+use crate::services::body::apply_body;
 use crate::utils::auth::handle_auth;
 use crate::utils::other::{get_content_type, get_deep_error, to_hashmap};
 use crate::utils::proxy::{check_proxy, handle_proxy};
@@ -8,7 +9,7 @@ use reqwest::{Client, Method};
 use std::collections::HashMap;
 use std::time::Duration;
 use tokio::time::timeout;
-use tracing::{debug, error, info};
+use tracing::{error, info};
 
 const DEFAULT_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 const MAX_RESPONSE_SIZE: usize = 10 * 1024 * 1024;
@@ -98,9 +99,28 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     };
 
     let mut request_builder = client.request(method, &payload.url);
+    let is_multipart = payload
+        .body
+        .as_ref()
+        .is_some_and(|body| body.body_type == "Form Data");
+    let has_content_type = payload
+        .headers
+        .iter()
+        .any(|header| header.key.eq_ignore_ascii_case("content-type"));
+    let has_content_length = payload
+        .headers
+        .iter()
+        .any(|header| header.key.eq_ignore_ascii_case("content-length"));
 
     // DONE: 添加標頭
     for header in payload.headers {
+        // Multipart 的 boundary 與長度必須對應編碼器產生的內容。
+        if is_multipart
+            && (header.key.eq_ignore_ascii_case("content-type")
+                || header.key.eq_ignore_ascii_case("content-length"))
+        {
+            continue;
+        }
         request_builder = request_builder.header(&header.key, &header.value);
     }
 
@@ -118,25 +138,18 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
         }
     }
 
-    // DONE: 處理正文內容
     if let Some(body) = payload.body {
-        match body.body_type.as_str() {
-            "None" => {
-                debug!("[execute_request] 無正文內容");
-            }
-            "Raw" => {
-                debug!("[execute_request] 處理 Raw Body: {}", body.content);
-                request_builder = request_builder.body(body.content);
-            }
-            // 其他類型的處理可以在這裡添加
-            _ => {
-                error!("[execute_request] 不支援的 Body 類型: {}", body.body_type);
-                return build_error_response(
-                    400,
-                    format!("不支援的 Body 類型: {}", body.body_type),
-                );
-            }
-        }
+        request_builder = match apply_body(
+            request_builder,
+            body,
+            has_content_type,
+            has_content_length,
+        )
+        .await
+        {
+            Ok(request) => request,
+            Err(error) => return build_error_response(400, error),
+        };
     }
 
     // DONE: 送請求
