@@ -31,6 +31,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       :class="cn(
         'pointer-events-none block size-4 rounded-full bg-lh-text ring-0 transition-transform',
         'data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',
+        'data-[state=checked]:bg-lh-crust'
       )"
     >
       <slot name="thumb" v-bind="slotProps" />
