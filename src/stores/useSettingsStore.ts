@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { Ref, ref, watch } from "vue";
 import { changeLang } from "@/i18n";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { createDefaultHttpClientConfig } from "@/lib/httpClientConfig";
 
 type StartupBehavior = "new-request" | "resume" | "empty";
 
@@ -88,6 +89,7 @@ export const useSettingsStore = defineStore(
     } as unknown as Ref<ColorTheme>);
     const autoUpdate = ref(true);
     const startupBehavior = ref<StartupBehavior>("resume");
+    const httpClientConfig = ref(createDefaultHttpClientConfig());
     const zoomRatio = ref(1.0 as number);
 
     function setQuicktypeConfig(newConfig: quicktypeConfig) {
@@ -173,6 +175,7 @@ export const useSettingsStore = defineStore(
 
       autoUpdate,
       startupBehavior,
+      httpClientConfig,
 
       backgroundImageUrl,
       setBackgroundImageUrl,

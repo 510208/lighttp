@@ -36,6 +36,7 @@ import type { Component } from "vue";
 import {
   CircleFadingArrowUp,
   Hash,
+  Network,
   Palette,
   Settings,
 } from "@lucide/vue";
@@ -45,13 +46,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  SettingsContent,
-  SettingsLayout,
-  SettingsSidebar,
-} from "./layout";
+import { SettingsContent, SettingsLayout, SettingsSidebar } from "./layout";
 import type { SettingsNavigationItem } from "./layout";
 import GeneralSettings from "./pages/GeneralSettings.vue";
+import HttpClientSettings from "./pages/HttpClientSettings.vue";
 import ThemesSettings from "./pages/ThemesSettings.vue";
 import DefineGenSettings from "./pages/DefineGenSettings.vue";
 import UpdateSettings from "./pages/UpdateSettings.vue";
@@ -90,13 +88,27 @@ const activeSection = computed({
 const { t } = useI18n();
 const navigation = computed<SettingsNavigationItem[]>(() => [
   { value: "general", label: t("settings_panel.tabs.general"), icon: Settings },
+  {
+    value: "http_client",
+    label: t("settings_panel.tabs.http_client"),
+    icon: Network,
+  },
   { value: "themes", label: t("settings_panel.tabs.themes"), icon: Palette },
-  { value: "define_gen", label: t("settings_panel.tabs.define_gen"), icon: Hash },
-  { value: "update", label: t("settings_panel.tabs.update"), icon: CircleFadingArrowUp },
+  {
+    value: "define_gen",
+    label: t("settings_panel.tabs.define_gen"),
+    icon: Hash,
+  },
+  {
+    value: "update",
+    label: t("settings_panel.tabs.update"),
+    icon: CircleFadingArrowUp,
+  },
 ]);
 
 const pages: Record<string, Component> = {
   general: GeneralSettings,
+  http_client: HttpClientSettings,
   themes: ThemesSettings,
   define_gen: DefineGenSettings,
   update: UpdateSettings,
