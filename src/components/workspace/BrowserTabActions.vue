@@ -23,8 +23,10 @@ defineEmits<{ create: [] }>();
         <Plus class="size-5" />
       </Button>
     </TooltipTrigger>
-    <TooltipContent side="right">{{
-      $t("home.workspace.new_request")
-    }}</TooltipContent>
+    <TooltipContent
+      side="right"
+      class="bg-lh-mantle text-lh-text border-lh-surface-1 max-w-80 border"
+      >{{ $t("home.workspace.new_request") }}</TooltipContent
+    >
   </Tooltip>
 </template>
