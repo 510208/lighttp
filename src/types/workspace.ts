@@ -10,6 +10,11 @@ export interface WorkspaceTab {
   updatedAt: number;
 }
 
+export interface FormDataField extends KeyValuePair {
+  type: "text" | "file";
+  filePath: string | null;
+}
+
 export interface RequestState {
   method: string;
   url: string;
@@ -18,6 +23,9 @@ export interface RequestState {
   auth: AuthStore;
   bodyType: string;
   bodyContent: string;
+  formData: FormDataField[];
+  urlEncoded: KeyValuePair[];
+  bodyFilePath: string | null;
   proxyConfig: ProxyConfig;
 }
 

@@ -1,8 +1,8 @@
-import { type RequestStoreData } from "@/stores/useRequestStore";
-import { BasicAuthContent } from "@/stores/authType";
+import type { RequestStoreData } from "@/stores/useRequestStore";
+import type { BasicAuthContent } from "@/stores/authType";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import { validateBodyFiles } from "@/lib/requestBody";
 
-// 監聽 settingsStore 中的 defaultIndentSize 設定，並變動 indentString 裡的空白長度
 function getIndentString(defaultIndentSize: number | string): string {
   const store = useSettingsStore();
   return (
@@ -10,19 +10,18 @@ function getIndentString(defaultIndentSize: number | string): string {
   );
 }
 
-// 安全轉義 POSIX/Bash Shell 參數
-function escapeShellArg(arg: string): string {
-  // 1. 移除危險的換行符號，避免 Terminal 貼上時自動換行執行
-  const sanitized = arg.replace(/[\r\n]+/g, "");
-
-  // 2. 在單引號包裹的 Bash 字串中，將 ' 替換為 '\''
-  return `'${sanitized.replace(/'/g, "'\\''")}'`;
+function escapeShellArg(value: string, powershell: boolean): string {
+  // PowerShell 以重複單引號跳脫；Bash 則先結束引號再插入單引號。
+  const escaped = powershell
+    ? value.split("'").join("''")
+    : value.split("'").join("'\\''");
+  return `'${escaped}'`;
 }
 
-// 專門用於處理多行 Body（如 JSON / XML）的轉義
-function escapeShellBody(body: string): string {
-  // Body 允許保留換行，但單引號必須進行嚴格轉義
-  return `'${body.replace(/'/g, "'\\''")}'`;
+function escapeFormFilePath(path: string): string {
+  // cURL 會另外解析逗號及分號，檔案路徑必須先做 multipart 引號跳脫。
+  const escaped = path.split("\\").join("\\\\").split('"').join('\\"');
+  return `"${escaped}"`;
 }
 
 export function getCurlCommand(
@@ -30,47 +29,99 @@ export function getCurlCommand(
   indentString: string | number,
   breakLineSymbol: string = "\\",
 ): string {
+  validateBodyFiles(store);
   const parts: string[] = [];
   const indent = getIndentString(indentString);
-
-  // 基礎 URL 轉義
-  const safeUrl = escapeShellArg(store.url);
-  const safeMethod = escapeShellArg(store.method.toUpperCase());
-  parts.push(`curl -X ${safeMethod} ${safeUrl}`);
-
-  // Headers
-  store.headers.forEach(
-    (header: { enabled: boolean; key: string; value: string }) => {
-      if (header.enabled && header.key) {
-        const headerString = `${header.key}: ${header.value}`;
-        parts.push(`${indent}-H ${escapeShellArg(headerString)}`);
-      }
-    },
+  const powershell = breakLineSymbol === "`";
+  const quote = (value: string) => escapeShellArg(value, powershell);
+  const executable = powershell ? "curl.exe" : "curl";
+  const multipart = store.bodyType === "Form Data";
+  parts.push(
+    `${executable} -X ${quote(store.method.toUpperCase())} ${quote(store.url)}`,
   );
 
-  // Auth
+  const headers = store.headers.filter((header) => {
+    if (!header.enabled || !header.key) return false;
+    const name = header.key.toLowerCase();
+    return !multipart || (name !== "content-type" && name !== "content-length");
+  });
+  for (const header of headers) {
+    parts.push(`${indent}-H ${quote(`${header.key}: ${header.value}`)}`);
+  }
+  const hasContentType = headers.some(
+    (header) => header.key.toLowerCase() === "content-type",
+  );
+
   if (store.auth.type === "basic" && store.auth.content) {
-    const authContent = store.auth.content as BasicAuthContent;
-    const userPass = `${authContent.username}:${authContent.password}`;
-    parts.push(`${indent}-u ${escapeShellArg(userPass)}`);
-  } else if (store.auth.type === "bearer token" && store.auth.content) {
+    const auth = store.auth.content as BasicAuthContent;
+    parts.push(`${indent}-u ${quote(`${auth.username}:${auth.password}`)}`);
+  } else if (store.auth.type === "bearer" && store.auth.content) {
     const token = (store.auth.content as { token: string }).token;
-    const authHeader = `Authorization: Bearer ${token}`;
-    parts.push(`${indent}-H ${escapeShellArg(authHeader)}`);
+    parts.push(`${indent}-H ${quote(`Authorization: Bearer ${token}`)}`);
   }
 
-  // Body
-  if (store.bodyContent && store.bodyType !== "None") {
-    parts.push(`${indent}-d ${escapeShellBody(store.bodyContent)}`);
+  switch (store.bodyType) {
+    case "Raw":
+      if (store.bodyContent) {
+        parts.push(`${indent}-d ${quote(store.bodyContent)}`);
+      }
+      break;
+    case "Form Data": {
+      const fields = store.formData.filter(
+        (field) => field.enabled && field.key,
+      );
+      for (const field of fields) {
+        if (field.type === "file") {
+          const file = escapeFormFilePath(field.filePath!);
+          parts.push(`${indent}--form ${quote(`${field.key}=@${file}`)}`);
+        } else {
+          parts.push(
+            `${indent}--form-string ${quote(`${field.key}=${field.value}`)}`,
+          );
+        }
+      }
+      if (fields.length === 0) {
+        parts.push(
+          `${indent}-H ${quote("Content-Type: multipart/form-data; boundary=LigHTTPBoundary")}`,
+          `${indent}--data-raw ${quote("")}`,
+        );
+      }
+      break;
+    }
+    case "URL Encoded": {
+      const fields = new URLSearchParams();
+      for (const field of store.urlEncoded) {
+        if (field.enabled && field.key) fields.append(field.key, field.value);
+      }
+      if (!hasContentType) {
+        parts.push(
+          `${indent}-H ${quote("Content-Type: application/x-www-form-urlencoded")}`,
+        );
+      }
+      parts.push(`${indent}--data-raw ${quote(fields.toString())}`);
+      break;
+    }
+    case "Binary":
+      if (!hasContentType) {
+        parts.push(
+          `${indent}-H ${quote("Content-Type: application/octet-stream")}`,
+        );
+      }
+      parts.push(`${indent}--data-binary ${quote(`@${store.bodyFilePath}`)}`);
+      break;
   }
 
-  // Proxy
-  if (store.proxyConfig && store.proxyConfig.host && store.proxyConfig.port) {
-    const authPart = store.proxyConfig.auth
-      ? `${store.proxyConfig.auth.username}:${store.proxyConfig.auth.password}@`
+  if (
+    store.proxyConfig?.enabled &&
+    store.proxyConfig.host &&
+    store.proxyConfig.port
+  ) {
+    const proxy = store.proxyConfig;
+    const auth = proxy.auth
+      ? `${proxy.auth.username}:${proxy.auth.password}@`
       : "";
-    const proxyUrl = `${store.proxyConfig.protocol}://${authPart}${store.proxyConfig.host}:${store.proxyConfig.port}`;
-    parts.push(`${indent}-x ${escapeShellArg(proxyUrl)}`);
+    const url = `${proxy.protocol}://${auth}${proxy.host}:${proxy.port}`;
+    parts.push(`${indent}-x ${quote(url)}`);
   }
 
   return parts.join(` ${breakLineSymbol}\n`);

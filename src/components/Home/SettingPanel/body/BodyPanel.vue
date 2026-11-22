@@ -18,14 +18,12 @@ const selectedBodyMethod = computed({
   get: () => {
     // 根據 Store 裡的類型標籤找回對應的 UI value
     const method = bodyMethods.find((m) => m.label === requestStore.bodyType);
-    return method ? method.value : "無";
+    return method ? method.value : "空內容";
   },
   set: (newValue) => {
     const method = bodyMethods.find((m) => m.value === newValue);
     if (method && requestStore.bodyType !== method.label) {
       requestStore.setBodyType(method.label);
-      // 切換類型時，若有需要可選擇性清空內容
-      // requestStore.setBodyContent("");
     }
   },
 });
@@ -33,6 +31,11 @@ const selectedBodyMethod = computed({
 const selectedBodyMethodObject = computed(() => {
   const method = bodyMethods.find((m) => m.label === requestStore.bodyType);
   return method ? method.object : null;
+});
+
+const selectedBodyProps = computed(() => {
+  const method = bodyMethods.find((m) => m.label === requestStore.bodyType);
+  return method && "props" in method ? method.props : {};
 });
 
 const escapeHtml = (str: string) =>
@@ -76,6 +79,7 @@ const selectedDescriptionHtml = computed(() => {
       <!-- 移除 p-4 以便 CodeEditor 能撐滿容器 -->
       <component
         :is="selectedBodyMethodObject"
+        v-bind="selectedBodyProps"
         v-if="selectedBodyMethodObject"
       />
     </ResizablePanel>

@@ -8,6 +8,19 @@ export const KeyValuePairSchema = z.object({
   value: z.string().default(""),
 });
 
+export const FormDataFieldSchema = KeyValuePairSchema.extend({
+  type: z.enum(["text", "file"]).default("text"),
+  filePath: z.string().nullable().default(null),
+});
+
+export const BodySchema = z.object({
+  type: z.string().default("None"),
+  content: z.string().default(""),
+  formData: z.array(FormDataFieldSchema).default([]),
+  urlEncoded: z.array(KeyValuePairSchema).default([]),
+  filePath: z.string().nullable().default(null),
+});
+
 // Proxy 認證資訊
 export const ProxyAuthSchema = z.object({
   username: z.string().default(""),
@@ -37,12 +50,13 @@ export const WorkspaceSchema = z.object({
   params: z.array(KeyValuePairSchema).default([]),
   headers: z.array(KeyValuePairSchema).default([]),
   auth: AuthForBackendSchema.default({ auth_type: "none", content: {} }),
-  body: z
-    .object({
-      type: z.string().default("None"),
-      content: z.string().default(""),
-    })
-    .default({ type: "None", content: "" }),
+  body: BodySchema.default({
+    type: "None",
+    content: "",
+    formData: [],
+    urlEncoded: [],
+    filePath: null,
+  }),
   proxy: ProxyConfigSchema.nullable().default(null),
 });
 

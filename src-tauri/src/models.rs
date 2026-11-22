@@ -50,12 +50,57 @@ pub struct BearerAuthContent {
 }
 
 // ------ 正文
+fn enabled_by_default() -> bool {
+    true
+}
+
 #[derive(Debug, Serialize, Deserialize)]
+pub struct BodyField {
+    #[serde(default = "enabled_by_default")]
+    pub enabled: bool,
+    #[serde(default)]
+    pub key: String,
+    #[serde(default)]
+    pub value: String,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum FormDataFieldType {
+    #[default]
+    Text,
+    File,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FormDataField {
+    #[serde(default = "enabled_by_default")]
+    pub enabled: bool,
+    #[serde(default)]
+    pub key: String,
+    #[serde(default)]
+    pub value: String,
+    #[serde(rename = "type", default)]
+    pub field_type: FormDataFieldType,
+    #[serde(default)]
+    pub file_path: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BodyContent {
     #[serde(rename = "type")]
     pub body_type: String,
 
+    #[serde(default)]
     pub content: String,
+    #[serde(default)]
+    pub form_data: Vec<FormDataField>,
+    #[serde(default)]
+    pub url_encoded: Vec<BodyField>,
+    #[serde(default)]
+    pub file_path: Option<String>,
 }
 
 // ------ 代理

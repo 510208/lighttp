@@ -4,6 +4,8 @@ import AuthBearer from "@/components/Home/SettingPanel/auth/method/AuthBearer.vu
 
 import BodyNone from "@/components/Home/SettingPanel/body/method/BodyNone.vue";
 import BodyOriginal from "@/components/Home/SettingPanel/body/method/BodyOriginal.vue";
+import BodyForm from "@/components/Home/SettingPanel/body/method/BodyForm.vue";
+import BodyBinary from "@/components/Home/SettingPanel/body/method/BodyBinary.vue";
 
 export const authMethods = [
   {
@@ -39,6 +41,26 @@ export const bodyMethods = [
     descriptionKey: "home.settings_panel.tabs.body.body_original.hint",
     object: BodyOriginal,
     label: "Raw",
+  },
+  {
+    value: "form-data",
+    descriptionKey: "home.settings_panel.tabs.body.form_data.hint",
+    object: BodyForm,
+    label: "Form Data",
+    props: { multipart: true },
+  },
+  {
+    value: "url-encoded",
+    descriptionKey: "home.settings_panel.tabs.body.url_encoded.hint",
+    object: BodyForm,
+    label: "URL Encoded",
+    props: { multipart: false },
+  },
+  {
+    value: "binary",
+    descriptionKey: "home.settings_panel.tabs.body.binary.hint",
+    object: BodyBinary,
+    label: "Binary",
   },
 ];
 export type BodyMethod = (typeof bodyMethods)[number]["value"];
