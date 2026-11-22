@@ -2,6 +2,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt;
 
+mod http_client;
+pub use http_client::HttpClientConfig;
+
 #[derive(Deserialize, Debug)]
 pub struct Header {
     pub key: String,
@@ -153,6 +156,8 @@ pub struct RequestPayload {
     pub auth: AuthStore,
     pub body: Option<BodyContent>,
     pub proxy: Option<ProxyConfig>,
+    #[serde(default, rename = "httpClientConfig")]
+    pub http_client_config: HttpClientConfig,
 }
 
 impl fmt::Debug for RequestPayload {
