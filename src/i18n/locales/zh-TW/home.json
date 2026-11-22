@@ -140,7 +140,7 @@
   "home.workspace.close_all": "關閉所有分頁",
   "home.workspace.empty_title": "你的請求工作區",
   "home.workspace.empty_description": "新增分頁以開始使用。每個分頁會分別保存自己的請求設定與回應。",
-  "home.workspace.shortcut_hint": "按 Ctrl / ⌘ + T 新增請求",
+  "home.workspace.author_hint": "LigHTTP，由 {author} 用♥️在台灣開發",
   "home.workspace.status.pending": "正在傳送請求…",
   "home.workspace.status.error": "請求失敗"
 }

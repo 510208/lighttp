@@ -140,7 +140,7 @@
   "home.workspace.close_all": "Close All Tabs",
   "home.workspace.empty_title": "Your request workspace",
   "home.workspace.empty_description": "Create a request tab to get started. Each tab keeps its own request and response.",
-  "home.workspace.shortcut_hint": "Ctrl / ⌘ + T to create a request",
+  "home.workspace.author_hint": "LigHTTP，Built with ♥️ by {author} in Taiwan",
   "home.workspace.status.pending": "Sending request…",
   "home.workspace.status.error": "Request failed"
 }
