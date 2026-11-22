@@ -9,6 +9,11 @@
   "settings_panel.general.language.label": "介面語言",
   "settings_panel.general.language.description": "選擇欲在界面中使用的語言",
   "settings_panel.general.language.placeholder": "選擇語言",
+  "settings_panel.general.startup_behavior.label": "啟動行為",
+  "settings_panel.general.startup_behavior.description": "選擇下次啟動應用程式時顯示的內容。繼續先前工作區僅還原請求草稿，不包含回應結果。",
+  "settings_panel.general.startup_behavior.new_request": "開新請求工作區",
+  "settings_panel.general.startup_behavior.resume": "繼續先前的工作區",
+  "settings_panel.general.startup_behavior.empty": "顯示無工作區的畫面",
   "settings_panel.general.check_update_when_open.label": "啟動時檢查更新",
   "settings_panel.general.check_update_when_open.description": "啟用後，應用程式啟動時將會自動檢查是否有新版本。",
 

@@ -5,6 +5,7 @@ import { restoreWorkspace } from "@/services/workspace/persistence";
 import { useRequestStore } from "./useRequestStore";
 import { useResponseStore } from "./useResponseStore";
 import { useExecutionStore } from "./useExecutionStore";
+import { useSettingsStore } from "./useSettingsStore";
 
 function createWorkspaceTab(): WorkspaceTab {
   const now = Date.now();
@@ -19,9 +20,14 @@ function createWorkspaceTab(): WorkspaceTab {
 
 export const useWorkspaceStore = defineStore("workspace", () => {
   const restored = restoreWorkspace();
-  const tabs = ref<WorkspaceTab[]>(restored?.tabs ?? [createWorkspaceTab()]);
+  const tabs = ref<WorkspaceTab[]>(
+    restored?.tabs ??
+      (useSettingsStore().startupBehavior === "empty"
+        ? []
+        : [createWorkspaceTab()]),
+  );
   const activeTabId = ref<string | null>(
-    restored ? restored.activeTabId : tabs.value[0].id,
+    restored ? restored.activeTabId : (tabs.value[0]?.id ?? null),
   );
   const activeTab = computed(() =>
     tabs.value.find((tab) => tab.id === activeTabId.value),

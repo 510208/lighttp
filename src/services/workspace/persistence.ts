@@ -4,6 +4,7 @@ import { z } from "zod";
 import { WorkspaceSchema } from "@/schemas/workspace";
 import { useWorkspaceStore } from "@/stores/useWorkspaceStore";
 import { useRequestStore } from "@/stores/useRequestStore";
+import { useSettingsStore } from "@/stores/useSettingsStore";
 
 const STORAGE_KEY = "lighttp.workspace.v1";
 const snapshotSchema = z.object({
@@ -27,6 +28,9 @@ let restoredSnapshot: WorkspaceSnapshot | null | undefined;
 export function restoreWorkspace(): WorkspaceSnapshot | null {
   if (restoredSnapshot !== undefined) return restoredSnapshot;
   restoredSnapshot = null;
+  // Resolve startup behavior once; changes apply on the next application launch.
+  const behavior = useSettingsStore().startupBehavior;
+  if (behavior === "new-request" || behavior === "empty") return null;
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return null;
