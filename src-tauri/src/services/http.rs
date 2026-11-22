@@ -1,26 +1,27 @@
 use crate::models::{RequestPayload, ResponsePayload};
 use crate::services::body::apply_body;
+use crate::services::client::create_client_builder;
 use crate::utils::auth::handle_auth;
 use crate::utils::other::{get_content_type, get_deep_error, to_hashmap};
 use crate::utils::proxy::{check_proxy, handle_proxy};
 use base64::{engine::general_purpose, Engine as _};
 use futures_util::StreamExt;
-use reqwest::{Client, Method};
+use reqwest::Method;
 use std::collections::HashMap;
-use std::time::Duration;
-use tokio::time::timeout;
 use tracing::{error, info};
 
-const DEFAULT_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 const MAX_RESPONSE_SIZE: usize = 10 * 1024 * 1024;
+
+#[cfg(test)]
+mod tests;
 
 pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     info!("[execute_request] 收到請求: {:?}", payload);
 
-    // DONE: 建立一個Client實例
-    let mut client_builder = Client::builder()
-        .timeout(DEFAULT_REQUEST_TIMEOUT)
-        .connect_timeout(Duration::from_secs(10));
+    let mut client_builder = match create_client_builder(&payload.http_client_config) {
+        Ok(builder) => builder,
+        Err(error) => return build_error_response(400, error),
+    };
 
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
@@ -139,56 +140,34 @@ pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
     }
 
     if let Some(body) = payload.body {
-        request_builder = match apply_body(
-            request_builder,
-            body,
-            has_content_type,
-            has_content_length,
-        )
-        .await
-        {
-            Ok(request) => request,
-            Err(error) => return build_error_response(400, error),
-        };
+        request_builder =
+            match apply_body(request_builder, body, has_content_type, has_content_length).await {
+                Ok(request) => request,
+                Err(error) => return build_error_response(400, error),
+            };
     }
 
-    // DONE: 送請求
-    // info!("[execute_request] request_builder: {:?}", request_builder);
-    let response = timeout(DEFAULT_REQUEST_TIMEOUT, request_builder.send()).await;
-
-    // DONE: 檢查請求是否成功
-    match response {
-        Ok(Ok(response_obj)) => parse_success_response(response_obj).await,
-        Ok(Err(e)) => {
+    // 由 reqwest 統一管理整段請求與回應本文的逾時，避免額外的固定計時器覆蓋設定。
+    match request_builder.send().await {
+        Ok(response) => parse_success_response(response).await,
+        Err(e) => {
             let detailed_error = get_deep_error(&e); // 這裡會拿到更深層的資訊
             error!("[execute_request] 請求發送失敗: {}", detailed_error);
-            return build_error_response(500, detailed_error);
-        }
-        Err(_) => {
-            error!(
-                "[execute_request] 請求執行超時（超過 {} 秒）",
-                DEFAULT_REQUEST_TIMEOUT.as_secs()
-            );
-            build_error_response(
-                504,
-                format!(
-                    "請求連線或回應超時（已超過 {} 秒）",
-                    DEFAULT_REQUEST_TIMEOUT.as_secs()
-                ),
-            )
+            let status = if e.is_timeout() { 504 } else { 500 };
+            build_error_response(status, detailed_error)
         }
     }
 }
 
 // 處理成功的結果
 async fn parse_success_response(response: reqwest::Response) -> ResponsePayload {
-    // 1. 先取出所有需要從 response 讀取的純數據（唯讀/複製）
+    // 在消耗串流之前先保存回應資訊。
     let status = response.status().as_u16();
     let content_length = response.content_length();
     let headers_map = to_hashmap(response.headers()); // 直接將 headers 轉為 HashMap，不再保留 &HeaderMap
     let content_type = get_content_type(response.headers());
 
-    // 2. 預先檢查 Content-Length
+    // 預先檢查 Content-Length。
     if let Some(length) = content_length {
         if length > MAX_RESPONSE_SIZE as u64 {
             return build_error_response(
@@ -201,15 +180,20 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
         }
     }
 
-    // 3. 【最後一步】轉移 response 所有權給 bytes_stream()
-    // 此行之後「絕不能」再出現任何 `response.xxx` 的程式碼
+    // bytes_stream 會取得 response 的所有權，後續僅使用前面保存的資訊。
     let mut stream = response.bytes_stream();
     let mut body_bytes = Vec::new();
 
     while let Some(chunk_result) = stream.next().await {
         let chunk = match chunk_result {
             Ok(c) => c,
-            Err(e) => return build_error_response(500, format!("讀取回應內容失敗: {}", e)),
+            Err(e) => {
+                let status = if e.is_timeout() { 504 } else { 500 };
+                return build_error_response(
+                    status,
+                    format!("讀取回應內容失敗: {}", get_deep_error(&e)),
+                );
+            }
         };
 
         if body_bytes.len() + chunk.len() > MAX_RESPONSE_SIZE as usize {
@@ -225,7 +209,6 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
         body_bytes.extend_from_slice(&chunk);
     }
 
-    // 4. 使用最前面已經擷取好的變數（headers_map, content_type）建構 ResponsePayload
     let is_media = is_media_content_type(&content_type);
     let base64_encoded = general_purpose::STANDARD.encode(&body_bytes);
 
@@ -239,7 +222,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
 
     ResponsePayload {
         status,
-        headers: headers_map, // 直接使用第 1 步預先轉好的 HashMap
+        headers: headers_map,
         body_type: content_type,
         body: text_body,
         body_binary: body_bytes,

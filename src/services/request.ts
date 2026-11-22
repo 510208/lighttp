@@ -8,6 +8,8 @@ import { useWorkspaceStore } from "@/stores/useWorkspaceStore";
 import { useExecutionStore } from "@/stores/useExecutionStore";
 import { toast } from "vue-sonner";
 import { validateBodyFiles } from "@/lib/requestBody";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { normalizeHttpClientConfig } from "@/lib/httpClientConfig";
 
 interface BackendResponse {
   status: number;
@@ -31,7 +33,13 @@ async function handleSend() {
   let payload;
   try {
     validateBodyFiles(requestStore);
-    payload = requestStore.getRequestData();
+    payload = {
+      ...requestStore.getRequestData(),
+      // 每次送出時擷取全域設定，避免影響執行中的請求與匯出的請求草稿。
+      httpClientConfig: normalizeHttpClientConfig(
+        useSettingsStore().httpClientConfig,
+      ),
+    };
     if (!/^https?:\/\//i.test(payload.url))
       payload.url = "http://" + payload.url;
     const url = new URL(payload.url);
