@@ -49,6 +49,7 @@ export const WorkspaceSchema = z.object({
   method: z.string().default("GET"),
   params: z.array(KeyValuePairSchema).default([]),
   headers: z.array(KeyValuePairSchema).default([]),
+  cookieIds: z.array(z.string().uuid()).default([]),
   auth: AuthForBackendSchema.default({ auth_type: "none", content: {} }),
   body: BodySchema.default({
     type: "None",
