@@ -89,7 +89,7 @@ const faviconUrl = computed(() => {
           :tabindex="active ? 0 : -1"
           :draggable="true"
           class="hover:bg-lh-mantle text-lh-text size-8 cursor-pointer rounded-lg p-1.5"
-          :class="{ 'bg-lh-mantle': active }"
+          :class="{ 'bg-lh-surface-0': active }"
           @click="emit('activate')"
           @keydown="emit('navigate', $event)"
           @dragstart="emit('dragstart', $event)"
