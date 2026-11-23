@@ -19,6 +19,9 @@ importers:
       '@fontsource-variable/space-grotesk':
         specifier: ^5.2.10
         version: 5.2.10
+      '@internationalized/date':
+        specifier: 3.12.3
+        version: 3.12.3
       '@lucide/vue':
         specifier: ^1.37.0
         version: 1.37.0(vue@3.5.41(typescript@5.6.3))
