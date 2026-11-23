@@ -24,6 +24,11 @@
         {{ $t("title_bar.dropdown_menu.settings") }}
       </DropdownMenuItem>
 
+      <DropdownMenuItem @click="cookieStore.managerOpen = true">
+        <Cookie />
+        {{ $t("cookies.manager") }}
+      </DropdownMenuItem>
+
       <DropdownMenuSeparator />
 
       <DropdownMenuItem @click="Window.openAboutWindow()">
@@ -56,7 +61,15 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Info, EllipsisVertical, Save, FolderOpen, Bolt } from "@lucide/vue";
+import {
+  Info,
+  EllipsisVertical,
+  Save,
+  FolderOpen,
+  Bolt,
+  Cookie,
+} from "@lucide/vue";
+import { useCookieStore } from "@/stores/useCookieStore";
 import { Button } from "@/components/ui/button";
 import { Window, FileHelpers } from "@/services";
 import SettingPanel from "@/components/settings/SettingsPanel.vue";
@@ -71,6 +84,7 @@ import {
 } from "@/components/ui/dialog";
 
 const isSettingsOpen = ref(false);
+const cookieStore = useCookieStore();
 const { aboutOpen } = Window;
 
 function openSettings() {

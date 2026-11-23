@@ -17,6 +17,7 @@
   "dependencies": {
     "@fontsource-variable/noto-sans-tc": "^5.2.10",
     "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@internationalized/date": "3.12.3",
     "@lucide/vue": "^1.37.0",
     "@monaco-editor/loader": "^1.7.0",
     "@tailwindcss/vite": "^4.3.3",
@@ -32,6 +33,7 @@
     "@vueuse/core": "^14.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cn": "^0.5.2",
     "hotkeys-js": "^4.0.7",
     "htmlfy": "^1.0.1",
     "lucide-vue-next": "^1.0.0",

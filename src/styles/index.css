@@ -36,6 +36,8 @@
   --color-lh-base: var(--catppuccin-color-base);
   --color-lh-mantle: var(--catppuccin-color-mantle);
   --color-lh-crust: var(--catppuccin-color-crust);
+  /* Font sans */
+  --font-heading: var(--font-sans);
 }
 
 @custom-variant dark (&);

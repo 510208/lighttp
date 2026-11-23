@@ -28,6 +28,7 @@ export const useRequestStore = defineStore("request", () => {
       url: "https://api.samhacker.xyz",
       params: [],
       headers: [],
+      cookieIds: [],
       auth: { type: "none", content: {} },
       bodyType: "None",
       bodyContent: "",
@@ -52,6 +53,7 @@ export const useRequestStore = defineStore("request", () => {
       url: data.url,
       params: pairs(data.params),
       headers: pairs(data.headers),
+      cookieIds: [...data.cookieIds],
       auth: { type: data.auth.auth_type, content: data.auth.content ?? {} },
       bodyType: data.body.type,
       bodyContent: data.body.content,
@@ -98,6 +100,7 @@ export const useRequestStore = defineStore("request", () => {
   const url = field("url");
   const params = field("params");
   const headers = field("headers");
+  const cookieIds = field("cookieIds");
   const auth = field("auth");
   const bodyType = field("bodyType");
   const bodyContent = field("bodyContent");
@@ -270,6 +273,7 @@ export const useRequestStore = defineStore("request", () => {
       method: method.value,
       params: params.value.filter((p) => p.enabled),
       headers: headers.value.filter((h) => h.enabled),
+      cookieIds: cookieIds.value,
       auth: renameAuthType(auth.value),
       body: {
         type: bodyType.value,
@@ -290,6 +294,7 @@ export const useRequestStore = defineStore("request", () => {
       method: request.method,
       params: request.params,
       headers: request.headers,
+      cookieIds: request.cookieIds,
       auth: renameAuthType(request.auth),
       body: {
         type: request.bodyType,
@@ -320,6 +325,7 @@ export const useRequestStore = defineStore("request", () => {
     params,
     auth,
     headers,
+    cookieIds,
 
     addParam: () => paramManager.addExample("param"),
     addParamFromPair: (key: string, value: string) =>

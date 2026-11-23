@@ -10,6 +10,8 @@ import { toast } from "vue-sonner";
 import { validateBodyFiles } from "@/lib/requestBody";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { normalizeHttpClientConfig } from "@/lib/httpClientConfig";
+import { useCookieStore } from "@/stores/useCookieStore";
+import { i18n } from "@/i18n";
 
 interface BackendResponse {
   status: number;
@@ -40,6 +42,12 @@ async function handleSend() {
         useSettingsStore().httpClientConfig,
       ),
     };
+    if (
+      payload.cookieIds.length &&
+      payload.headers.some((header) => header.key.toLowerCase() === "cookie")
+    ) {
+      throw new Error(i18n.global.t("cookies.header_conflict"));
+    }
     if (!/^https?:\/\//i.test(payload.url))
       payload.url = "http://" + payload.url;
     const url = new URL(payload.url);
@@ -114,6 +122,12 @@ async function handleSend() {
     toast.error(message, { id: toastId });
   } finally {
     signal.removeEventListener("abort", cancel);
+    // 即使請求取消或本文讀取失敗，先前的回應仍可能已經更新 Cookie。
+    void useCookieStore()
+      .refresh()
+      .catch((error) => {
+        toast.error(String(error));
+      });
   }
 }
 

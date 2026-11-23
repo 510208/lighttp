@@ -1,6 +1,7 @@
 use crate::models::{RequestPayload, ResponsePayload};
 use crate::services::body::apply_body;
 use crate::services::client::create_client_builder;
+use crate::services::cookies::RequestCookieJar;
 use crate::utils::auth::handle_auth;
 use crate::utils::other::{get_content_type, get_deep_error, to_hashmap};
 use crate::utils::proxy::{check_proxy, handle_proxy};
@@ -8,6 +9,7 @@ use base64::{engine::general_purpose, Engine as _};
 use futures_util::StreamExt;
 use reqwest::Method;
 use std::collections::HashMap;
+use std::sync::Arc;
 use tracing::{error, info};
 
 const MAX_RESPONSE_SIZE: usize = 10 * 1024 * 1024;
@@ -15,13 +17,29 @@ const MAX_RESPONSE_SIZE: usize = 10 * 1024 * 1024;
 #[cfg(test)]
 mod tests;
 
-pub async fn execute_request(payload: RequestPayload) -> ResponsePayload {
+pub async fn execute_request(
+    payload: RequestPayload,
+    cookie_jar: Option<Arc<RequestCookieJar>>,
+) -> ResponsePayload {
     info!("[execute_request] 收到請求: {:?}", payload);
 
     let mut client_builder = match create_client_builder(&payload.http_client_config) {
         Ok(builder) => builder,
         Err(error) => return build_error_response(400, error),
     };
+    let has_manual_cookies = payload
+        .headers
+        .iter()
+        .any(|header| header.key.eq_ignore_ascii_case("cookie"));
+    if has_manual_cookies && !payload.cookie_ids.is_empty() {
+        return build_error_response(
+            400,
+            "請擇一使用手動 Cookie 標頭或 Cookie Jar，避免重複或覆蓋".into(),
+        );
+    }
+    if let Some(jar) = cookie_jar {
+        client_builder = client_builder.cookie_provider(jar);
+    }
 
     // DONE: 處理代理設定 (如果有的話)
     if let Some(proxy_config) = payload.proxy.as_ref() {
@@ -196,7 +214,7 @@ async fn parse_success_response(response: reqwest::Response) -> ResponsePayload 
             }
         };
 
-        if body_bytes.len() + chunk.len() > MAX_RESPONSE_SIZE as usize {
+        if body_bytes.len() + chunk.len() > MAX_RESPONSE_SIZE {
             return build_error_response(
                 413,
                 format!(

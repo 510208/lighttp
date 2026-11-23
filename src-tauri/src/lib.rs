@@ -3,8 +3,7 @@ mod models;
 mod services;
 pub mod utils;
 
-use std::sync::Mutex;
-#[cfg(desktop)]
+use std::sync::{Arc, Mutex};
 use tauri::Manager;
 use utils::cli::handle_cli_args;
 use utils::cli::AppCliState;
@@ -27,6 +26,10 @@ pub fn run() {
         .manage(AppCliState(Mutex::new(CliData::default())))
         .plugin(tauri_plugin_cli::init())
         .setup(|app| {
+            let cookie_path = app.path().app_data_dir()?.join("cookies.json");
+            let cookie_manager = services::cookies::CookieManager::load(cookie_path)
+                .map_err(std::io::Error::other)?;
+            app.manage(Arc::new(cookie_manager));
             // 調用抽離出去的 CLI 處理函式
             handle_cli_args(app)?;
 
@@ -42,6 +45,12 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::handle_request,
             commands::cancel_request,
+            commands::list_cookies,
+            commands::save_cookie,
+            commands::set_cookie_persistence,
+            commands::delete_cookie,
+            commands::clear_cookies,
+            commands::get_cookie_header,
             commands::get_cli_state
         ])
         .run(tauri::generate_context!())

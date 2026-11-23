@@ -92,7 +92,7 @@ async fn send(url: &str, config: HttpClientConfig) -> ResponsePayload {
     }))
     .unwrap();
     payload.http_client_config = config;
-    execute_request(payload).await
+    execute_request(payload, None).await
 }
 
 #[tokio::test]

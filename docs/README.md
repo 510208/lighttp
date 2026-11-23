@@ -30,6 +30,7 @@ LigHTTP is **a lightweight HTTP client** built using Rust and Tauri. It provides
 - Serve static files from a specified directory
 - Handle HTTP GET, POST, PUT, DELETE and all other requests
 - Support for Proxying requests to other servers
+- Global [Cookie Manager](cookies.md) with per-request cookie selection and optional persistence managed by Rust
 - Convert any json response to JSON Structure, Rust Struct, Python Class, or TypeScript Interface, which is powered by [`quicktype-core`](https://www.npmjs.com/package/quicktype-core)
 - Easy to use API for handling requests and responses
 - Full compatibility with JSON responses

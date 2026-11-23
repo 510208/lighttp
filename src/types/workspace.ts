@@ -20,6 +20,7 @@ export interface RequestState {
   url: string;
   params: KeyValuePair[];
   headers: KeyValuePair[];
+  cookieIds: string[];
   auth: AuthStore;
   bodyType: string;
   bodyContent: string;
