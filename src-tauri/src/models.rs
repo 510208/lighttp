@@ -153,6 +153,8 @@ pub struct RequestPayload {
     pub params: Vec<Param>,
 
     pub headers: Vec<Header>,
+    #[serde(default, rename = "cookieIds")]
+    pub cookie_ids: Vec<String>,
     pub auth: AuthStore,
     pub body: Option<BodyContent>,
     pub proxy: Option<ProxyConfig>,
