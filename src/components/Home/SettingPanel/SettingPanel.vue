@@ -1,6 +1,8 @@
 <template>
   <Tabs default-value="params">
-    <TabsList class="gap-5 bg-transparent p-0">
+    <TabsList
+      class="h-auto flex-wrap justify-start gap-x-5 gap-y-1 bg-transparent p-0"
+    >
       <TabsOptions
         value="params"
         name="Params"
@@ -10,6 +12,11 @@
         value="headers"
         name="Headers"
         :chinese-name="$t('home.settings_panel.tabs.headers')"
+      />
+      <TabsOptions
+        value="cookies"
+        name="Cookies"
+        :chinese-name="$t('cookies.tab')"
       />
       <TabsOptions
         value="auth"
@@ -30,6 +37,7 @@
     <div id="setting-panel-content" class="min-h-30">
       <TabsContent value="params" as-child><ParamTable /></TabsContent>
       <TabsContent value="headers" as-child><HeaderTable /></TabsContent>
+      <TabsContent value="cookies" as-child><CookiePanel /></TabsContent>
       <TabsContent value="auth" as-child>
         <KeepAlive><AuthPanel /></KeepAlive>
       </TabsContent>
@@ -49,4 +57,5 @@ import HeaderTable from "./headers/HeaderTable.vue";
 import AuthPanel from "./auth/AuthPanel.vue";
 import BodyPanel from "./body/BodyPanel.vue";
 import ProxyPanel from "./proxy/ProxyPanel.vue";
+import CookiePanel from "./cookies/CookiePanel.vue";
 </script>
