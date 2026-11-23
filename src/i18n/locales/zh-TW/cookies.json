@@ -23,6 +23,7 @@
   "cookies.session_hint": "留空代表無固定到期時間。是否跨次啟動保留，由持久儲存開關決定。",
   "cookies.unspecified": "未指定",
   "cookies.host_only": "僅限此主機",
+  "cookies.persistent": "持久儲存此Cookie",
   "cookies.make_not_persistent": "取消持久儲存",
   "cookies.memory_only": "僅限本次使用",
   "cookies.persistence_hint": "啟用後將以明文儲存在應用程式資料目錄。關閉後立即移除磁碟上的此筆資料，並僅保留於記憶體。",

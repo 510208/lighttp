@@ -23,6 +23,7 @@
   "cookies.session_hint": "Leave empty for no fixed expiry. The persistence switch controls whether this cookie survives restarting the app.",
   "cookies.unspecified": "Unspecified",
   "cookies.host_only": "Host only",
+  "cookies.persistent": "Persistent save this cookie",
   "cookies.make_not_persistent": "Make not persistent",
   "cookies.memory_only": "Session only",
   "cookies.persistence_hint": "When enabled, this cookie is saved as plain text in the application data directory. Disabling removes its saved copy immediately and keeps it in memory only.",
