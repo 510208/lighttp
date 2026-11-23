@@ -1,17 +1,32 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { saveCookie } from "@/services/cookies";
 import type { CookieInput, ManagedCookie } from "@/types/cookies";
+import CookieDatePicker from "./CookieDatePicker.vue";
 
 const props = defineProps<{ cookie: ManagedCookie | null }>();
 const emit = defineEmits<{ saved: []; cancel: [] }>();
 const { t } = useI18n();
 const form = ref<CookieInput>(emptyCookie());
-const expiresAt = ref("");
+const sameSite = computed({
+  get: () => form.value.sameSite ?? "unspecified",
+  set: (value: string) => {
+    form.value.sameSite =
+      value === "unspecified" ? null : (value as CookieInput["sameSite"]);
+  },
+});
 const saving = ref(false);
 const error = ref("");
 
@@ -34,13 +49,6 @@ watch(
   () => props.cookie,
   (cookie) => {
     form.value = cookie ? { ...cookie } : emptyCookie();
-    const date = cookie?.expires ? new Date(cookie.expires * 1000) : null;
-    // datetime-local 使用本地時間，送至 Rust 前再轉回 Unix timestamp。
-    expiresAt.value = date
-      ? new Date(date.getTime() - date.getTimezoneOffset() * 60_000)
-          .toISOString()
-          .slice(0, 19)
-      : "";
     error.value = "";
   },
   { immediate: true },
@@ -50,9 +58,7 @@ async function save() {
   saving.value = true;
   error.value = "";
   try {
-    const expires = expiresAt.value
-      ? Math.floor(new Date(expiresAt.value).getTime() / 1000)
-      : null;
+    const expires = form.value.expires;
     if (expires !== null && !Number.isFinite(expires)) {
       throw new Error(t("cookies.invalid_expiry"));
     }
@@ -67,56 +73,80 @@ async function save() {
 </script>
 
 <template>
-  <form class="flex flex-col gap-4" @submit.prevent="save">
-    <h3 class="font-semibold">
+  <form class="lh-settings-page gap-4" @submit.prevent="save">
+    <h3 class="lh-settings-page-title">
       {{ cookie ? t("cookies.edit") : t("cookies.add") }}
     </h3>
-    <fieldset :disabled="saving" class="grid gap-4 sm:grid-cols-2">
-      <label class="flex flex-col gap-1 text-sm">
-        {{ t("cookies.name") }}
-        <Input v-model="form.name" required autocomplete="off" />
-      </label>
-      <label class="flex flex-col gap-1 text-sm">
-        {{ t("cookies.value") }}
-        <Input v-model="form.value" autocomplete="off" />
-      </label>
-      <label class="flex flex-col gap-1 text-sm">
-        {{ t("cookies.domain") }}
-        <Input v-model="form.domain" required placeholder="api.example.com" />
-      </label>
-      <label class="flex flex-col gap-1 text-sm">
-        {{ t("cookies.path") }}
-        <Input v-model="form.path" required placeholder="/" />
-      </label>
-      <label class="flex flex-col gap-1 text-sm">
-        {{ t("cookies.expires") }}
-        <Input v-model="expiresAt" type="datetime-local" step="1" />
+    <fieldset
+      :disabled="saving"
+      class="lh-setting-card grid gap-4 sm:grid-cols-2"
+    >
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label for="cookie-name">{{ t("cookies.name") }}</Label>
+        <Input
+          id="cookie-name"
+          v-model="form.name"
+          required
+          autocomplete="off"
+        />
+      </div>
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label for="cookie-value">{{ t("cookies.value") }}</Label>
+        <Input id="cookie-value" v-model="form.value" autocomplete="off" />
+      </div>
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label for="cookie-domain">{{ t("cookies.domain") }}</Label>
+        <Input
+          id="cookie-domain"
+          v-model="form.domain"
+          required
+          placeholder="api.example.com"
+        />
+      </div>
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label for="cookie-path">{{ t("cookies.path") }}</Label>
+        <Input id="cookie-path" v-model="form.path" required placeholder="/" />
+      </div>
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label>{{ t("cookies.expires") }}</Label>
+        <CookieDatePicker v-model="form.expires" :disabled="saving" />
         <span class="text-lh-subtext-0 text-xs">{{
           t("cookies.session_hint")
         }}</span>
-      </label>
-      <label class="flex flex-col gap-1 text-sm">
-        SameSite
-        <select v-model="form.sameSite" class="lh-control h-9 px-3">
-          <option :value="null">{{ t("cookies.unspecified") }}</option>
-          <option value="Strict">Strict</option>
-          <option value="Lax">Lax</option>
-          <option value="None">None</option>
-        </select>
-      </label>
-      <label class="flex items-center gap-2 text-sm">
-        <Switch v-model="form.secure" /> Secure
-      </label>
-      <label class="flex items-center gap-2 text-sm">
-        <Switch v-model="form.httpOnly" /> HttpOnly
-      </label>
-      <label class="flex items-center gap-2 text-sm">
-        <Switch v-model="form.hostOnly" /> {{ t("cookies.host_only") }}
-      </label>
-      <label class="flex items-center gap-2 text-sm">
-        <Switch v-model="form.persistent" /> {{ t("cookies.persistent") }}
-      </label>
-      <p class="text-lh-subtext-0 text-xs sm:col-span-2">
+      </div>
+      <div class="flex min-w-0 flex-col gap-1">
+        <Label for="cookie-same-site">SameSite</Label>
+        <Select v-model="sameSite">
+          <SelectTrigger id="cookie-same-site" class="w-full">
+            <SelectValue :placeholder="t('cookies.unspecified')" />
+          </SelectTrigger>
+          <SelectContent class="bg-lh-base border-lh-surface-2 text-lh-text">
+            <SelectItem value="unspecified">{{
+              t("cookies.unspecified")
+            }}</SelectItem>
+            <SelectItem value="Strict">Strict</SelectItem>
+            <SelectItem value="Lax">Lax</SelectItem>
+            <SelectItem value="None">None</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <Label for="cookie-secure">Secure</Label>
+        <Switch id="cookie-secure" v-model="form.secure" />
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <Label for="cookie-http-only">HttpOnly</Label>
+        <Switch id="cookie-http-only" v-model="form.httpOnly" />
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <Label for="cookie-host-only">{{ t("cookies.host_only") }}</Label>
+        <Switch id="cookie-host-only" v-model="form.hostOnly" />
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <Label for="cookie-persistent">{{ t("cookies.persistent") }}</Label>
+        <Switch id="cookie-persistent" v-model="form.persistent" />
+      </div>
+      <p class="text-lh-subtext-0 text-xs leading-relaxed sm:col-span-2">
         {{ t("cookies.persistence_hint") }}
       </p>
     </fieldset>
