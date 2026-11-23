@@ -2,6 +2,8 @@ import type { RequestStoreData } from "@/stores/useRequestStore";
 import type { BasicAuthContent } from "@/stores/authType";
 import { useSettingsStore } from "@/stores/useSettingsStore";
 import { validateBodyFiles } from "@/lib/requestBody";
+import { getCookieHeader } from "@/services/cookies";
+import { i18n } from "@/i18n";
 
 function getIndentString(defaultIndentSize: number | string): string {
   const store = useSettingsStore();
@@ -24,12 +26,27 @@ function escapeFormFilePath(path: string): string {
   return `"${escaped}"`;
 }
 
-export function getCurlCommand(
+export async function getCurlCommand(
   store: RequestStoreData,
   indentString: string | number,
   breakLineSymbol: string = "\\",
-): string {
+): Promise<string> {
   validateBodyFiles(store);
+  const cookieIds = [...store.cookieIds];
+  const rawUrl = store.url.trim();
+  const lowerUrl = rawUrl.toLowerCase();
+  const cookieUrl =
+    lowerUrl.startsWith("http://") || lowerUrl.startsWith("https://")
+      ? rawUrl
+      : `http://${rawUrl}`;
+  if (
+    cookieIds.length &&
+    store.headers.some(
+      (header) => header.enabled && header.key.toLowerCase() === "cookie",
+    )
+  ) {
+    throw new Error(i18n.global.t("cookies.header_conflict"));
+  }
   const parts: string[] = [];
   const indent = getIndentString(indentString);
   const powershell = breakLineSymbol === "`";
@@ -124,5 +141,11 @@ export function getCurlCommand(
     parts.push(`${indent}-x ${quote(url)}`);
   }
 
+  if (cookieIds.length) {
+    const cookieHeader = await getCookieHeader(cookieIds, cookieUrl);
+    if (cookieHeader) {
+      parts.push(`${indent}-H ${quote(`Cookie: ${cookieHeader}`)}`);
+    }
+  }
   return parts.join(` ${breakLineSymbol}\n`);
 }
