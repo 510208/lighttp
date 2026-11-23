@@ -4,7 +4,7 @@ P0：核心請求能力
 - [x] Form Data / URL Encoded / Binary Body
 - [ ] Request 取消
 - [x] 自訂 Timeout
-- [ ] Cookie Jar 與 Cookie 管理
+- [x] Cookie Jar 與 Cookie 管理
 - [ ] Response Pretty / Raw / Preview
 - [ ] Response 搜尋與下載
 - [ ] 可設定的 Response Size Limit
