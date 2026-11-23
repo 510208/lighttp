@@ -246,9 +246,9 @@ async function generateRustType() {
   }
 }
 
-function generateCurlCommand(symbol: string) {
+async function generateCurlCommand(symbol: string) {
   try {
-    generatedSchema.value = getCurlCommand(
+    generatedSchema.value = await getCurlCommand(
       requestStore,
       settingsStore.getQuicktypeIndentString(),
       symbol,
