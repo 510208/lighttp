@@ -19,7 +19,7 @@
     >
       <template #author>
         <a
-          href="https://example.com/samhacker"
+          href="https://samhacker.xyz"
           target="_blank"
           rel="noopener noreferrer"
           class="underline hover:opacity-80"
