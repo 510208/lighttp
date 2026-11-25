@@ -105,7 +105,7 @@
           <div class="flex flex-wrap justify-end gap-2">
             <SettingAction variant="outline" @click="resetColorTheme">
               <RotateCcw class="mr-2 size-4" />
-              恢復預設
+              {{ t('settings_panel.themes.color_theme.reset_theme') }}
             </SettingAction>
             <SettingAction
               variant="default"
@@ -113,7 +113,7 @@
               @click="importColorTheme"
             >
               <Palette class="mr-2 size-4" />
-              {{ isImporting ? "匯入中..." : "匯入主題" }}
+              {{ isImporting ? t('settings_panel.themes.color_theme.importing_theme') : t('settings_panel.themes.color_theme.import_theme') }}
             </SettingAction>
           </div>
         </div>

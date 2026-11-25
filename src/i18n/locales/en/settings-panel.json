@@ -62,6 +62,9 @@
   "settings_panel.themes.zoom_ratio.description": "Set the zoom ratio, which affects the display scale of the editor content. You can also use Ctrl+滚轮 to adjust.",
   "settings_panel.themes.color_theme.label": "Interface Color Theme",
   "settings_panel.themes.color_theme.description": "Import or switch LigHTTP .lhtheme.css theme files.",
+  "settings_panel.themes.color_theme.reset_theme": "Default theme",
+  "settings_panel.themes.color_theme.import_theme": "Import",
+  "settings_panel.themes.color_theme.importing_theme": "Importing......",
 
   "settings_panel.update.title": "Check for Updates",
   "settings_panel.update.checking_for_updates": "Checking for updates...",
